@@ -1,0 +1,15 @@
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\bin\Debug\net8.0\WorldCup2026.Application.deps.json
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\bin\Debug\net8.0\WorldCup2026.Application.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\bin\Debug\net8.0\WorldCup2026.Application.pdb
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\bin\Debug\net8.0\WorldCup2026.Domain.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\bin\Debug\net8.0\WorldCup2026.Domain.pdb
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.csproj.AssemblyReference.cache
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.AssemblyInfoInputs.cache
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.AssemblyInfo.cs
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.csproj.CoreCompileInputs.cache
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup.B4286206.Up2Date
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\refint\WorldCup2026.Application.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.pdb
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\ref\WorldCup2026.Application.dll
