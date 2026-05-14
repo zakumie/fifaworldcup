@@ -274,7 +274,7 @@ export function DashboardPage() {
                         </div>
 
                         {/* Handicap */}
-                        <div className="hidden sm:flex flex-col items-center min-w-[100px]">
+                        <div className="hidden sm:flex flex-col items-center min-w-[80px]">
                           <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">Handicap</span>
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-600 border border-violet-200 text-xs font-semibold">
                             {handicapLabel ?? 'Even'}
@@ -282,7 +282,7 @@ export function DashboardPage() {
                         </div>
 
                         {/* Pick */}
-                        <div className="hidden sm:flex flex-col items-center min-w-[170px]">
+                        <div className="hidden sm:flex flex-col items-center min-w-[120px]">
                           <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">Pick</span>
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200 text-xs font-semibold">
                             {bet.selectedTeamName ?? '—'}

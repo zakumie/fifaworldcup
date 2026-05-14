@@ -28,6 +28,8 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@locator/babel-jsx": "^0.5.1",
+    "@locator/runtime": "^0.5.1",
     "@tailwindcss/vite": "^4.2.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

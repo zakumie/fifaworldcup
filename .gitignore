@@ -2,6 +2,10 @@
 .vs/
 API/.vs/
 
+# Node.js dependencies
+node_modules/
+WEB/node_modules/
+
 # .NET build outputs
 API/**/bin/
 API/**/obj/
@@ -105,3 +109,4 @@ API/src/WorldCup2026.Application/obj/Debug/net8.0/WorldCup2026.Application.dll
 API/src/WorldCup2026.Application/obj/Debug/net8.0/WorldCup2026.Application.pdb
 API/src/WorldCup2026.Application/obj/Debug/net8.0/ref/WorldCup2026.Application.dll
 API/src/WorldCup2026.Application/obj/Debug/net8.0/refint/WorldCup2026.Application.dll
+API/.vs/WorldCup2026/DesignTimeBuild/.dtbcache.v2

@@ -23,7 +23,7 @@ const ROLE_STYLE: Record<string, string> = {
 export function GroupDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: group, isLoading } = useGetGroupQuery(id ?? '', { skip: !id });
+  const { data: group, isLoading, error } = useGetGroupQuery(id ?? '', { skip: !id });
   const { data: leaderboard } = useGetLeaderboardQuery({ groupId: id ?? '' }, { skip: !id });
   const [copied, setCopied] = useState(false);
   const [selectedMember, setSelectedMember] = useState<GroupMemberDto | null>(null);
@@ -51,10 +51,13 @@ export function GroupDetailPage() {
   }
 
   if (!group) {
+    const errorMessage = error && typeof error === 'object' && 'data' in error 
+      ? (error.data as any)?.message || 'Group not found'
+      : 'Group not found';
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-400">
         <GroupsIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-        <p className="text-lg font-medium">Group not found</p>
+        <p className="text-lg font-medium">{errorMessage}</p>
       </div>
     );
   }
