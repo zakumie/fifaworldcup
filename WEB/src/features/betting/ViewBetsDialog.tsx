@@ -49,12 +49,12 @@ function TeamFlag({ flagUrl, name, code }: { flagUrl: string | null; name: strin
 }
 
 function ProfitDisplay({ profit }: { profit: number }) {
-  if (profit === 0) return <span className="text-xs text-slate-400">—</span>;
+  if (profit === 0) return <span className="text-xs text-green-600 font-bold"><TrendingUpIcon sx={{ fontSize: 14 }} /> 0</span>;
   const isPositive = profit > 0;
   return (
     <span className={`inline-flex items-center gap-0.5 text-xs font-bold ${isPositive ? 'text-emerald-600' : 'text-red-500'}`}>
       {isPositive ? <TrendingUpIcon sx={{ fontSize: 14 }} /> : <TrendingDownIcon sx={{ fontSize: 14 }} />}
-      {isPositive ? '+' : ''}${profit.toLocaleString()}
+      {isPositive ? '+' : ''}{profit.toLocaleString()}
     </span>
   );
 }
@@ -71,7 +71,7 @@ function BetCard({ bet, hideAmount }: { bet: BetDto; hideAmount?: boolean }) {
       <div className="flex-1 min-w-0">
         <p className="text-[13px] text-gray-800 truncate">{bet.userDisplayName}</p>
         <div className="flex items-center gap-1.5 mt-0.5">
-          {!hideAmount && (<span className="text-xs font-bold text-gray-600">${bet.betAmount.toLocaleString()}</span>)}
+          {!hideAmount && (<span className="text-xs font-bold text-gray-600">{bet.betAmount.toLocaleString()}</span>)}
           {isSettled && <ProfitDisplay profit={bet.profit} />}
         </div>
       </div>
@@ -119,7 +119,7 @@ function ColumnHeader({ team, count, pool, color, border, hideAmount }: { team: 
       )}
       <div className="flex-1 min-w-0">
         <p className="text-xs font-bold text-slate-800 truncate">{team.name}</p>
-        {!hideAmount && <p className="text-[10px] text-slate-500">${pool.toLocaleString()} wagered</p>}
+        {!hideAmount && <p className="text-[10px] text-slate-500">{pool.toLocaleString()} wagered</p>}
       </div>
       <span className="text-lg font-black text-slate-700">{count}</span>
     </div>
@@ -235,8 +235,8 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
               <span className="text-[10px] text-white/40 uppercase">Bet</span>
               <span className="text-xs font-semibold text-emerald-300">
                 {config.isFixedBet
-                  ? `$${config.defaultBetAmount?.toLocaleString() ?? config.minBetAmount.toLocaleString()}`
-                  : `$${config.minBetAmount.toLocaleString()} – $${config.maxBetAmount.toLocaleString()}`
+                  ? `${config.defaultBetAmount?.toLocaleString() ?? config.minBetAmount.toLocaleString()}`
+                  : `${config.minBetAmount.toLocaleString()} – ${config.maxBetAmount.toLocaleString()}`
                 }
               </span>
             </div>

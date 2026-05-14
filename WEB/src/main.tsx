@@ -6,6 +6,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { store } from './app/store';
 import { theme } from './app/theme';
+import { MusicProvider } from './contexts/MusicContext';
 import App from './App';
 import './index.css';
 
@@ -17,8 +18,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
+            <MusicProvider>
+              <CssBaseline />
+              <App />
+            </MusicProvider>
           </ThemeProvider>
         </GoogleOAuthProvider>
       </BrowserRouter>

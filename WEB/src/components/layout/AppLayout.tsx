@@ -23,6 +23,7 @@ import { logout } from '../../features/auth/authSlice';
 import { apiSlice } from '../../app/api';
 import { setSelectedGroupId } from '../../features/groups/groupSlice';
 import { useGroupId } from '../../features/groups/useGroupId';
+import { MusicPlayer } from '../MusicPlayer';
 
 const DRAWER_WIDTH = 260;
 const COLLAPSED_WIDTH = 72;
@@ -177,7 +178,7 @@ export function AppLayout() {
       >
         <div className="h-full px-4 sm:px-6 flex items-center justify-between bg-white/80 backdrop-blur-xl border-b border-gray-100">
           {/* Mobile menu + breadcrumb */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-1">
             <IconButton
               onClick={() => setMobileOpen(!mobileOpen)}
               sx={{ display: { sm: 'none' }, color: 'text.primary' }}
@@ -192,8 +193,13 @@ export function AppLayout() {
             </div>
           </div>
 
+          {/* Center - Music Player */}
+          <div className="flex-1 flex justify-center">
+            <MusicPlayer />
+          </div>
+
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex-1 flex items-center justify-end gap-2">
             {groups.length > 1 && (
               <div className="flex items-center gap-1.5 bg-slate-50 rounded-full pl-2 pr-1 py-0.5 border border-gray-200/60">
                 <Groups2Icon sx={{ fontSize: 16, color: '#64748b' }} />
