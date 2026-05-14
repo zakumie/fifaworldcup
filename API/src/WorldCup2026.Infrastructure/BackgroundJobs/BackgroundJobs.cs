@@ -42,7 +42,7 @@ public class MatchFetchJob : BackgroundService
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 hasLiveMatches = await db.Matches.AnyAsync(
                     m => m.Status == MatchStatus.Live ||
-                         (m.Status == MatchStatus.Scheduled && m.StartTime <= DateTime.UtcNow.AddHours(1)),
+                         ((m.Status == MatchStatus.Open || m.Status == MatchStatus.Upcoming) && m.StartTime <= DateTime.UtcNow.AddHours(1)),
                     stoppingToken);
             }
             catch { /* ignore */ }

@@ -195,3 +195,4 @@ E:\Projects\WorldCup2026\API\tests\WorldCup2026.IntegrationTests\bin\Debug\net8.
 E:\Projects\WorldCup2026\API\tests\WorldCup2026.IntegrationTests\bin\Debug\net8.0\System.CodeDom.dll
 E:\Projects\WorldCup2026\API\tests\WorldCup2026.IntegrationTests\bin\Debug\net8.0\System.Management.dll
 E:\Projects\WorldCup2026\API\tests\WorldCup2026.IntegrationTests\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
+E:\Projects\WorldCup2026\API\tests\WorldCup2026.IntegrationTests\obj\Debug\net8.0\WorldCup2026.IntegrationTests.sourcelink.json

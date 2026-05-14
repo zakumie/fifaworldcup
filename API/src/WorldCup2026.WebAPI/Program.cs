@@ -11,6 +11,7 @@ using WorldCup2026.Application.Validators;
 using WorldCup2026.Infrastructure;
 using WorldCup2026.WebAPI.Middleware;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Serilog
@@ -58,7 +59,11 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 // Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
-        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        options.JsonSerializerOptions.Converters.Add(new UtcDateTimeJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new UtcNullableDateTimeJsonConverter());
+    });
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

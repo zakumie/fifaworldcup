@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/api';
-import type { BetDto, BettingConfigDto, CreateBettingConfigRequest, PlaceBetRequest, UpdateBettingConfigRequest } from '../../types';
+import type { BetDto, BettingConfigDto, CreateBettingConfigRequest, PlaceBetRequest, UpdateBetRequest, UpdateBettingConfigRequest } from '../../types';
 
 export const bettingApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -23,9 +23,17 @@ export const bettingApi = apiSlice.injectEndpoints({
       query: (body) => ({ url: '/betting/bets', method: 'POST', body }),
       invalidatesTags: ['Bets', 'Groups'],
     }),
+    updateBet: builder.mutation<BetDto, { betId: string; body: UpdateBetRequest }>({
+      query: ({ betId, body }) => ({ url: `/betting/bets/${betId}`, method: 'PUT', body }),
+      invalidatesTags: ['Bets', 'Groups'],
+    }),
     getMyBets: builder.query<BetDto[], { groupId: string }>({
       query: ({ groupId }) => `/betting/groups/${groupId}/bets`,
       providesTags: ['Bets'],
+    }),
+    getMatchBets: builder.query<BetDto[], { groupId: string; matchId: string }>({
+      query: ({ groupId, matchId }) => `/betting/groups/${groupId}/matches/${matchId}/bets`,
+      providesTags: (_result, _err, { matchId }) => [{ type: 'Bets', id: `match-bets-${matchId}` }],
     }),
   }),
 });
@@ -36,5 +44,7 @@ export const {
   useCreateBettingConfigMutation,
   useUpdateBettingConfigMutation,
   usePlaceBetMutation,
+  useUpdateBetMutation,
   useGetMyBetsQuery,
+  useGetMatchBetsQuery,
 } = bettingApi;

@@ -30,11 +30,12 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 
       if (refreshResult.data) {
         const { setCredentials } = await import('../features/auth/authSlice');
-        api.dispatch(setCredentials(refreshResult.data as { accessToken: string; refreshToken: string; user: { id: string; email: string; displayName: string; avatarUrl: string | null } }));
+        api.dispatch(setCredentials(refreshResult.data as { accessToken: string; refreshToken: string; user: { id: string; email: string; displayName: string; avatarUrl: string | null; timeZone: string } }));
         result = await rawBaseQuery(args, api, extraOptions);
       } else {
         const { logout } = await import('../features/auth/authSlice');
         api.dispatch(logout());
+        api.dispatch(apiSlice.util.resetApiState());
       }
     }
   }

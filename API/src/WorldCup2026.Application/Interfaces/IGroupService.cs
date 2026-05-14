@@ -12,7 +12,7 @@ public interface IGroupService
     Task<Result<GroupDetailDto>> GetByIdAsync(Guid groupId, Guid userId);
     Task<Result<List<GroupDto>>> GetUserGroupsAsync(Guid userId);
     Task<Result<List<GroupDto>>> GetAllGroupsAsync();
-    Task<Result<GroupDto>> JoinByCodeAsync(JoinGroupRequest request, Guid userId);
+    Task<Result<JoinGroupResponse>> JoinByCodeAsync(JoinGroupRequest request, Guid userId);
     Task<Result<string>> RegenerateInviteCodeAsync(Guid groupId, Guid userId);
     Task<Result> UpdateMemberRoleAsync(Guid groupId, Guid memberId, GroupRole role, Guid currentUserId);
     Task<Result> RemoveMemberAsync(Guid groupId, Guid memberId, Guid currentUserId);

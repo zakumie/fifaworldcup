@@ -17,3 +17,4 @@ E:\Projects\WorldCup2026\API\src\WorldCup2026.Infrastructure\obj\Debug\net8.0\re
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Infrastructure\obj\Debug\net8.0\WorldCup2026.Infrastructure.pdb
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Infrastructure\obj\Debug\net8.0\WorldCup2026.Infrastructure.genruntimeconfig.cache
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Infrastructure\obj\Debug\net8.0\ref\WorldCup2026.Infrastructure.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Infrastructure\obj\Debug\net8.0\WorldCup2026.Infrastructure.sourcelink.json

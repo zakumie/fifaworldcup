@@ -12,10 +12,10 @@ public class LeaderboardController : BaseApiController
     public LeaderboardController(ILeaderboardService leaderboard) => _leaderboard = leaderboard;
 
     [HttpGet("groups/{groupId:guid}")]
-    public async Task<ActionResult> GetLeaderboard(Guid groupId)
-        => HandleResult(await _leaderboard.GetLeaderboardAsync(groupId));
+    public async Task<ActionResult> GetLeaderboard(Guid groupId, CancellationToken ct)
+        => HandleResult(await _leaderboard.GetLeaderboardAsync(groupId, ct));
 
     [HttpGet("groups/{groupId:guid}/dashboard")]
-    public async Task<ActionResult> GetDashboard(Guid groupId)
-        => HandleResult(await _leaderboard.GetDashboardAsync(groupId));
+    public async Task<ActionResult> GetDashboard(Guid groupId, CancellationToken ct)
+        => HandleResult(await _leaderboard.GetDashboardAsync(groupId, ct));
 }

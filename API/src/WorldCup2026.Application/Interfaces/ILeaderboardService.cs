@@ -5,7 +5,7 @@ namespace WorldCup2026.Application.Interfaces;
 
 public interface ILeaderboardService
 {
-    Task<Result<List<LeaderboardEntryDto>>> GetLeaderboardAsync(Guid groupId);
-    Task<Result<DashboardDto>> GetDashboardAsync(Guid groupId);
+    Task<Result<List<LeaderboardEntryDto>>> GetLeaderboardAsync(Guid groupId, CancellationToken ct = default);
+    Task<Result<DashboardDto>> GetDashboardAsync(Guid groupId, CancellationToken ct = default);
     Task SnapshotLeaderboardAsync(Guid groupId);
 }

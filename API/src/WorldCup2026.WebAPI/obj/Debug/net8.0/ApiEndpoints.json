@@ -112,6 +112,27 @@
   },
   {
     "ContainingType": "WorldCup2026.WebAPI.Controllers.BettingController",
+    "Method": "UpdateBet",
+    "RelativePath": "api/Betting/bets/{betId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "betId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WorldCup2026.Application.DTOs.Betting.UpdateBetRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WorldCup2026.WebAPI.Controllers.BettingController",
     "Method": "CreateConfig",
     "RelativePath": "api/Betting/configs",
     "HttpMethod": "POST",
@@ -591,6 +612,58 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WorldCup2026.WebAPI.Controllers.UsersController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WorldCup2026.WebAPI.Controllers.UsersController",
+    "Method": "ToggleUserActive",
+    "RelativePath": "api/Users/{id}/active",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WorldCup2026.Application.DTOs.Users.ToggleUserActiveRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WorldCup2026.WebAPI.Controllers.UsersController",
+    "Method": "UpdateUserRole",
+    "RelativePath": "api/Users/{id}/role",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WorldCup2026.Application.DTOs.Users.UpdateUserRoleRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

@@ -24,4 +24,16 @@ public class UsersController : BaseApiController
     [HttpPut("me")]
     public async Task<ActionResult> UpdateProfile(UpdateProfileRequest request)
         => HandleResult(await _users.UpdateProfileAsync(_currentUser.UserId, request));
+
+    [HttpGet]
+    public async Task<ActionResult> GetAllUsers()
+        => HandleResult(await _users.GetAllUsersAsync());
+
+    [HttpPut("{id}/role")]
+    public async Task<ActionResult> UpdateUserRole(Guid id, UpdateUserRoleRequest request)
+        => HandleResult(await _users.UpdateUserRoleAsync(id, request));
+
+    [HttpPut("{id}/active")]
+    public async Task<ActionResult> ToggleUserActive(Guid id, ToggleUserActiveRequest request)
+        => HandleResult(await _users.ToggleUserActiveAsync(id, request));
 }

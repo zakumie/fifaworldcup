@@ -112,7 +112,7 @@ public class MatchService : IMatchService
                 m.Id, m.ExternalMatchId,
                 new TeamDto(m.HomeTeam.Id, m.HomeTeam.Name, m.HomeTeam.Code, m.HomeTeam.FlagUrl, m.HomeTeam.GroupName),
                 new TeamDto(m.AwayTeam.Id, m.AwayTeam.Name, m.AwayTeam.Code, m.AwayTeam.FlagUrl, m.AwayTeam.GroupName),
-                m.HomeScore, m.AwayScore, m.MatchDay, m.Stage, m.StartTime, m.Status))
+                m.HomeScore, m.AwayScore, m.MatchDay, m.Stage, m.Group, m.StartTime, m.Status))
             .ToListAsync();
 
         return Result<PagedResult<MatchDto>>.Success(new PagedResult<MatchDto>
@@ -173,7 +173,7 @@ public class MatchService : IMatchService
                 m.Id, m.ExternalMatchId,
                 new TeamDto(m.HomeTeam.Id, m.HomeTeam.Name, m.HomeTeam.Code, m.HomeTeam.FlagUrl, m.HomeTeam.GroupName),
                 new TeamDto(m.AwayTeam.Id, m.AwayTeam.Name, m.AwayTeam.Code, m.AwayTeam.FlagUrl, m.AwayTeam.GroupName),
-                m.HomeScore, m.AwayScore, m.MatchDay, m.Stage, m.StartTime, m.Status))
+                m.HomeScore, m.AwayScore, m.MatchDay, m.Stage, m.Group, m.StartTime, m.Status))
             .FirstOrDefaultAsync();
     }
 }

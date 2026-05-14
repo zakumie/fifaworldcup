@@ -10,3 +10,4 @@ E:\Projects\WorldCup2026\API\src\WorldCup2026.Domain\obj\Debug\net8.0\WorldCup20
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Domain\obj\Debug\net8.0\refint\WorldCup2026.Domain.dll
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Domain\obj\Debug\net8.0\WorldCup2026.Domain.pdb
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Domain\obj\Debug\net8.0\ref\WorldCup2026.Domain.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Domain\obj\Debug\net8.0\WorldCup2026.Domain.sourcelink.json

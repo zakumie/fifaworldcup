@@ -10,6 +10,7 @@ public class GroupMember : BaseEntity
     public Guid UserId { get; set; }
     public GroupRole Role { get; set; } = GroupRole.User;
     public decimal Balance { get; set; }
+    public decimal PenaltyAmount { get; set; }
     public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
     [Timestamp]

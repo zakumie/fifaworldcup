@@ -337,6 +337,48 @@
         }
       }
     },
+    "/api/Betting/bets/{betId}": {
+      "put": {
+        "tags": [
+          "Betting"
+        ],
+        "parameters": [
+          {
+            "name": "betId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBetRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBetRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Betting/groups/{groupId}/bets": {
       "get": {
         "tags": [
@@ -1023,6 +1065,102 @@
           }
         }
       }
+    },
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/role": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRoleRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRoleRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRoleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/active": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleUserActiveRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleUserActiveRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleUserActiveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1096,6 +1234,9 @@
           "defaultBalance": {
             "type": "number",
             "format": "double"
+          },
+          "settlementMode": {
+            "$ref": "#/components/schemas/SettlementMode"
           }
         },
         "additionalProperties": false
@@ -1170,7 +1311,8 @@
       },
       "MatchStatus": {
         "enum": [
-          "Scheduled",
+          "Open",
+          "Upcoming",
           "Live",
           "Finished",
           "Postponed",
@@ -1234,6 +1376,40 @@
           "displayName": {
             "type": "string",
             "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SettlementMode": {
+        "enum": [
+          "Normal",
+          "WinnerKeepsLoserPays"
+        ],
+        "type": "string"
+      },
+      "ToggleUserActiveRequest": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateBetRequest": {
+        "type": "object",
+        "properties": {
+          "selectedTeamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "betAmount": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -1299,6 +1475,12 @@
           "defaultBalance": {
             "type": "number",
             "format": "double"
+          },
+          "settlementMode": {
+            "$ref": "#/components/schemas/SettlementMode"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1351,6 +1533,10 @@
           "avatarUrl": {
             "type": "string",
             "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1368,6 +1554,16 @@
           },
           "status": {
             "$ref": "#/components/schemas/MatchStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateUserRoleRequest": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

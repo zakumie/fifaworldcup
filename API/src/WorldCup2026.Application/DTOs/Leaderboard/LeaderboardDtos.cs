@@ -2,8 +2,9 @@ namespace WorldCup2026.Application.DTOs.Leaderboard;
 
 public record LeaderboardEntryDto(
     int Rank, Guid UserId, string DisplayName, string? AvatarUrl,
-    int TotalBets, int TotalWins, int TotalLosses,
-    decimal TotalWinAmount, decimal TotalLossAmount, decimal NetProfit);
+    int TotalBets, int Wins, int Losses, int Draws,
+    decimal TotalWagered, decimal TotalPayout, decimal Profit,
+    decimal Balance, decimal WinRate, decimal PenaltyAmount);
 
 public record DashboardDto(
     List<LeaderboardEntryDto> TopWinners,

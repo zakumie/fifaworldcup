@@ -34,7 +34,8 @@ public class AuthService : IAuthService
             Email = request.Email,
             DisplayName = request.DisplayName,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            AuthProvider = AuthProvider.Local
+            AuthProvider = AuthProvider.Local,
+            TimeZone = NormalizeTimeZone(request.TimeZone)
         };
 
         _db.Users.Add(user);
@@ -158,7 +159,18 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         _db.SaveChanges();
 
-        var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString());
+        var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString(), user.TimeZone);
         return Result<AuthResponse>.Success(new AuthResponse(accessToken, refreshToken, userInfo));
+    }
+
+    private static readonly string[] AllowedTimeZones = { "Pacific/Easter", "UTC", "Asia/Ho_Chi_Minh" };
+
+    private static string NormalizeTimeZone(string? timeZone)
+    {
+        if (string.IsNullOrEmpty(timeZone))
+            return "Asia/Ho_Chi_Minh";
+        return AllowedTimeZones.Contains(timeZone, StringComparer.OrdinalIgnoreCase)
+            ? timeZone
+            : "Asia/Ho_Chi_Minh";
     }
 }

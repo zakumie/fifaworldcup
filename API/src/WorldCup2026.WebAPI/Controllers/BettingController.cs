@@ -37,6 +37,10 @@ public class BettingController : BaseApiController
     public async Task<ActionResult> PlaceBet(PlaceBetRequest request)
         => HandleResult(await _betting.PlaceBetAsync(request, _currentUser.UserId));
 
+    [HttpPut("bets/{betId:guid}")]
+    public async Task<ActionResult> UpdateBet(Guid betId, [FromBody] UpdateBetRequest request)
+        => HandleResult(await _betting.UpdateBetAsync(betId, request, _currentUser.UserId));
+
     [HttpGet("groups/{groupId:guid}/bets")]
     public async Task<ActionResult> GetMyBets(Guid groupId)
         => HandleResult(await _betting.GetUserBetsAsync(groupId, _currentUser.UserId));

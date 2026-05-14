@@ -12,8 +12,9 @@ public class Match : BaseEntity
     public int? AwayScore { get; set; }
     public int MatchDay { get; set; }
     public string Stage { get; set; } = null!;
+    public string? Group { get; set; }
     public DateTime StartTime { get; set; }
-    public MatchStatus Status { get; set; } = MatchStatus.Scheduled;
+    public MatchStatus Status { get; set; } = MatchStatus.Open;
 
     public Team HomeTeam { get; set; } = null!;
     public Team AwayTeam { get; set; } = null!;

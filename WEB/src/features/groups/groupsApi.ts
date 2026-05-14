@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/api';
-import type { GroupDto, GroupDetailDto, CreateGroupRequest, JoinGroupRequest } from '../../types';
+import type { GroupDto, GroupDetailDto, CreateGroupRequest, UpdateGroupRequest, JoinGroupRequest } from '../../types';
 
 export const groupsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,6 +19,10 @@ export const groupsApi = apiSlice.injectEndpoints({
       query: (body) => ({ url: '/groups', method: 'POST', body }),
       invalidatesTags: ['Groups'],
     }),
+    updateGroup: builder.mutation<GroupDto, { id: string; body: UpdateGroupRequest }>({
+      query: ({ id, body }) => ({ url: `/groups/${id}`, method: 'PUT', body }),
+      invalidatesTags: ['Groups'],
+    }),
     joinGroup: builder.mutation<void, JoinGroupRequest>({
       query: (body) => ({ url: '/groups/join', method: 'POST', body }),
       invalidatesTags: ['Groups'],
@@ -32,5 +36,5 @@ export const groupsApi = apiSlice.injectEndpoints({
 
 export const {
   useGetGroupsQuery, useGetAllGroupsQuery, useGetGroupQuery,
-  useCreateGroupMutation, useJoinGroupMutation, useLeaveGroupMutation,
+  useCreateGroupMutation, useUpdateGroupMutation, useJoinGroupMutation, useLeaveGroupMutation,
 } = groupsApi;

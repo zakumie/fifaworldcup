@@ -37,6 +37,7 @@ public class MatchesController : BaseApiController
         => HandleResult(await _matches.UpdateScoreAsync(id, request));
 
     [HttpPost("sync")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> SyncFromExternal()
         => HandleResult(await _matches.SyncFromExternalAsync());
 

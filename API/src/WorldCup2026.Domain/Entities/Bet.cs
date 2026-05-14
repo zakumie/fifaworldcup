@@ -9,7 +9,7 @@ public class Bet : BaseEntity
     public Guid MatchBettingConfigId { get; set; }
     public Guid GroupId { get; set; }
     public Guid MatchId { get; set; }
-    public Guid SelectedTeamId { get; set; }
+    public Guid? SelectedTeamId { get; set; }
     public decimal BetAmount { get; set; }
     public BetStatus Status { get; set; } = BetStatus.Pending;
     public decimal Profit { get; set; }
@@ -19,5 +19,5 @@ public class Bet : BaseEntity
     public MatchBettingConfig BettingConfig { get; set; } = null!;
     public Group Group { get; set; } = null!;
     public Match Match { get; set; } = null!;
-    public Team SelectedTeam { get; set; } = null!;
+    public Team? SelectedTeam { get; set; }
 }

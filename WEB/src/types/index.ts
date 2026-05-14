@@ -7,6 +7,7 @@ export interface RegisterRequest {
   email: string;
   password: string;
   displayName: string;
+  timeZone?: string;
 }
 
 export interface AuthResponse {
@@ -21,9 +22,12 @@ export interface UserInfo {
   displayName: string;
   avatarUrl: string | null;
   role?: UserRole;
+  timeZone: string;
 }
 
 export type UserRole = 'Admin' | 'Manager' | 'User';
+
+export type SettlementMode = 'Normal' | 'WinnerKeepsLoserPays';
 
 export interface GroupDto {
   id: string;
@@ -35,6 +39,7 @@ export interface GroupDto {
   memberCount: number;
   isActive: boolean;
   createdAt: string;
+  settlementMode: SettlementMode;
 }
 
 export interface GroupDetailDto {
@@ -46,6 +51,7 @@ export interface GroupDetailDto {
   defaultBalance: number;
   isActive: boolean;
   createdAt: string;
+  settlementMode: SettlementMode;
   members: GroupMemberDto[];
 }
 
@@ -59,6 +65,7 @@ export interface GroupMemberDto {
   balance: number;
   joinedAt: string;
   isActive: boolean;
+  penaltyAmount: number;
 }
 
 export interface CreateGroupRequest {
@@ -66,6 +73,16 @@ export interface CreateGroupRequest {
   description: string;
   maxMembers: number;
   defaultBalance: number;
+  settlementMode: SettlementMode;
+}
+
+export interface UpdateGroupRequest {
+  name: string;
+  description: string;
+  maxMembers: number;
+  defaultBalance: number;
+  settlementMode: SettlementMode;
+  isActive: boolean;
 }
 
 export interface JoinGroupRequest {
@@ -87,13 +104,14 @@ export interface MatchDto {
   awayTeam: TeamDto;
   matchDay: number;
   stage: string;
+  group: string | null;
   startTime: string;
   status: MatchStatus;
   homeScore: number | null;
   awayScore: number | null;
 }
 
-export type MatchStatus = 'Scheduled' | 'Live' | 'Finished' | 'Postponed' | 'Cancelled';
+export type MatchStatus = 'Upcoming' | 'Open' | 'Live' | 'Finished' | 'Postponed' | 'Cancelled';
 
 export interface UpdateScoreRequest {
   homeScore: number;
@@ -151,6 +169,11 @@ export interface PlaceBetRequest {
   betAmount: number;
 }
 
+export interface UpdateBetRequest {
+  selectedTeamId: string;
+  betAmount: number;
+}
+
 export interface BetDto {
   id: string;
   userId: string;
@@ -158,13 +181,15 @@ export interface BetDto {
   matchId: string;
   homeTeamName: string;
   awayTeamName: string;
-  selectedTeamId: string;
-  selectedTeamName: string;
+  selectedTeamId: string | null;
+  selectedTeamName: string | null;
   betAmount: number;
   status: BetStatus;
   profit: number;
   createdAt: string;
   settledAt: string | null;
+  handicap: number;
+  favoredTeamName: string | null;
 }
 
 export type BetStatus = 'Pending' | 'Won' | 'Lost' | 'HalfWon' | 'HalfLost' | 'Push' | 'Cancelled';
@@ -177,11 +202,13 @@ export interface LeaderboardEntryDto {
   totalBets: number;
   wins: number;
   losses: number;
+  draws: number;
   totalWagered: number;
   totalPayout: number;
   profit: number;
   balance: number;
   winRate: number;
+  penaltyAmount: number;
 }
 
 export interface PagedResult<T> {
@@ -189,4 +216,39 @@ export interface PagedResult<T> {
   totalCount: number;
   page: number;
   pageSize: number;
+}
+
+export interface AdminUserDto {
+  id: string;
+  email: string;
+  displayName: string;
+  avatarUrl: string | null;
+  authProvider: string;
+  role: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface UpdateUserRoleRequest {
+  role: string;
+}
+
+export interface ToggleUserActiveRequest {
+  isActive: boolean;
+}
+
+export interface UserProfileDto {
+  id: string;
+  email: string;
+  displayName: string;
+  avatarUrl: string | null;
+  authProvider: string;
+  createdAt: string;
+  timeZone: string;
+}
+
+export interface UpdateProfileRequest {
+  displayName: string;
+  avatarUrl: string | null;
+  timeZone?: string;
 }

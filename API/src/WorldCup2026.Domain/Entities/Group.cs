@@ -1,4 +1,5 @@
 using WorldCup2026.Domain.Common;
+using WorldCup2026.Domain.Enums;
 
 namespace WorldCup2026.Domain.Entities;
 
@@ -9,6 +10,7 @@ public class Group : BaseEntity
     public string InviteCode { get; set; } = null!;
     public int MaxMembers { get; set; } = 50;
     public decimal DefaultBalance { get; set; } = 1000m;
+    public SettlementMode SettlementMode { get; set; } = SettlementMode.Normal;
     public Guid CreatedById { get; set; }
     public bool IsActive { get; set; } = true;
 

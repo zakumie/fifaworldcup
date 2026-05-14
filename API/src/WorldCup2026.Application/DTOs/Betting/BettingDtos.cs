@@ -17,6 +17,8 @@ public record UpdateBettingConfigRequest(
 
 public record PlaceBetRequest(Guid MatchBettingConfigId, Guid SelectedTeamId, decimal BetAmount);
 
+public record UpdateBetRequest(Guid SelectedTeamId, decimal BetAmount);
+
 public record BettingConfigDto(
     Guid Id, Guid MatchId, Guid GroupId,
     decimal Handicap, Guid? FavoredTeamId, string? FavoredTeamName,
@@ -28,8 +30,9 @@ public record BettingConfigDto(
 public record BetDto(
     Guid Id, Guid UserId, string UserDisplayName,
     Guid MatchId, string HomeTeamName, string AwayTeamName,
-    Guid SelectedTeamId, string SelectedTeamName,
+    Guid? SelectedTeamId, string? SelectedTeamName,
     decimal BetAmount, BetStatus Status, decimal Profit,
-    DateTime CreatedAt, DateTime? SettledAt);
+    DateTime CreatedAt, DateTime? SettledAt,
+    decimal Handicap = 0, string? FavoredTeamName = null);
 
 public record BetResultDto(BetStatus Status, decimal Profit);

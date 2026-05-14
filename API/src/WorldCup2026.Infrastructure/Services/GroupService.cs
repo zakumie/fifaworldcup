@@ -35,6 +35,7 @@ public class GroupService : IGroupService
             InviteCode = GenerateInviteCode(),
             MaxMembers = request.MaxMembers,
             DefaultBalance = request.DefaultBalance,
+            SettlementMode = request.SettlementMode,
             CreatedById = userId
         };
 
@@ -58,6 +59,8 @@ public class GroupService : IGroupService
         group.Description = request.Description;
         group.MaxMembers = request.MaxMembers;
         group.DefaultBalance = request.DefaultBalance;
+        group.SettlementMode = request.SettlementMode;
+        group.IsActive = request.IsActive;
 
         await _db.SaveChangesAsync();
         int memberCount = await _db.GroupMembers.CountAsync(m => m.GroupId == groupId && m.IsActive);
@@ -99,16 +102,21 @@ public class GroupService : IGroupService
 
         var members = group.Members.Select(m => new GroupMemberDto(
             m.Id, m.UserId, m.User.DisplayName, m.User.Email,
-            m.User.AvatarUrl, m.Role, m.Balance, m.JoinedAt, m.IsActive)).ToList();
+            m.User.AvatarUrl, m.Role, m.Balance, m.JoinedAt, m.IsActive, m.PenaltyAmount)).ToList();
 
         return Result<GroupDetailDto>.Success(new GroupDetailDto(
             group.Id, group.Name, group.Description, group.InviteCode,
             group.MaxMembers, group.DefaultBalance, group.IsActive,
-            group.CreatedAt, members));
+            group.CreatedAt, group.SettlementMode, members));
     }
 
     public async Task<Result<List<GroupDto>>> GetUserGroupsAsync(Guid userId)
     {
+        if (await IsSystemAdmin(userId))
+        {
+            return await GetAllGroupsAsync();
+        }
+
         var groups = await _db.GroupMembers
             .Where(m => m.UserId == userId && m.IsActive)
             .AsNoTracking()
@@ -116,7 +124,7 @@ public class GroupService : IGroupService
                 m.Group.Id, m.Group.Name, m.Group.Description, m.Group.InviteCode,
                 m.Group.MaxMembers, m.Group.DefaultBalance,
                 m.Group.Members.Count(x => x.IsActive),
-                m.Group.IsActive, m.Group.CreatedAt))
+                m.Group.IsActive, m.Group.CreatedAt, m.Group.SettlementMode))
             .ToListAsync();
 
         return Result<List<GroupDto>>.Success(groups);
@@ -131,34 +139,53 @@ public class GroupService : IGroupService
                 g.Id, g.Name, g.Description, g.InviteCode,
                 g.MaxMembers, g.DefaultBalance,
                 g.Members.Count(x => x.IsActive),
-                g.IsActive, g.CreatedAt))
+                g.IsActive, g.CreatedAt, g.SettlementMode))
             .ToListAsync();
 
         return Result<List<GroupDto>>.Success(groups);
     }
 
-    public async Task<Result<GroupDto>> JoinByCodeAsync(JoinGroupRequest request, Guid userId)
+    public async Task<Result<JoinGroupResponse>> JoinByCodeAsync(JoinGroupRequest request, Guid userId)
     {
         var group = await _db.Groups
             .FirstOrDefaultAsync(g => g.InviteCode == request.InviteCode && g.IsActive);
 
-        if (group == null) return Result<GroupDto>.Failure("Invalid invite code.");
+        if (group == null) return Result<JoinGroupResponse>.Failure("Invalid invite code.");
 
         if (await _db.GroupMembers.AnyAsync(m => m.GroupId == group.Id && m.UserId == userId && m.IsActive))
-            return Result<GroupDto>.Failure("You are already a member of this group.");
+            return Result<JoinGroupResponse>.Failure("You are already a member of this group.");
 
         int activeMembers = await _db.GroupMembers.CountAsync(m => m.GroupId == group.Id && m.IsActive);
         if (activeMembers >= group.MaxMembers)
-            return Result<GroupDto>.Failure("Group is full.");
+            return Result<JoinGroupResponse>.Failure("Group is full.");
 
-        _db.GroupMembers.Add(new GroupMember
+        // Calculate penalty for missed settled matches in WinnerKeepsLoserPays mode
+        int missedMatches = 0;
+        decimal penaltyAmount = 0m;
+        decimal balance = group.DefaultBalance;
+
+        if (group.SettlementMode == SettlementMode.WinnerKeepsLoserPays)
+        {
+            var settledConfigs = await _db.MatchBettingConfigs
+                .Where(c => c.GroupId == group.Id && c.IsSettled && c.DeletedAt == null)
+                .Select(c => c.DefaultBetAmount)
+                .ToListAsync();
+
+            missedMatches = settledConfigs.Count;
+            penaltyAmount = settledConfigs.Sum(amt => amt ?? 0m);
+            balance = group.DefaultBalance - penaltyAmount;
+        }
+
+        var member = new GroupMember
         {
             GroupId = group.Id,
             UserId = userId,
             Role = GroupRole.User,
-            Balance = group.DefaultBalance,
+            Balance = balance,
+            PenaltyAmount = penaltyAmount,
             JoinedAt = DateTime.UtcNow
-        });
+        };
+        _db.GroupMembers.Add(member);
 
         _db.Transactions.Add(new Transaction
         {
@@ -171,10 +198,27 @@ public class GroupService : IGroupService
             Description = "Initial balance on joining group"
         });
 
+        if (penaltyAmount > 0)
+        {
+            _db.Transactions.Add(new Transaction
+            {
+                UserId = userId,
+                GroupId = group.Id,
+                Type = TransactionType.BetLost,
+                Amount = -penaltyAmount,
+                BalanceBefore = group.DefaultBalance,
+                BalanceAfter = balance,
+                Description = $"Penalty for {missedMatches} missed settled match(es)"
+            });
+        }
+
         await _db.SaveChangesAsync();
 
-        _logger.LogInformation("User {UserId} joined group {GroupId}", userId, group.Id);
-        return Result<GroupDto>.Success(MapToGroupDto(group, activeMembers + 1));
+        _logger.LogInformation("User {UserId} joined group {GroupId} (missed={Missed}, penalty={Penalty})",
+            userId, group.Id, missedMatches, penaltyAmount);
+
+        var groupDto = MapToGroupDto(group, activeMembers + 1);
+        return Result<JoinGroupResponse>.Success(new JoinGroupResponse(groupDto, missedMatches, penaltyAmount, balance));
     }
 
     public async Task<Result<string>> RegenerateInviteCodeAsync(Guid groupId, Guid userId)
@@ -259,5 +303,5 @@ public class GroupService : IGroupService
 
     private static GroupDto MapToGroupDto(Group g, int memberCount) =>
         new(g.Id, g.Name, g.Description, g.InviteCode,
-            g.MaxMembers, g.DefaultBalance, memberCount, g.IsActive, g.CreatedAt);
+            g.MaxMembers, g.DefaultBalance, memberCount, g.IsActive, g.CreatedAt, g.SettlementMode);
 }

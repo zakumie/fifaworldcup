@@ -22,68 +22,119 @@ public class LeaderboardService : ILeaderboardService
         _logger = logger;
     }
 
-    public async Task<Result<List<LeaderboardEntryDto>>> GetLeaderboardAsync(Guid groupId)
+    public async Task<Result<List<LeaderboardEntryDto>>> GetLeaderboardAsync(Guid groupId, CancellationToken ct = default)
     {
         string cacheKey = $"leaderboard:{groupId}";
         var cached = await _cache.GetAsync<List<LeaderboardEntryDto>>(cacheKey);
         if (cached != null) return Result<List<LeaderboardEntryDto>>.Success(cached);
 
-        var entries = await _db.Bets
+        var members = await _db.GroupMembers
+            .AsNoTracking()
+            .Include(m => m.User)
+            .Where(m => m.GroupId == groupId && m.IsActive)
+            .ToListAsync(ct);
+
+        var betStats = await _db.Bets
+            .AsNoTracking()
             .Where(b => b.GroupId == groupId && b.Status != BetStatus.Pending && b.Status != BetStatus.Cancelled)
-            .GroupBy(b => new { b.UserId, b.User.DisplayName, b.User.AvatarUrl })
-            .Select(g => new LeaderboardEntryDto(
-                0,
-                g.Key.UserId,
-                g.Key.DisplayName,
-                g.Key.AvatarUrl,
-                g.Count(),
-                g.Count(b => b.Status == BetStatus.Won || b.Status == BetStatus.HalfWon),
-                g.Count(b => b.Status == BetStatus.Lost || b.Status == BetStatus.HalfLost),
-                g.Where(b => b.Profit > 0).Sum(b => b.Profit),
-                g.Where(b => b.Profit < 0).Sum(b => Math.Abs(b.Profit)),
-                g.Sum(b => b.Profit)))
-            .OrderByDescending(e => e.NetProfit)
-            .ToListAsync();
+            .GroupBy(b => b.UserId)
+            .Select(g => new
+            {
+                UserId = g.Key,
+                TotalBets = g.Count(),
+                Wins = g.Count(b => b.Status == BetStatus.Won || b.Status == BetStatus.HalfWon),
+                Losses = g.Count(b => b.Status == BetStatus.Lost || b.Status == BetStatus.HalfLost),
+                Draws = g.Count(b => b.Status == BetStatus.Push),
+                TotalWagered = g.Sum(b => b.BetAmount),
+                TotalPayout = g.Sum(b => b.BetAmount + b.Profit),
+                Profit = g.Sum(b => b.Profit),
+            })
+            .ToDictionaryAsync(e => e.UserId, ct);
 
-        var ranked = entries.Select((e, i) => e with { Rank = i + 1 }).ToList();
+        var entries = members
+            .Select(m =>
+            {
+                betStats.TryGetValue(m.UserId, out var s);
+                int totalBets = s?.TotalBets ?? 0;
+                int wins = s?.Wins ?? 0;
+                int losses = s?.Losses ?? 0;
+                int draws = s?.Draws ?? 0;
+                decimal profit = s?.Profit ?? 0;
+                decimal winRate = totalBets > 0 ? (decimal)wins / totalBets : 0;
+                return new
+                {
+                    m.UserId,
+                    m.User.DisplayName,
+                    m.User.AvatarUrl,
+                    TotalBets = totalBets,
+                    Wins = wins,
+                    Losses = losses,
+                    Draws = draws,
+                    TotalWagered = s?.TotalWagered ?? 0,
+                    TotalPayout = s?.TotalPayout ?? 0,
+                    Profit = profit - m.PenaltyAmount,
+                    Balance = m.Balance,
+                    WinRate = Math.Round(winRate, 4),
+                    PenaltyAmount = m.PenaltyAmount,
+                };
+            })
+            .OrderByDescending(e => e.Balance)
+            .ThenByDescending(e => e.Profit)
+            .ToList();
+
+        var ranked = entries.Select((e, i) => new LeaderboardEntryDto(
+            i + 1, e.UserId, e.DisplayName, e.AvatarUrl,
+            e.TotalBets, e.Wins, e.Losses, e.Draws,
+            e.TotalWagered, e.TotalPayout, e.Profit,
+            e.Balance, e.WinRate, e.PenaltyAmount)
+        ).ToList();
+
         await _cache.SetAsync(cacheKey, ranked, TimeSpan.FromMinutes(5));
-
         return Result<List<LeaderboardEntryDto>>.Success(ranked);
     }
 
-    public async Task<Result<DashboardDto>> GetDashboardAsync(Guid groupId)
+    public async Task<Result<DashboardDto>> GetDashboardAsync(Guid groupId, CancellationToken ct = default)
     {
-        var leaderboardResult = await GetLeaderboardAsync(groupId);
+        var leaderboardResult = await GetLeaderboardAsync(groupId, ct);
         if (!leaderboardResult.Succeeded)
             return Result<DashboardDto>.Failure(leaderboardResult.Error!);
 
         var leaderboard = leaderboardResult.Data!;
 
-        var topWinners = leaderboard.OrderByDescending(e => e.NetProfit).Take(5).ToList();
-        var topLosers = leaderboard.OrderBy(e => e.NetProfit).Take(5).ToList();
+        var topWinners = leaderboard.OrderByDescending(e => e.Profit).Take(5).ToList();
+        var topLosers = leaderboard.OrderBy(e => e.Profit).Take(5).ToList();
 
         var highestBets = await _db.Bets
+            .AsNoTracking()
             .Where(b => b.GroupId == groupId)
             .OrderByDescending(b => b.BetAmount)
             .Take(5)
-            .Include(b => b.User)
-            .Include(b => b.Match).ThenInclude(m => m.HomeTeam)
-            .Include(b => b.Match).ThenInclude(m => m.AwayTeam)
-            .AsNoTracking()
             .Select(b => new HighestBetDto(
                 b.UserId, b.User.DisplayName, b.BetAmount,
                 b.Match.HomeTeam.Name, b.Match.AwayTeam.Name))
-            .ToListAsync();
+            .ToListAsync(ct);
 
-        int totalMembers = await _db.GroupMembers.CountAsync(m => m.GroupId == groupId && m.IsActive);
-        int totalBets = await _db.Bets.CountAsync(b => b.GroupId == groupId);
-        int totalMatches = await _db.Bets.Where(b => b.GroupId == groupId)
-            .Select(b => b.MatchId).Distinct().CountAsync();
-        decimal totalWagered = await _db.Bets.Where(b => b.GroupId == groupId).SumAsync(b => b.BetAmount);
+        var stats = await _db.Bets
+            .AsNoTracking()
+            .Where(b => b.GroupId == groupId)
+            .GroupBy(_ => 1)
+            .Select(g => new
+            {
+                TotalBets = g.Count(),
+                TotalMatches = g.Select(b => b.MatchId).Distinct().Count(),
+                TotalWagered = g.Sum(b => b.BetAmount),
+            })
+            .FirstOrDefaultAsync(ct);
 
-        var stats = new GroupStatsDto(totalMembers, totalBets, totalMatches, totalWagered);
+        int totalMembers = await _db.GroupMembers.CountAsync(m => m.GroupId == groupId && m.IsActive, ct);
 
-        return Result<DashboardDto>.Success(new DashboardDto(topWinners, topLosers, highestBets, stats));
+        var groupStats = new GroupStatsDto(
+            totalMembers,
+            stats?.TotalBets ?? 0,
+            stats?.TotalMatches ?? 0,
+            stats?.TotalWagered ?? 0);
+
+        return Result<DashboardDto>.Success(new DashboardDto(topWinners, topLosers, highestBets, groupStats));
     }
 
     public async Task SnapshotLeaderboardAsync(Guid groupId)
@@ -96,11 +147,11 @@ public class LeaderboardService : ILeaderboardService
             GroupId = groupId,
             UserId = e.UserId,
             TotalBets = e.TotalBets,
-            TotalWins = e.TotalWins,
-            TotalLosses = e.TotalLosses,
-            TotalWinAmount = e.TotalWinAmount,
-            TotalLossAmount = e.TotalLossAmount,
-            NetProfit = e.NetProfit,
+            TotalWins = e.Wins,
+            TotalLosses = e.Losses,
+            TotalWinAmount = e.TotalWagered,
+            TotalLossAmount = e.TotalPayout,
+            NetProfit = e.Profit,
             Rank = e.Rank,
             SnapshotDate = DateTime.UtcNow.Date
         });

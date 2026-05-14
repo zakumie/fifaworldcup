@@ -4,7 +4,7 @@ import type { LeaderboardEntryDto } from '../../types';
 export const leaderboardApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getLeaderboard: builder.query<LeaderboardEntryDto[], { groupId: string }>({
-      query: ({ groupId }) => `/leaderboard/${groupId}`,
+      query: ({ groupId }) => `/leaderboard/groups/${groupId}`,
       providesTags: ['Leaderboard'],
     }),
   }),

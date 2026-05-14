@@ -16,11 +16,12 @@ public enum GroupRole
 
 public enum MatchStatus
 {
-    Scheduled = 0,
-    Live = 1,
-    Finished = 2,
-    Postponed = 3,
-    Cancelled = 4
+    Open = 0,
+    Upcoming = 1,
+    Live = 2,
+    Finished = 3,
+    Postponed = 4,
+    Cancelled = 5
 }
 
 public enum BetStatus
@@ -47,5 +48,12 @@ public enum TransactionType
     BetWon = 2,
     BetLost = 3,
     BetRefund = 4,
-    AdminAdjustment = 5
+    AdminAdjustment = 5,
+    BetUpdated = 6
+}
+
+public enum SettlementMode
+{
+    Normal = 0,
+    WinnerKeepsLoserPays = 1
 }

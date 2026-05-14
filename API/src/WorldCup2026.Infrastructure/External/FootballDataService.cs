@@ -80,17 +80,23 @@ public class FootballDataService : IExternalMatchService
                 string awayCode = m.GetProperty("awayTeam").GetProperty("tla").GetString() ?? "";
                 var homeTeam = await _db.Teams.FirstOrDefaultAsync(t => t.Code == homeCode);
                 var awayTeam = await _db.Teams.FirstOrDefaultAsync(t => t.Code == awayCode);
-                if (homeTeam == null || awayTeam == null) continue;
+                if (homeTeam == null || awayTeam == null)
+                {
+                    _logger.LogWarning("Skipping match {ExternalId}: team not found - Home={HomeCode}({Found1}) Away={AwayCode}({Found2})",
+                        externalId, homeCode, homeTeam != null, awayCode, awayTeam != null);
+                    continue;
+                }
 
                 string status = m.GetProperty("status").GetString() ?? "";
+                string? group = m.TryGetProperty("group", out var grp) ? grp.GetString() : null;
                 var matchStatus = status switch
                 {
-                    "SCHEDULED" or "TIMED" => MatchStatus.Scheduled,
+                    "SCHEDULED" or "TIMED" => MatchStatus.Open,
                     "IN_PLAY" or "PAUSED" => MatchStatus.Live,
                     "FINISHED" => MatchStatus.Finished,
                     "POSTPONED" => MatchStatus.Postponed,
                     "CANCELLED" => MatchStatus.Cancelled,
-                    _ => MatchStatus.Scheduled
+                    _ => MatchStatus.Open
                 };
 
                 int? homeScore = null, awayScore = null;
@@ -105,9 +111,16 @@ public class FootballDataService : IExternalMatchService
 
                 if (existing != null)
                 {
-                    existing.Status = matchStatus;
+                    // Don't update matches that have already completed
+                    if (existing.Status == MatchStatus.Finished)
+                        continue;
+
+                    // Don't overwrite Upcoming (admin-configured) back to Open (external initial)
+                    if (!(existing.Status == MatchStatus.Upcoming && matchStatus == MatchStatus.Open))
+                        existing.Status = matchStatus;
                     existing.HomeScore = homeScore;
                     existing.AwayScore = awayScore;
+                    existing.Group = group;
                 }
                 else
                 {
@@ -118,6 +131,7 @@ public class FootballDataService : IExternalMatchService
                         AwayTeamId = awayTeam.Id,
                         MatchDay = m.TryGetProperty("matchday", out var md) ? md.GetInt32() : 0,
                         Stage = m.GetProperty("stage").GetString() ?? "GROUP_STAGE",
+                        Group = group,
                         StartTime = m.GetProperty("utcDate").GetDateTime(),
                         Status = matchStatus,
                         HomeScore = homeScore,

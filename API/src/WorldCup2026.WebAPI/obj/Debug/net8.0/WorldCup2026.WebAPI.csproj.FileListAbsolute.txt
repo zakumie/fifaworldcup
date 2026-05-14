@@ -4,7 +4,6 @@ E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup20
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup2026.WebAPI.AssemblyInfoInputs.cache
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup2026.WebAPI.AssemblyInfo.cs
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup2026.WebAPI.csproj.CoreCompileInputs.cache
-E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup2026.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup2026.WebAPI.MvcApplicationPartsAssemblyInfo.cache
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\bin\Debug\net8.0\appsettings.Development.json
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\bin\Debug\net8.0\appsettings.json
@@ -182,4 +181,5 @@ E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\bin\Debug\net8.0\Google.Api
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\bin\Debug\net8.0\Google.Apis.Core.dll
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\bin\Debug\net8.0\System.Management.dll
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\WorldCup2026.WebAPI.sourcelink.json
 E:\Projects\WorldCup2026\API\src\WorldCup2026.WebAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

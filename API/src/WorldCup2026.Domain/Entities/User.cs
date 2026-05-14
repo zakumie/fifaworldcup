@@ -15,6 +15,7 @@ public class User : BaseEntity
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public SystemRole Role { get; set; } = SystemRole.User;
     public bool IsActive { get; set; } = true;
+    public string TimeZone { get; set; } = "Asia/Ho_Chi_Minh";
 
     public ICollection<GroupMember> GroupMemberships { get; set; } = new List<GroupMember>();
     public ICollection<Group> CreatedGroups { get; set; } = new List<Group>();

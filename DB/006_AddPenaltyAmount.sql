@@ -1,0 +1,2 @@
+ALTER TABLE GroupMembers
+ADD PenaltyAmount DECIMAL(18, 2) NOT NULL DEFAULT 0;

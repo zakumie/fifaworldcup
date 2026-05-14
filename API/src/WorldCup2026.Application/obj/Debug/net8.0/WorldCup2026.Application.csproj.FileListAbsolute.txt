@@ -13,3 +13,4 @@ E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\World
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\refint\WorldCup2026.Application.dll
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.pdb
 E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\ref\WorldCup2026.Application.dll
+E:\Projects\WorldCup2026\API\src\WorldCup2026.Application\obj\Debug\net8.0\WorldCup2026.Application.sourcelink.json

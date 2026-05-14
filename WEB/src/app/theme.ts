@@ -39,5 +39,10 @@ export const theme = createTheme({
         root: { borderRadius: 12 },
       },
     },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: { borderRadius: 0 },
+      },
+    },
   },
 });
