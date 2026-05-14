@@ -1,7 +1,6 @@
-.vs/VSWorkspaceState.json
-.vs/slnx.sqlite
-.vs/WorldCup2026/v17/workspaceFileList.bin
-API/.vs/WorldCup2026/v17/.futdcache.v2
+# Visual Studio IDE cache files
+.vs/
+API/.vs/
 
 # .NET build outputs
 API/**/bin/
