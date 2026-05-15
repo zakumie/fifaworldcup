@@ -57,7 +57,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a1a0f] via-[#0f2618] to-[#0a1a0f] relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#173b2a] via-[#2e503b] to-[#173b2a] relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-emerald-500/5 blur-3xl" />
@@ -78,9 +78,9 @@ export function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-[#111b14]/80 backdrop-blur-xl border border-emerald-800/30 rounded-3xl p-8 shadow-2xl shadow-black/40">
+        <div className="bg-white backdrop-blur-xl border border-slate-200 rounded-3xl p-8 shadow-2xl shadow-black/8">
           {error && (
-            <Alert severity="error" sx={{ mb: 3, borderRadius: 2, bgcolor: 'rgba(220,38,38,0.1)', color: '#fca5a5', '& .MuiAlert-icon': { color: '#f87171' } }}>
+            <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
               {error}
             </Alert>
           )}
@@ -88,7 +88,7 @@ export function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             {/* Email field */}
             <div className="mb-4">
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
                 Email
               </label>
               <div className="relative">
@@ -100,10 +100,10 @@ export function LoginPage() {
                   type="email"
                   autoFocus
                   placeholder="you@example.com"
-                  className={`w-full pl-11 pr-4 py-3 rounded-xl bg-[#0a1a0f] border text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 transition-all ${
+                  className={`w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 transition-all ${
                     errors.email
                       ? 'border-red-500/50 focus:ring-red-500/30'
-                      : 'border-emerald-800/30 focus:ring-emerald-500/30 focus:border-emerald-600/50'
+                      : 'border-slate-300 focus:ring-emerald-500/30 focus:border-emerald-500'
                   }`}
                 />
               </div>
@@ -114,7 +114,7 @@ export function LoginPage() {
 
             {/* Password field */}
             <div className="mb-6">
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
                 Password
               </label>
               <div className="relative">
@@ -125,10 +125,10 @@ export function LoginPage() {
                   {...register('password')}
                   type="password"
                   placeholder="••••••••"
-                  className={`w-full pl-11 pr-4 py-3 rounded-xl bg-[#0a1a0f] border text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 transition-all ${
+                  className={`w-full pl-11 pr-4 py-3 rounded-xl bg-slate-50 border text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 transition-all ${
                     errors.password
                       ? 'border-red-500/50 focus:ring-red-500/30'
-                      : 'border-emerald-800/30 focus:ring-emerald-500/30 focus:border-emerald-600/50'
+                      : 'border-slate-300 focus:ring-emerald-500/30 focus:border-emerald-500'
                   }`}
                 />
               </div>
@@ -156,9 +156,9 @@ export function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-emerald-800/30" />
-            <span className="text-xs font-medium text-slate-500 uppercase">or</span>
-            <div className="flex-1 h-px bg-emerald-800/30" />
+            <div className="flex-1 h-px bg-slate-200" />
+            <span className="text-xs font-medium text-slate-400 uppercase">or</span>
+            <div className="flex-1 h-px bg-slate-200" />
           </div>
 
           {/* Google login */}
@@ -169,15 +169,15 @@ export function LoginPage() {
               size="large"
               width="100%"
               text="signin_with"
-              theme="filled_black"
+              theme="outline"
               shape="pill"
             />
           </Box>
 
           {/* Register link */}
-          <p className="text-center text-sm text-slate-400 mt-6">
+          <p className="text-center text-sm text-slate-500 mt-6">
             Don't have an account?{' '}
-            <RouterLink to="/register" className="text-emerald-400 font-semibold hover:text-emerald-300 transition-colors">
+            <RouterLink to="/register" className="text-emerald-600 font-semibold hover:text-emerald-500 transition-colors">
               Sign up
             </RouterLink>
           </p>
