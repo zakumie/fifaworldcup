@@ -103,18 +103,7 @@ builder.Services.AddCors(options =>
 
 // DataProtection — persist keys to Redis so they survive container restarts
 
-var redisConnection = builder.Configuration.GetConnectionString("Redis");
-
-var redisConnectionOptions = ConfigurationOptions.Parse(redisConnection!);
-redisConnectionOptions.Ssl = true;
-redisConnectionOptions.AbortOnConnectFail = false;
-redisConnectionOptions.ConnectRetry = 5;
-
-var redis = ConnectionMultiplexer.Connect(redisConnectionOptions);
-
-builder.Services.AddDataProtection()
-    .SetApplicationName("WorldCup2026Predition")
-    .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
+builder.Services.AddDataProtection().DisableAutomaticKeyGeneration().SetApplicationName("WorldCup2026Predition");
 
 // Health checks
 builder.Services.AddHealthChecks();

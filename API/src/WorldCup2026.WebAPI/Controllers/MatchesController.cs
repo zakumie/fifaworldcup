@@ -47,7 +47,7 @@ public class MatchesController : BaseApiController
 
     [HttpPost("sync-teams")]
     [Authorize(Policy = "AdminOnly")]
-    public async Task<ActionResult> SyncTeams()
+    public async Task<ActionResult> SyncTeams(int isSyncAll = 0)
         => HandleResult(await _matches.SyncTeamsAsync());
 
     [HttpGet("teams")]
