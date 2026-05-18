@@ -12,5 +12,6 @@ public interface IMatchService
     Task<Result<PagedResult<MatchDto>>> GetListAsync(MatchListRequest request);
     Task<Result<MatchDto>> UpdateScoreAsync(Guid matchId, UpdateScoreRequest request);
     Task<Result<int>> SyncFromExternalAsync();
+    Task<Result<int>> SyncTeamsAsync();
     Task<Result<List<TeamDto>>> GetTeamsAsync();
 }

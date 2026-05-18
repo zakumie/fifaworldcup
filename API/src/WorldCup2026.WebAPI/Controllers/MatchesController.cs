@@ -45,6 +45,11 @@ public class MatchesController : BaseApiController
     public async Task<ActionResult> SyncFromExternal()
         => HandleResult(await _matches.SyncFromExternalAsync());
 
+    [HttpPost("sync-teams")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<ActionResult> SyncTeams()
+        => HandleResult(await _matches.SyncTeamsAsync());
+
     [HttpGet("teams")]
     public async Task<ActionResult> GetTeams()
         => HandleResult(await _matches.GetTeamsAsync());

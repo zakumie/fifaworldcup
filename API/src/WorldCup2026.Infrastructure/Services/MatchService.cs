@@ -146,6 +146,13 @@ public class MatchService : IMatchService
         return Result<int>.Success(synced);
     }
 
+    public async Task<Result<int>> SyncTeamsAsync()
+    {
+        int synced = await _externalService.SyncTeamsAsync();
+        await _cache.RemoveByPrefixAsync("teams:");
+        return Result<int>.Success(synced);
+    }
+
     public async Task<Result<List<TeamDto>>> GetTeamsAsync()
     {
         const string cacheKey = "teams:all";
