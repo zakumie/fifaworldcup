@@ -2,6 +2,11 @@
 .vs/
 API/.vs/
 
+# Environment files (secrets)
+.env
+.env.local
+.env.production
+
 # Node.js dependencies
 node_modules/
 WEB/node_modules/
