@@ -23,7 +23,7 @@ public static class DependencyInjection
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379";
-            options.InstanceName = "wc2026_";
+            options.InstanceName = "WORLDCUP_2026_REDIS";
         });
 
         // HTTP Client for football-data.org
