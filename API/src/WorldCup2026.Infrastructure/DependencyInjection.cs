@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using WorldCup2026.Application.Interfaces;
 using WorldCup2026.Infrastructure.BackgroundJobs;
 using WorldCup2026.Infrastructure.Data;
@@ -19,11 +20,24 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DefaultConnection"),
                 b => b.EnableRetryOnFailure(3)));
 
-        // Redis Cache
+        // Redis Cache with connection pooling and validation
+        var redisConnectionString = configuration.GetConnectionString("Redis") 
+            ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING")
+            ?? "localhost:6379";
+            
+        var configOptions = ConfigurationOptions.Parse(redisConnectionString);
+        configOptions.ConnectRetry = 3;
+        configOptions.ConnectTimeout = 5000;
+        configOptions.SyncTimeout = 5000;
+        configOptions.AbortOnConnectFail = false;
+        
+        var multiplexer = ConnectionMultiplexer.Connect(configOptions);
+        services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+        
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379";
             options.InstanceName = "WORLDCUP_2026_REDIS";
+            options.ConfigurationOptions = configOptions;
         });
 
         // HTTP Client for football-data.org

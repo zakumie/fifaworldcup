@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -102,8 +103,15 @@ builder.Services.AddCors(options =>
 });
 
 // DataProtection — persist keys to Redis so they survive container restarts
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis")
+    ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING")
+    ?? "localhost:6379";
 
-builder.Services.AddDataProtection().DisableAutomaticKeyGeneration().SetApplicationName("WorldCup2026Predition");
+var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
+builder.Services.AddDataProtection()
+    .PersistKeysToStackExchangeRedis(multiplexer, "WORLDCUP_2026_DATAPROTECTION")
+    .DisableAutomaticKeyGeneration()
+    .SetApplicationName("WorldCup2026Prediction");
 
 // Health checks
 builder.Services.AddHealthChecks();
