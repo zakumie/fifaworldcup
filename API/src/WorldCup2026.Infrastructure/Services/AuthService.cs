@@ -41,7 +41,7 @@ public class AuthService : IAuthService
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
 
-        return GenerateAuthResponse(user);
+        return await GenerateAuthResponseAsync(user);
     }
 
     public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request)
@@ -50,39 +50,13 @@ public class AuthService : IAuthService
         if (user == null || user.PasswordHash == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             return Result<AuthResponse>.Failure("Invalid email or password.");
 
-        return GenerateAuthResponse(user);
+        return await GenerateAuthResponseAsync(user);
     }
 
-    public async Task<Result<AuthResponse>> OAuthLoginAsync(OAuthLoginRequest request)
+    public Task<Result<AuthResponse>> OAuthLoginAsync(OAuthLoginRequest request)
     {
-        var provider = request.Provider.ToLowerInvariant() switch
-        {
-            "google" => AuthProvider.Google,
-            "facebook" => AuthProvider.Facebook,
-            _ => throw new ArgumentException("Unsupported provider")
-        };
-
-        // In production, validate the token with the OAuth provider
-        // For now, decode the token to get user info
-        // This is a placeholder — real implementation would call Google/Facebook API
-        var externalId = request.Token; // Placeholder
-        var user = await _db.Users.FirstOrDefaultAsync(
-            u => u.AuthProvider == provider && u.ExternalAuthId == externalId);
-
-        if (user == null)
-        {
-            user = new User
-            {
-                Email = $"{externalId}@{request.Provider}.oauth",
-                DisplayName = "OAuth User",
-                AuthProvider = provider,
-                ExternalAuthId = externalId
-            };
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-        }
-
-        return GenerateAuthResponse(user);
+        // Generic OAuth is disabled. Use provider-specific endpoints (e.g., /google-login).
+        return Task.FromResult(Result<AuthResponse>.Failure("OAuth login via this endpoint is not supported. Use /google-login instead."));
     }
 
     public async Task<Result<AuthResponse>> GoogleLoginAsync(GoogleLoginRequest request)
@@ -122,7 +96,7 @@ public class AuthService : IAuthService
         if (!user.IsActive)
             return Result<AuthResponse>.Failure("Account is disabled.");
 
-        return GenerateAuthResponse(user);
+        return await GenerateAuthResponseAsync(user);
     }
 
     public async Task<Result<AuthResponse>> RefreshTokenAsync(RefreshTokenRequest request)
@@ -135,7 +109,7 @@ public class AuthService : IAuthService
         if (user == null)
             return Result<AuthResponse>.Failure("Invalid or expired refresh token.");
 
-        return GenerateAuthResponse(user);
+        return await GenerateAuthResponseAsync(user);
     }
 
     public async Task<Result> LogoutAsync(Guid userId)
@@ -150,14 +124,14 @@ public class AuthService : IAuthService
         return Result.Success();
     }
 
-    private Result<AuthResponse> GenerateAuthResponse(User user)
+    private async Task<Result<AuthResponse>> GenerateAuthResponseAsync(User user)
     {
         var accessToken = _jwt.GenerateAccessToken(user.Id, user.Email, user.DisplayName, user.Role.ToString());
         var refreshToken = _jwt.GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
 
         var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString(), user.TimeZone);
         return Result<AuthResponse>.Success(new AuthResponse(accessToken, refreshToken, userInfo));

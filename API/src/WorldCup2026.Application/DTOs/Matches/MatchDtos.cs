@@ -28,5 +28,10 @@ public record MatchListRequest
     public DateTime? FromDate { get; init; }
     public DateTime? ToDate { get; init; }
     public int Page { get; init; } = 1;
-    public int PageSize { get; init; } = 20;
+    public int PageSize
+    {
+        get => _pageSize;
+        init => _pageSize = value > 100 ? 100 : value < 1 ? 1 : value;
+    }
+    private readonly int _pageSize = 20;
 }

@@ -28,10 +28,10 @@ public class CacheService : ICacheService
 
     public async Task RemoveAsync(string key) => await _cache.RemoveAsync(key);
 
-    public Task RemoveByPrefixAsync(string prefix)
+    public async Task RemoveByPrefixAsync(string prefix)
     {
-        // Redis SCAN-based prefix removal requires StackExchange.Redis directly.
-        // For simplicity, individual keys are removed. In production, use Redis SCAN.
-        return Task.CompletedTask;
+        // IDistributedCache doesn't support prefix removal.
+        // Remove exact key when prefix matches a single known key pattern.
+        await _cache.RemoveAsync(prefix);
     }
 }

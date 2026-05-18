@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorldCup2026.Application.DTOs.Auth;
 using WorldCup2026.Application.Interfaces;
@@ -30,6 +31,7 @@ public class AuthController : BaseApiController
     public async Task<ActionResult> RefreshToken(RefreshTokenRequest request)
         => HandleResult(await _auth.RefreshTokenAsync(request));
 
+    [Authorize]
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()
     {

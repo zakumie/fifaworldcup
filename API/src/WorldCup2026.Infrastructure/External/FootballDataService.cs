@@ -37,10 +37,13 @@ public class FootballDataService : IExternalMatchService
             var teams = doc.RootElement.GetProperty("teams");
             int count = 0;
 
+            // Preload existing team codes to avoid N+1
+            var existingCodes = (await _db.Teams.Select(x => x.Code).ToListAsync()).ToHashSet();
+
             foreach (var t in teams.EnumerateArray())
             {
                 string code = t.GetProperty("tla").GetString() ?? "";
-                if (await _db.Teams.AnyAsync(x => x.Code == code)) continue;
+                if (existingCodes.Contains(code)) continue;
 
                 _db.Teams.Add(new Team
                 {
@@ -71,15 +74,22 @@ public class FootballDataService : IExternalMatchService
             var matches = doc.RootElement.GetProperty("matches");
             int count = 0;
 
+            // Preload lookups to avoid N+1 queries
+            var existingMatches = await _db.Matches
+                .Where(x => x.ExternalMatchId != null)
+                .ToDictionaryAsync(x => x.ExternalMatchId!.Value);
+            var teamsByCode = await _db.Teams
+                .ToDictionaryAsync(t => t.Code);
+
             foreach (var m in matches.EnumerateArray())
             {
                 int externalId = m.GetProperty("id").GetInt32();
-                var existing = await _db.Matches.FirstOrDefaultAsync(x => x.ExternalMatchId == externalId);
+                existingMatches.TryGetValue(externalId, out var existing);
 
                 string homeCode = m.GetProperty("homeTeam").GetProperty("tla").GetString() ?? "";
                 string awayCode = m.GetProperty("awayTeam").GetProperty("tla").GetString() ?? "";
-                var homeTeam = await _db.Teams.FirstOrDefaultAsync(t => t.Code == homeCode);
-                var awayTeam = await _db.Teams.FirstOrDefaultAsync(t => t.Code == awayCode);
+                teamsByCode.TryGetValue(homeCode, out var homeTeam);
+                teamsByCode.TryGetValue(awayCode, out var awayTeam);
                 if (homeTeam == null || awayTeam == null)
                 {
                     _logger.LogWarning("Skipping match {ExternalId}: team not found - Home={HomeCode}({Found1}) Away={AwayCode}({Found2})",

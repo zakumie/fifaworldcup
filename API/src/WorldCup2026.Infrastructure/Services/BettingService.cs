@@ -333,6 +333,11 @@ public class BettingService : IBettingService
             {
                 using var transaction = await _db.Database.BeginTransactionAsync();
 
+                // Preload all group members to avoid N+1 queries
+                var membersByUserId = await _db.GroupMembers
+                    .Where(m => m.GroupId == groupId && m.IsActive)
+                    .ToDictionaryAsync(m => m.UserId);
+
                 foreach (var bet in bets)
                 {
                     var result = BettingEngine.Calculate(
@@ -348,8 +353,7 @@ public class BettingService : IBettingService
                     bet.Status = result.Status;
                     bet.SettledAt = DateTime.UtcNow;
 
-                    var member = await _db.GroupMembers
-                        .FirstAsync(m => m.GroupId == groupId && m.UserId == bet.UserId);
+                    var member = membersByUserId[bet.UserId];
 
                     decimal balanceBefore = member.Balance;
                     decimal balanceChange;
@@ -411,9 +415,9 @@ public class BettingService : IBettingService
                 if (config.Group.SettlementMode == SettlementMode.WinnerKeepsLoserPays)
                 {
                     var bettorUserIds = bets.Select(b => b.UserId).ToHashSet();
-                    var nonBettors = await _db.GroupMembers
-                        .Where(m => m.GroupId == groupId && m.IsActive && !bettorUserIds.Contains(m.UserId))
-                        .ToListAsync();
+                    var nonBettors = membersByUserId.Values
+                        .Where(m => !bettorUserIds.Contains(m.UserId))
+                        .ToList();
 
                     decimal autoLossAmount = config.DefaultBetAmount ?? config.MinBetAmount;
 
