@@ -37,7 +37,6 @@ public class FootballDataService : IExternalMatchService
             var teams = doc.RootElement.GetProperty("teams");
             int count = 0;
 
-            // Preload existing team codes to avoid N+1
             var existingCodes = (await _db.Teams.Select(x => x.Code).ToListAsync()).ToHashSet();
 
             foreach (var t in teams.EnumerateArray())

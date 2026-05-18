@@ -80,7 +80,7 @@ public class MatchConfiguration : IEntityTypeConfiguration<Match>
         builder.HasIndex(e => e.ExternalMatchId);
         builder.HasIndex(e => e.StartTime);
         builder.Property(e => e.Stage).HasMaxLength(50).IsRequired();
-        builder.Property(e => e.Group).HasColumnName("\"Group\"");
+        builder.Property(e => e.Group).HasColumnName("Group");
 
         builder.HasOne(e => e.HomeTeam)
             .WithMany()
