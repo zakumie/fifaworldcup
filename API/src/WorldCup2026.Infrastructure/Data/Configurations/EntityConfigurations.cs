@@ -44,6 +44,7 @@ public class GroupMemberConfiguration : IEntityTypeConfiguration<GroupMember>
         builder.HasKey(e => e.Id);
         builder.HasIndex(e => new { e.GroupId, e.UserId }).IsUnique();
         builder.Property(e => e.Balance).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.PenaltyAmount).HasColumnType("numeric(18,2)");
         builder.Property(e => e.RowVersion).IsRowVersion();
 
         builder.HasOne(e => e.Group)
