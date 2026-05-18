@@ -95,17 +95,26 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins(builder.Configuration["Cors:Origins"] ?? "http://localhost:4000")
+        policy.WithOrigins(builder.Configuration["Cors:Origins"]!)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
 });
 
 // DataProtection — persist keys to Redis so they survive container restarts
-var redisConn = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")!);
+
+var redisConnection = builder.Configuration.GetConnectionString("Redis");
+
+var redisConnectionOptions = ConfigurationOptions.Parse(redisConnection!);
+redisConnectionOptions.Ssl = true;
+redisConnectionOptions.AbortOnConnectFail = false;
+redisConnectionOptions.ConnectRetry = 5;
+
+var redis = ConnectionMultiplexer.Connect(redisConnectionOptions);
+
 builder.Services.AddDataProtection()
     .SetApplicationName("WorldCup2026Predition")
-    .PersistKeysToStackExchangeRedis(redisConn, "DataProtection-Keys");
+    .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 
 // Health checks
 builder.Services.AddHealthChecks();
