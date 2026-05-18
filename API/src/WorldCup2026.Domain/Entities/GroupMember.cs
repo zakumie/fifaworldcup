@@ -14,7 +14,7 @@ public class GroupMember : BaseEntity
     public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
     [Timestamp]
-    public byte[]? RowVersion { get; set; }
+    public uint RowVersion { get; set; }
 
     public Group Group { get; set; } = null!;
     public User User { get; set; } = null!;

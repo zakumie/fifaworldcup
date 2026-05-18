@@ -3,10 +3,8 @@
 -- Converted from SQL Server DeployToProd.sql
 -- ============================================================
 
--- NOTE: "RowVersion" in GroupMembers was SQL Server's [timestamp] (auto-incremented binary).
--- PostgreSQL equivalent: use xmin system column as EF Core concurrency token
--- via .UseXminAsConcurrencyToken() in DbContext configuration.
--- The column is kept as integer for schema compatibility.
+-- NOTE: "RowVersion" concurrency is handled by PostgreSQL's xmin system column.
+-- EF Core Npgsql maps [Timestamp] uint to xmin automatically — no DDL column needed.
 
 -- ============================================================
 -- Tables
@@ -85,7 +83,6 @@ CREATE TABLE "GroupMembers" (
     "Balance"       numeric(18, 2)  NOT NULL DEFAULT 0,
     "JoinedAt"      timestamptz     NOT NULL DEFAULT now(),
     "IsActive"      boolean         NOT NULL DEFAULT true,
-    "RowVersion"    integer         NOT NULL DEFAULT 0,
     "CreatedAt"     timestamptz     NOT NULL DEFAULT now(),
     "UpdatedAt"     timestamptz     NOT NULL DEFAULT now(),
     "DeletedAt"     timestamptz     NULL,

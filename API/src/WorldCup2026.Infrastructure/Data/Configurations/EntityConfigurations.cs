@@ -28,7 +28,7 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
         builder.Property(e => e.Name).HasMaxLength(200).IsRequired();
         builder.Property(e => e.Description).HasMaxLength(500);
         builder.Property(e => e.InviteCode).HasMaxLength(20).IsRequired();
-        builder.Property(e => e.DefaultBalance).HasColumnType("decimal(18,2)");
+        builder.Property(e => e.DefaultBalance).HasColumnType("numeric(18,2)");
 
         builder.HasOne(e => e.CreatedBy)
             .WithMany(u => u.CreatedGroups)
@@ -43,7 +43,7 @@ public class GroupMemberConfiguration : IEntityTypeConfiguration<GroupMember>
     {
         builder.HasKey(e => e.Id);
         builder.HasIndex(e => new { e.GroupId, e.UserId }).IsUnique();
-        builder.Property(e => e.Balance).HasColumnType("decimal(18,2)");
+        builder.Property(e => e.Balance).HasColumnType("numeric(18,2)");
         builder.Property(e => e.RowVersion).IsRowVersion();
 
         builder.HasOne(e => e.Group)
@@ -79,6 +79,7 @@ public class MatchConfiguration : IEntityTypeConfiguration<Match>
         builder.HasIndex(e => e.ExternalMatchId);
         builder.HasIndex(e => e.StartTime);
         builder.Property(e => e.Stage).HasMaxLength(50).IsRequired();
+        builder.Property(e => e.Group).HasColumnName("\"Group\"");
 
         builder.HasOne(e => e.HomeTeam)
             .WithMany()
@@ -98,11 +99,11 @@ public class MatchBettingConfigConfiguration : IEntityTypeConfiguration<MatchBet
     {
         builder.HasKey(e => e.Id);
         builder.HasIndex(e => new { e.MatchId, e.GroupId }).IsUnique();
-        builder.Property(e => e.Handicap).HasColumnType("decimal(5,2)");
-        builder.Property(e => e.Odds).HasColumnType("decimal(5,2)");
-        builder.Property(e => e.MinBetAmount).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.MaxBetAmount).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.DefaultBetAmount).HasColumnType("decimal(18,2)");
+        builder.Property(e => e.Handicap).HasColumnType("numeric(5,2)");
+        builder.Property(e => e.Odds).HasColumnType("numeric(5,2)");
+        builder.Property(e => e.MinBetAmount).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.MaxBetAmount).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.DefaultBetAmount).HasColumnType("numeric(18,2)");
 
         builder.HasOne(e => e.Match)
             .WithMany(m => m.BettingConfigs)
@@ -133,8 +134,8 @@ public class BetConfiguration : IEntityTypeConfiguration<Bet>
         builder.HasKey(e => e.Id);
         builder.HasIndex(e => new { e.UserId, e.MatchBettingConfigId }).IsUnique();
         builder.HasIndex(e => new { e.GroupId, e.MatchId });
-        builder.Property(e => e.BetAmount).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.Profit).HasColumnType("decimal(18,2)");
+        builder.Property(e => e.BetAmount).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.Profit).HasColumnType("numeric(18,2)");
 
         builder.HasOne(e => e.User)
             .WithMany(u => u.Bets)
@@ -169,9 +170,9 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
     {
         builder.HasKey(e => e.Id);
         builder.HasIndex(e => new { e.UserId, e.GroupId });
-        builder.Property(e => e.Amount).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.BalanceBefore).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.BalanceAfter).HasColumnType("decimal(18,2)");
+        builder.Property(e => e.Amount).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.BalanceBefore).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.BalanceAfter).HasColumnType("numeric(18,2)");
         builder.Property(e => e.Description).HasMaxLength(500);
 
         builder.HasOne(e => e.User)
@@ -192,9 +193,9 @@ public class LeaderboardSnapshotConfiguration : IEntityTypeConfiguration<Leaderb
     {
         builder.HasKey(e => e.Id);
         builder.HasIndex(e => new { e.GroupId, e.SnapshotDate });
-        builder.Property(e => e.TotalWinAmount).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.TotalLossAmount).HasColumnType("decimal(18,2)");
-        builder.Property(e => e.NetProfit).HasColumnType("decimal(18,2)");
+        builder.Property(e => e.TotalWinAmount).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.TotalLossAmount).HasColumnType("numeric(18,2)");
+        builder.Property(e => e.NetProfit).HasColumnType("numeric(18,2)");
 
         builder.HasOne(e => e.Group)
             .WithMany()

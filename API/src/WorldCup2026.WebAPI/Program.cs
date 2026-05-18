@@ -1,10 +1,9 @@
-using System.Text;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Text;
 using WorldCup2026.Application.Interfaces;
 using WorldCup2026.Application.Mappings;
 using WorldCup2026.Application.Validators;
