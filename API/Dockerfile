@@ -12,6 +12,9 @@ RUN dotnet publish src/WorldCup2026.WebAPI/WorldCup2026.WebAPI.csproj -c Release
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
+
+RUN mkdir -p /app/keys && chown app:app /app/keys
+
 USER app
 COPY --from=build /app/publish .
 
