@@ -1,6 +1,6 @@
+using System.Collections.Concurrent;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
-using StackExchange.Redis;
 using WorldCup2026.Application.Interfaces;
 
 namespace WorldCup2026.Infrastructure.Services;
@@ -8,13 +8,9 @@ namespace WorldCup2026.Infrastructure.Services;
 public class CacheService : ICacheService
 {
     private readonly IDistributedCache _cache;
-    private readonly IConnectionMultiplexer _redis;
+    private static readonly ConcurrentDictionary<string, byte> _keys = new();
 
-    public CacheService(IDistributedCache cache, IConnectionMultiplexer redis)
-    {
-        _cache = cache;
-        _redis = redis;
-    }
+    public CacheService(IDistributedCache cache) => _cache = cache;
 
     public async Task<T?> GetAsync<T>(string key)
     {
@@ -30,30 +26,22 @@ public class CacheService : ICacheService
         };
         var json = JsonSerializer.Serialize(value);
         await _cache.SetStringAsync(key, json, options);
+        _keys.TryAdd(key, 0);
     }
 
-    public async Task RemoveAsync(string key) => await _cache.RemoveAsync(key);
+    public async Task RemoveAsync(string key)
+    {
+        await _cache.RemoveAsync(key);
+        _keys.TryRemove(key, out _);
+    }
 
     public async Task RemoveByPrefixAsync(string prefix)
     {
-        var db = _redis.GetDatabase();
-        var endpoints = _redis.GetEndPoints();
-        
-        if (endpoints.Length == 0)
-            return;
-            
-        var server = _redis.GetServer(endpoints[0]);
-        var pattern = $"WORLDCUP_2026_REDIS:{prefix}*";
-        
-        var keys = new List<RedisKey>();
-        await foreach (var key in server.KeysAsync(pattern: pattern, pageSize: 10000))
+        var matchingKeys = _keys.Keys.Where(k => k.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)).ToList();
+        foreach (var key in matchingKeys)
         {
-            keys.Add(key);
-        }
-        
-        if (keys.Count > 0)
-        {
-            await db.KeyDeleteAsync(keys.ToArray());
+            await _cache.RemoveAsync(key);
+            _keys.TryRemove(key, out _);
         }
     }
 }
