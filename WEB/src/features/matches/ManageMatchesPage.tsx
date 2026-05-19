@@ -392,10 +392,11 @@ export function ManageMatchesPage() {
             }}
             rowsPerPageOptions={[10, 25, 50]}
             sx={{
-              borderTop: '1px solid #f1f5f9',
+              borderTop: '1px solid',
+              borderColor: 'divider',
               '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
                 fontSize: '0.8rem',
-                color: '#64748b',
+                color: 'text.secondary',
               },
             }}
           />

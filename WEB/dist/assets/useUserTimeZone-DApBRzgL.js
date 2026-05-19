@@ -1,0 +1,1 @@
+import{a as r,aA as s,r as n,aD as m}from"./index-Dx-pk_1t.js";function i(){const o=r(t=>{var e;return(e=t.auth.user)==null?void 0:e.timeZone})||s(),a=n.useCallback((t,e="MMM dd, yyyy")=>m(t,e,o),[o]);return{timeZone:o,formatDate:a}}export{i as u};

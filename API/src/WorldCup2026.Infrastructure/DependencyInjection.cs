@@ -19,12 +19,8 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DefaultConnection"),
                 b => b.EnableRetryOnFailure(3)));
 
-        // Redis Cache
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379";
-            options.InstanceName = "wc2026_";
-        });
+        // In-Memory Distributed Cache
+        services.AddDistributedMemoryCache();
 
         // HTTP Client for football-data.org
         services.AddHttpClient("FootballData");

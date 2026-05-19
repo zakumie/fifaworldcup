@@ -18,10 +18,13 @@ import ManageHistoryRoundedIcon from '@mui/icons-material/ManageHistoryRounded';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import RoofingRoundedIcon from '@mui/icons-material/RoofingRounded';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { logout } from '../../features/auth/authSlice';
 import { apiSlice } from '../../app/api';
 import { setSelectedGroupId } from '../../features/groups/groupSlice';
+import { toggleThemeMode } from '../../features/settings/themeSlice';
 import { useGroupId } from '../../features/groups/useGroupId';
 import { MusicPlayer } from '../MusicPlayer';
 
@@ -55,6 +58,7 @@ export function AppLayout() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
+  const themeMode = useAppSelector((state) => state.theme.mode);
 
   const isAdminOrManager = user?.role === 'Admin' || user?.role === 'Manager';
   const sidebarWidth = collapsed ? COLLAPSED_WIDTH : DRAWER_WIDTH;
@@ -83,11 +87,11 @@ export function AppLayout() {
           ${collapsed ? 'justify-center' : ''}
           ${isActive
             ? 'bg-primary text-white shadow-md shadow-primary/25'
-            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white'
           }
         `}
       >
-        <span className={`transition-colors flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'}`}>
+        <span className={`transition-colors flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
           {item.icon}
         </span>
         {!collapsed && item.label}
@@ -100,7 +104,7 @@ export function AppLayout() {
   };
 
   const drawerContent = (isCollapsed: boolean) => (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900">
       {/* Brand + Collapse toggle */}
       <div onClick={() => setCollapsed(!collapsed)} className={`pt-6 pb-4 ${isCollapsed ? 'px-3' : 'px-5'}`}>
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
@@ -109,8 +113,8 @@ export function AppLayout() {
           </div>
           {!isCollapsed && (
             <div className="flex-1">
-              <h1 className="text-base font-bold text-gray-800 leading-tight tracking-tight">WC 2026</h1>
-              <p className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Predictions</p>
+              <h1 className="text-base font-bold text-gray-800 dark:text-gray-100 leading-tight tracking-tight">WC 2026</h1>
+              <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Predictions</p>
             </div>
           )}
         </div>
@@ -118,7 +122,7 @@ export function AppLayout() {
 
       {/* Main Nav */}
       <nav className="flex-1 px-3 pb-4">
-        {!isCollapsed && <p className="px-3 pt-4 pb-2 text-[10px] font-semibold text-slate-300 uppercase tracking-widest">Menu</p>}
+        {!isCollapsed && <p className="px-3 pt-4 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Menu</p>}
         {isCollapsed && <div className="pt-4" />}
         <ul className="space-y-0.5">
           {mainItems.map(renderNavButton)}
@@ -126,8 +130,8 @@ export function AppLayout() {
 
         {adminItems.length > 0 && (
           <>
-            {!isCollapsed && <p className="px-3 pt-6 pb-2 text-[10px] font-semibold text-slate-300 uppercase tracking-widest">Admin</p>}
-            {isCollapsed && <div className="pt-4 mb-2 border-t border-gray-100 mx-2" />}
+            {!isCollapsed && <p className="px-3 pt-6 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Admin</p>}
+            {isCollapsed && <div className="pt-4 mb-2 border-t border-gray-100 dark:border-gray-700 mx-2" />}
             <ul className="space-y-0.5">
               {adminItems.map(renderNavButton)}
             </ul>
@@ -135,24 +139,25 @@ export function AppLayout() {
         )}
       </nav>
 
-      {/* Logout button at bottom */}
-      <div className="p-3 border-t border-gray-100">
+      {/* Settings section at bottom */}
+      <div className="p-3 border-t border-gray-100 dark:border-gray-700 space-y-1">
+        {/* Theme toggle */}
         {isCollapsed ? (
-          <Tooltip title="Logout" placement="right">
+          <Tooltip title={themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'} placement="right">
             <button
-              onClick={handleLogout}
-              className="w-full flex justify-center p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+              onClick={() => dispatch(toggleThemeMode())}
+              className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
             >
-              <LogoutOutlinedIcon fontSize="small" />
+              {themeMode === 'dark' ? <LightModeOutlinedIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
             </button>
           </Tooltip>
         ) : (
           <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors"
+            onClick={() => dispatch(toggleThemeMode())}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
           >
-            <LogoutOutlinedIcon fontSize="small" />
-            <span className="text-sm font-medium">Logout</span>
+            {themeMode === 'dark' ? <LightModeOutlinedIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
+            <span className="text-sm font-medium">{themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
           </button>
         )}
       </div>
@@ -176,7 +181,7 @@ export function AppLayout() {
           transition: 'left 0.3s ease',
         }}
       >
-        <div className="h-full px-4 sm:px-6 flex items-center justify-between bg-white/80 backdrop-blur-xl border-b border-gray-100">
+        <div className="h-full px-4 sm:px-6 flex items-center justify-between bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-700">
           {/* Mobile menu + breadcrumb */}
           <div className="flex items-center gap-3 flex-1">
             <IconButton
@@ -187,7 +192,7 @@ export function AppLayout() {
               <MenuIcon />
             </IconButton>
             <div className="hidden sm:block">
-              <h2 className="text-sm font-semibold text-gray-800">
+              <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
                 {visibleItems.find((i) => i.path === location.pathname)?.label ?? 'World Cup 2026'}
               </h2>
             </div>
@@ -201,12 +206,12 @@ export function AppLayout() {
           {/* Right actions */}
           <div className="flex-1 flex items-center justify-end gap-2">
             {groups.length > 1 && (
-              <div className="flex items-center gap-1.5 bg-slate-50 rounded-full pl-2 pr-1 py-0.5 border border-gray-200/60">
+              <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-800 rounded-full pl-2 pr-1 py-0.5 border border-gray-200/60 dark:border-gray-600">
                 <Groups2Icon sx={{ fontSize: 16, color: '#64748b' }} />
                 <select name='group-team'
                   value={groupId}
                   onChange={(e) => dispatch(setSelectedGroupId(e.target.value))}
-                  className="text-sm font-medium text-gray-700 bg-transparent border-none outline-none cursor-pointer p-[0.4rem] w-auto"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent border-none outline-none cursor-pointer p-[0.4rem] w-auto"
                 >
                   {groups.map((g) => (
                     <option key={g.id} value={g.id}>{g.name}</option>
@@ -224,7 +229,7 @@ export function AppLayout() {
               </Tooltip>
             )}
 
-            <Tooltip title="Account">
+            <Tooltip title="Settings">
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small">
                 <Avatar
                   src={user?.avatarUrl || undefined}
@@ -253,8 +258,8 @@ export function AppLayout() {
               }}
             >
               <div className="px-4 py-3">
-                <p className="text-sm font-semibold text-gray-800">{user?.displayName}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{user?.email}</p>
+                <p className="text-sm font-semibold" style={{ color: 'inherit' }}>{user?.displayName}</p>
+                <p className="text-xs mt-0.5" style={{ opacity: 0.6 }}>{user?.email}</p>
               </div>
               <Divider />
               <MenuItem onClick={() => { setAnchorEl(null); navigate('/profile'); }} sx={{ py: 1.5, px: 2.5 }}>
@@ -309,6 +314,7 @@ export function AppLayout() {
               borderColor: 'divider',
               transition: 'width 0.3s ease',
               overflowX: 'hidden',
+              bgcolor: 'background.paper',
             },
           }}
           open
@@ -327,7 +333,7 @@ export function AppLayout() {
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          bgcolor: '#f8fafc',
+          bgcolor: 'background.default',
           transition: 'width 0.3s ease',
         }}
       >

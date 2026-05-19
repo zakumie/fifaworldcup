@@ -12,9 +12,207 @@
   --color-muted: #64748b;
 }
 
+@variant dark (&:where(.dark, .dark *));
+
 @layer base {
   body {
     font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
     overflow-y: hidden;
+  }
+
+  .dark body,
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+/* ─── Global Dark Mode Overrides ─── */
+@layer utilities {
+  /* Card / panel backgrounds */
+  .dark .bg-white {
+    background-color: #1e1e1e !important;
+  }
+  .dark .bg-gray-50,
+  .dark .bg-slate-50 {
+    background-color: #252525 !important;
+  }
+  .dark .bg-\[\#f8fafc\] {
+    background-color: #121212 !important;
+  }
+
+  /* Borders */
+  .dark .border-gray-100 {
+    border-color: #333 !important;
+  }
+  .dark .border-gray-200\/60 {
+    border-color: rgba(75, 75, 75, 0.6) !important;
+  }
+  .dark .border-slate-50 {
+    border-color: #2a2a2a !important;
+    border-left-color: #fab319 !important;
+  }
+  .dark .border-slate-100 {
+    border-color: #333 !important;
+  }
+  
+  /* Text colors */
+  .dark .text-gray-800 {
+    color: #e5e5e5 !important;
+  }
+  .dark .text-gray-700 {
+    color: #d4d4d4 !important;
+  }
+  .dark .text-gray-600 {
+    color: #a3a3a3 !important;
+  }
+  .dark .text-gray-500 {
+    color: #8b8b8b !important;
+  }
+  .dark .text-gray-400 {
+    color: #737373 !important;
+  }
+  .dark .text-gray-900 {
+    color: #f5f5f5 !important;
+  }
+  .dark .text-slate-600 {
+    color: #a3a3a3 !important;
+  }
+  .dark .text-slate-500 {
+    color: #8b8b8b !important;
+  }
+  .dark .text-slate-400 {
+    color: #737373 !important;
+  }
+  .dark .text-slate-300 {
+    color: #525252 !important;
+  }
+  .dark .text-sky-800 {
+    color: #7dd3fc !important;
+  }
+  .dark .text-emerald-800 {
+    color: #6ee7b7 !important;
+  }
+
+  /* Hover states */
+  .dark .hover\:bg-gray-50:hover {
+    background-color: #2a2a2a !important;
+  }
+  .dark .hover\:bg-slate-50:hover {
+    background-color: #2a2a2a !important;
+  }
+  .dark .hover\:bg-slate-50\/50:hover {
+    background-color: rgba(42, 42, 42, 0.5) !important;
+  }
+
+  /* Dividers */
+  .dark .divide-gray-50 > :not(:last-child) {
+    border-color: #2a2a2a !important;
+  }
+  .dark .divide-gray-100 > :not(:last-child) {
+    border-color: #333 !important;
+  }
+
+  /* Specific component overrides */
+  /* Bet row cards */
+  .dark .border-gray-100.bg-white {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+  }
+  .dark .hover\:border-gray-200:hover {
+    border-color: #444 !important;
+  }
+
+  /* Leaderboard ranking row hover */
+  .dark .bg-amber-50\/30 {
+    background-color: rgba(245, 158, 11, 0.05) !important;
+  }
+
+  /* Match card config area */
+  .dark .bg-slate-50.border-slate-100 {
+    background-color: #252525 !important;
+    border-color: #333 !important;
+  }
+  .dark .bg-green-50.border-slate-100 {
+    background-color: #1a2e1f !important;
+    border-color: #2d4a35 !important;
+  }
+
+  /* Score box */
+  .dark .bg-red-50 {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+  }
+
+  /* Pagination bar */
+  .dark .bg-gray-50.rounded-xl.border-gray-100 {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+  }
+  .dark .hover\:bg-gray-200:hover {
+    background-color: #333 !important;
+  }
+
+  /* Win rate badges */
+  .dark .bg-emerald-50 {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+  }
+  .dark .bg-amber-50 {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+  }
+  .dark .bg-red-50:not(.animate-pulse) {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+  }
+  .dark .bg-blue-50 {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+  }
+  .dark .bg-violet-50 {
+    background-color: rgba(139, 92, 246, 0.1) !important;
+  }
+  .dark .bg-sky-50 {
+    background-color: rgba(56, 189, 248, 0.1) !important;
+  }
+
+  /* Status badge borders in dark */
+  .dark .border-emerald-200 {
+    border-color: rgba(16, 185, 129, 0.3) !important;
+  }
+  .dark .border-amber-200 {
+    border-color: rgba(245, 158, 11, 0.3) !important;
+  }
+  .dark .border-red-200 {
+    border-color: rgba(239, 68, 68, 0.3) !important;
+  }
+  .dark .border-sky-200 {
+    border-color: rgba(56, 189, 248, 0.3) !important;
+  }
+  .dark .border-violet-200 {
+    border-color: rgba(139, 92, 246, 0.3) !important;
+  }
+  .dark .border-slate-200 {
+    border-color: rgba(100, 116, 139, 0.3) !important;
+  }
+
+  /* No-group / empty state cards */
+  .dark .bg-blue-50:not(.text-blue-600) {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+  }
+
+  /* Select dropdown in dark mode */
+  .dark select option {
+    background-color: #1e1e1e;
+    color: #e5e5e5;
+  }
+
+  /* ManageMatches table: live row, status badges */
+  .dark .bg-red-50\/30 {
+    background-color: rgba(239, 68, 68, 0.06) !important;
+  }
+  .dark .bg-sky-100 {
+    background-color: rgba(56, 189, 248, 0.15) !important;
+  }
+  .dark .bg-green-100 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+  }
+  .dark .bg-purple-100 {
+    background-color: rgba(168, 85, 247, 0.15) !important;
   }
 }

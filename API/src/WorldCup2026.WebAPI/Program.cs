@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using StackExchange.Redis;
 using System.Text;
 using WorldCup2026.Application.Interfaces;
 using WorldCup2026.Application.Mappings;
@@ -101,9 +100,9 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
-// DataProtection — persist keys to Redis so they survive container restarts
-
-builder.Services.AddDataProtection().DisableAutomaticKeyGeneration().SetApplicationName("WorldCup2026Predition");
+// DataProtection — in-memory keys
+builder.Services.AddDataProtection()
+    .SetApplicationName("WorldCup2026Prediction");
 
 // Health checks
 builder.Services.AddHealthChecks();

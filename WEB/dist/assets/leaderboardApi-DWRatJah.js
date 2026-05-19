@@ -1,0 +1,1 @@
+import{af as a}from"./index-Dx-pk_1t.js";const o=a.injectEndpoints({endpoints:e=>({getLeaderboard:e.query({query:({groupId:r})=>`/leaderboard/groups/${r}`,providesTags:["Leaderboard"]})})}),{useGetLeaderboardQuery:s}=o;export{s as u};
