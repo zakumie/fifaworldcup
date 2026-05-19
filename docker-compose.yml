@@ -10,7 +10,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=WorldCup2026;Username=postgres;Password=${DB_PASSWORD:-YourStrong!Passw0rd}
-      - ConnectionStrings__Redis=redis:6379
       - Jwt__Secret=${JWT_SECRET:-WorldCup2026SuperSecretKey-ChangeThisInProduction-Min32Chars!}
       - Jwt__Issuer=WorldCup2026API
       - Jwt__Audience=WorldCup2026Web
@@ -20,8 +19,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_started
     restart: unless-stopped
 
   web:
@@ -52,14 +49,5 @@ services:
       retries: 5
     restart: unless-stopped
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-
 volumes:
   postgres_data:
-  redis_data:
