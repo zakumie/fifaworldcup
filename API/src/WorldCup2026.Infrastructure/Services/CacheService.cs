@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using WorldCup2026.Application.Interfaces;
 
 namespace WorldCup2026.Infrastructure.Services;
@@ -7,8 +8,13 @@ namespace WorldCup2026.Infrastructure.Services;
 public class CacheService : ICacheService
 {
     private readonly IDistributedCache _cache;
+    private readonly IConnectionMultiplexer _redis;
 
-    public CacheService(IDistributedCache cache) => _cache = cache;
+    public CacheService(IDistributedCache cache, IConnectionMultiplexer redis)
+    {
+        _cache = cache;
+        _redis = redis;
+    }
 
     public async Task<T?> GetAsync<T>(string key)
     {
@@ -30,8 +36,24 @@ public class CacheService : ICacheService
 
     public async Task RemoveByPrefixAsync(string prefix)
     {
-        // IDistributedCache doesn't support prefix removal.
-        // Remove exact key when prefix matches a single known key pattern.
-        await _cache.RemoveAsync(prefix);
+        var db = _redis.GetDatabase();
+        var endpoints = _redis.GetEndPoints();
+        
+        if (endpoints.Length == 0)
+            return;
+            
+        var server = _redis.GetServer(endpoints[0]);
+        var pattern = $"WORLDCUP_2026_REDIS:{prefix}*";
+        
+        var keys = new List<RedisKey>();
+        await foreach (var key in server.KeysAsync(pattern: pattern, pageSize: 10000))
+        {
+            keys.Add(key);
+        }
+        
+        if (keys.Count > 0)
+        {
+            await db.KeyDeleteAsync(keys.ToArray());
+        }
     }
 }

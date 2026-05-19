@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using WorldCup2026.Application.Interfaces;
 using WorldCup2026.Infrastructure.BackgroundJobs;
 using WorldCup2026.Infrastructure.Data;
