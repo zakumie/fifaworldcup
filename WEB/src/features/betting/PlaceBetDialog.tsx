@@ -64,7 +64,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
   };
 
   const handicapLabel = config.handicap !== 0
-    ? `${config.favoredTeamName ?? 'Home'} ${config.handicap > 0 ? '+' : ''}${config.handicap}`
+    ? `${config.favoredTeamName ?? 'Home'} ${config.handicap > 0 ? '+' : ''} ${config.handicap}`
     : null;
 
   const potentialWin = betAmount !== '' ? Number(betAmount) * config.odds : 0;
@@ -116,12 +116,12 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
 
           {/* Match info badges */}
           <div className="flex items-center justify-center gap-2 mt-4">
-            <span className="flex items-center gap-1 text-[11px] text-slate-300 bg-white/10 px-2.5 py-1 rounded-full backdrop-blur-sm">
+            <span className="flex items-center font-semibold gap-1 text-[11px] text-white bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-sm">
               <AccessTimeIcon sx={{ fontSize: 12 }} />
               {formatDate(match.startTime, 'MMM dd, HH:mm')}
             </span>
             {handicapLabel && (
-              <span className="text-[11px] text-amber-300 bg-amber-400/15 px-2.5 py-1 rounded-full font-medium">
+              <span className="text-[11px] font-semibold text-amber-300 bg-amber-400/15 px-2.5 py-1 rounded-full">
                 {handicapLabel}
               </span>
             )}
@@ -258,18 +258,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
               {/* Potential win / loss */}
               {selectedTeamId && betAmount !== '' && (
                 <div className="space-y-2 mb-5">
-                    {settlementMode === 'WinnerKeepsLoserPays' ? (
-                      <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border border-red-100">
-                        <div className="flex items-center gap-2 text-sm text-red-700">
-                          <TrendingUpIcon sx={{ fontSize: 18, transform: 'scaleY(-1)' }} />
-                          <span className="font-medium">Potential Loss</span>
-                        </div>
-                        <span className="text-lg font-black text-red-600">
-                          -{Number(betAmount).toLocaleString()}
-                        </span>
-                      </div>
-                    ) :
-                      <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100">
+                    {settlementMode !== 'WinnerKeepsLoserPays' && (<div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100">
                         <div className="flex items-center gap-2 text-sm text-emerald-700">
                           <TrendingUpIcon sx={{ fontSize: 18 }} />
                           <span className="font-medium">Potential Win</span>
@@ -277,7 +266,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                         <span className="text-lg font-black text-emerald-600">
                           +{potentialWin.toLocaleString()}
                         </span>
-                      </div>}
+                      </div>)}
                 </div>
               )}
 
@@ -292,7 +281,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading || !selectedTeamId || betAmount === ''}
-                  className="flex-[2] py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-xl transition-all shadow-lg shadow-emerald-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none active:scale-[0.98] flex items-center justify-center gap-2"
+                  className="flex-[2] py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-xl transition-all shadow-lg shadow-emerald-200/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none active:scale-[0.98] flex items-center justify-center gap-2"
                 >
                   {isLoading && (
                     <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">

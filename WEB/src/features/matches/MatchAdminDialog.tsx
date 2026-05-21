@@ -103,7 +103,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
         <div className="flex items-center justify-center gap-4 mt-2">
           <div className="flex items-center gap-2">
             {match.homeTeam.flagUrl && (
-              <img src={match.homeTeam.flagUrl} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-white/30" />
+              <img src={match.homeTeam.flagUrl} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white/30" />
             )}
             <span className="text-white font-bold text-sm">{match.homeTeam.name}</span>
           </div>
@@ -117,7 +117,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
           <div className="flex items-center gap-2">
             <span className="text-white font-bold text-sm">{match.awayTeam.name}</span>
             {match.awayTeam.flagUrl && (
-              <img src={match.awayTeam.flagUrl} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-white/30" />
+              <img src={match.awayTeam.flagUrl} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white/30" />
             )}
           </div>
         </div>
