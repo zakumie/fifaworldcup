@@ -360,17 +360,19 @@ public class BettingService : IBettingService
 
                     if (config.Group.SettlementMode == SettlementMode.WinnerKeepsLoserPays)
                     {
-                        // Custom mode: Won/HalfWon → get bet back (no profit), Push (draw) → lose 50%, Lost → nothing back
+                        // Custom mode: Won/HalfWon → get bet back (no profit), Push/HalfLost → lose 50%, Lost → nothing back
                         bet.Profit = result.Status switch
                         {
                             BetStatus.Won or BetStatus.HalfWon => 0m,
                             BetStatus.Push => -(bet.BetAmount * 0.5m),
+                            BetStatus.HalfLost => -(bet.BetAmount * 0.5m),
                             _ => -bet.BetAmount
                         };
                         balanceChange = result.Status switch
                         {
                             BetStatus.Won or BetStatus.HalfWon => bet.BetAmount,
                             BetStatus.Push => bet.BetAmount * 0.5m,
+                            BetStatus.HalfLost => bet.BetAmount * 0.5m,
                             _ => 0m
                         };
                         // Simplify status: no half states in this mode

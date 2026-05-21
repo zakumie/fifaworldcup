@@ -11,8 +11,19 @@ public static class BettingEngine
         Guid selectedTeamId, Guid homeTeamId,
         decimal betAmount, decimal odds)
     {
-        decimal adjustedHomeScore = homeScore + handicap;
+        decimal adjustedHomeScore = homeScore;
         decimal adjustedAwayScore = awayScore;
+
+        // Apply handicap to the favored team
+        if (favoredTeamId == homeTeamId)
+        {
+            adjustedHomeScore = homeScore + handicap;
+        }
+        else if (favoredTeamId.HasValue)  // Away team (not home)
+        {
+            adjustedAwayScore = awayScore + handicap;
+        }
+        // If favoredTeamId is null, no handicap applied (neutral bet)
 
         decimal betDiff;
         if (selectedTeamId == homeTeamId)
