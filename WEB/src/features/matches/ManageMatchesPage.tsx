@@ -42,22 +42,29 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
 
   let statusLabel: string;
   let statusStyle: string;
+  let iconStyle: string;
 
   if (isLive) {
     statusLabel = '● Live';
     statusStyle = 'text-white bg-red-500 animate-pulse';
+    iconStyle = 'bg-gradient-to-br from-pink-600 to-red-700';
+
   } else if (isSettled) {
     statusLabel = 'Settled';
     statusStyle = 'text-purple-700 bg-purple-100';
+    iconStyle = 'bg-gradient-to-br from-purple-600 to-fuchsia-700';
   } else if (isFinished && !isSettled) {
     statusLabel = 'Finished';
     statusStyle = 'text-green-700 bg-green-100';
+    iconStyle = 'bg-gradient-to-br from-green-600 to-emerald-700';
   } else if (hasConfig) {
     statusLabel = 'Upcoming';
     statusStyle = 'text-amber-600 bg-amber-50';
+    iconStyle = 'bg-gradient-to-br from-amber-500 to-yellow-600';
   } else {
     statusLabel = 'Open';
     statusStyle = 'text-blue-700 bg-sky-100';
+    iconStyle = 'bg-gradient-to-br from-sky-600 to-blue-700';
   }
 
   return (
@@ -67,13 +74,11 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
         className={`
           grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-center px-5 py-4
           border-b border-slate-50 hover:bg-slate-50/50 transition-colors cursor-pointer
-          ${isLive ? 'bg-red-50/30' : ''}
-          ${!hasConfig ? 'border-l-4 border-l-amber-300' : ''}
         `}
       >
         {/* Match teams */}
         <div className="col-span-3 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm shrink-0">
+          <div className={`w-10 h-10 rounded-xl ${iconStyle} flex items-center justify-center shadow-sm shrink-0`}>
             <SportsSoccerIcon sx={{ fontSize: 18, color: '#fff' }} />
           </div>
           <div className="min-w-0">
@@ -88,7 +93,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
               )}
               <span className="text-sm font-bold text-gray-800 truncate">{match.awayTeam.code}</span>
             </div>
-            <p className="text-xs text-green-600 font-semibold truncate">{formatDate(match.startTime, 'MMM dd, HH:mm')}</p>
+            <p className="text-xs text-blue-800 font-semibold truncate">{formatDate(match.startTime, 'MMM dd, HH:mm')}</p>
           </div>
         </div>
 
@@ -292,7 +297,7 @@ export function ManageMatchesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search matches by team name..."
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
           />
         </div>
 

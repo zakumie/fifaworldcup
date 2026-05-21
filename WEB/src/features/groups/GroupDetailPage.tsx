@@ -168,7 +168,7 @@ export function GroupDetailPage() {
             <div
               key={member.userId}
               onClick={() => setSelectedMember(member)}
-              className="flex items-center justify-between px-4 py-3 rounded-xl bg-slate-50/50 hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all cursor-pointer"
+              className="flex items-center justify-between px-4 py-3 rounded-xl bg-slate-50 hover:bg-gray-50 border-transparent hover:border-slate-200 transition-all cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <span className="w-5 text-xs font-bold text-slate-400 text-center">{idx + 1}</span>
@@ -235,41 +235,41 @@ export function GroupDetailPage() {
 
               {/* Stats Grid */}
               <div className="p-5 grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Total Bets</p>
-                  <p className="text-xl font-bold text-gray-800">{stats?.totalBets ?? 0}</p>
+                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">Total Bets</p>
+                  <p className="text-xl font-bold text-gray-800 dark:text-gray-100">{stats?.totalBets ?? 0}</p>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Win Rate</p>
-                  <p className="text-xl font-bold text-emerald-600">{stats ? `${stats.winRate.toFixed(1)}%` : '0%'}</p>
+                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">Win Rate</p>
+                  <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{stats ? `${stats.winRate.toFixed(1)}%` : '0%'}</p>
                 </div>
-                <div className="bg-emerald-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-emerald-600 uppercase">Wins</p>
-                  <p className="text-xl font-bold text-emerald-700">{stats?.wins ?? 0}</p>
+                <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase">Wins</p>
+                  <p className="text-xl font-bold text-emerald-700 dark:text-emerald-300">{stats?.wins ?? 0}</p>
                 </div>
-                <div className="bg-amber-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-amber-600 uppercase">Draws</p>
-                  <p className="text-xl font-bold text-amber-700">{stats?.draws ?? 0}</p>
+                <div className="bg-amber-50 dark:bg-amber-500/10 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 uppercase">Draws</p>
+                  <p className="text-xl font-bold text-amber-700 dark:text-amber-300">{stats?.draws ?? 0}</p>
                 </div>
-                <div className="bg-red-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-red-500 uppercase">Losses</p>
-                  <p className="text-xl font-bold text-red-600">{stats?.losses ?? 0}</p>
+                <div className="bg-red-50 dark:bg-red-500/10 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-red-500 dark:text-red-400 uppercase">Losses</p>
+                  <p className="text-xl font-bold text-red-600 dark:text-red-400">{stats?.losses ?? 0}</p>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Net Profit</p>
-                  <p className={`text-xl font-bold ${(stats?.profit ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">Net Profit</p>
+                  <p className={`text-xl font-bold ${(stats?.profit ?? 0) >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
                     {(stats?.profit ?? 0) >= 0 ? '+' : ''}{(stats?.profit ?? 0).toLocaleString()}
                   </p>
                 </div>
-                <div className={`rounded-xl p-3 text-center ${selectedMember.penaltyAmount > 0 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                  <p className={`text-[11px] font-semibold uppercase ${selectedMember.penaltyAmount > 0 ? 'text-red-500' : 'text-slate-500'}`}>Penalty</p>
-                  <p className={`text-xl font-bold ${selectedMember.penaltyAmount > 0 ? 'text-red-600' : 'text-gray-500'}`}>
+                <div className={`rounded-xl p-3 text-center ${selectedMember.penaltyAmount > 0 ? 'bg-red-50 dark:bg-red-500/10' : 'bg-slate-50 dark:bg-white/5'}`}>
+                  <p className={`text-[11px] font-semibold uppercase ${selectedMember.penaltyAmount > 0 ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}>Penalty</p>
+                  <p className={`text-xl font-bold ${selectedMember.penaltyAmount > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}>
                     {selectedMember.penaltyAmount > 0 ? `-${selectedMember.penaltyAmount.toLocaleString()}` : '0'}
                   </p>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Balance</p>
-                  <p className="text-xl font-bold text-green-800">{selectedMember.balance.toLocaleString()}</p>
+                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 text-center">
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase">Balance</p>
+                  <p className="text-xl font-bold text-green-800 dark:text-green-400">{selectedMember.balance.toLocaleString()}</p>
                 </div>
                 
               </div>

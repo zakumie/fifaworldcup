@@ -1,6 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 
 export function getTheme(mode: 'light' | 'dark') {
+  const isDark = mode === 'dark';
+
   return createTheme({
     palette: {
       mode,
@@ -14,9 +16,9 @@ export function getTheme(mode: 'light' | 'dark') {
         light: '#b71c1c',
         dark: '#5c0000',
       },
-      background: mode === 'light'
-        ? { default: '#f5f5f5', paper: '#ffffff' }
-        : { default: '#121212', paper: '#1e1e1e' },
+      background: isDark
+        ? { default: '#0f1117', paper: '#1a1d2e' }
+        : { default: '#f5f5f5', paper: '#ffffff' },
     },
     typography: {
       fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -43,6 +45,14 @@ export function getTheme(mode: 'light' | 'dark') {
       MuiDrawer: {
         styleOverrides: {
           paper: { borderRadius: 0 },
+        },
+      },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            backgroundColor: '#ffffff',
+            backgroundImage: 'none',
+          },
         },
       },
     },

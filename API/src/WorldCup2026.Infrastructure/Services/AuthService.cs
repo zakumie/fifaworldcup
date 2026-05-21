@@ -65,36 +65,48 @@ public class AuthService : IAuthService
         if (payload == null)
             return Result<AuthResponse>.Failure("Invalid Google credential.");
 
-        var user = await _db.Users.FirstOrDefaultAsync(
-            u => u.AuthProvider == AuthProvider.Google && u.ExternalAuthId == payload.Sub);
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == payload.Email);
 
-        if (user == null)
+        if (user != null)
         {
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Email == payload.Email && u.IsActive);
-            if (user != null)
+            if (!user.IsActive)
+                return Result<AuthResponse>.Failure("Account is disabled.");
+
+            if (user.AuthProvider != AuthProvider.Google || user.ExternalAuthId != payload.Sub)
             {
                 user.AuthProvider = AuthProvider.Google;
                 user.ExternalAuthId = payload.Sub;
                 user.AvatarUrl ??= payload.Picture;
+                await _db.SaveChangesAsync();
+                _logger.LogInformation("Linked local account {Email} to Google provider", user.Email);
             }
-            else
-            {
-                user = new User
-                {
-                    Email = payload.Email,
-                    DisplayName = payload.Name,
-                    AvatarUrl = payload.Picture,
-                    AuthProvider = AuthProvider.Google,
-                    ExternalAuthId = payload.Sub
-                };
-                _db.Users.Add(user);
-            }
-
-            await _db.SaveChangesAsync();
         }
-
-        if (!user.IsActive)
-            return Result<AuthResponse>.Failure("Account is disabled.");
+        else
+        {
+            user = new User
+            {
+                Email = payload.Email,
+                DisplayName = !string.IsNullOrWhiteSpace(payload.Name) ? payload.Name : payload.Email,
+                AvatarUrl = payload.Picture,
+                AuthProvider = AuthProvider.Google,
+                ExternalAuthId = payload.Sub
+            };
+            _db.Users.Add(user);
+            try
+            {
+                await _db.SaveChangesAsync();
+                _logger.LogInformation("Created new user via Google login: {Email}", user.Email);
+            }
+            catch (DbUpdateException)
+            {
+                _db.Entry(user).State = EntityState.Detached;
+                user = await _db.Users.FirstOrDefaultAsync(u => u.Email == payload.Email);
+                if (user == null)
+                    return Result<AuthResponse>.Failure("Failed to create account. Please try again.");
+                if (!user.IsActive)
+                    return Result<AuthResponse>.Failure("Account is disabled.");
+            }
+        }
 
         return await GenerateAuthResponseAsync(user);
     }

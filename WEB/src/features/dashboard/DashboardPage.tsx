@@ -53,7 +53,7 @@ function StatCard({ label, value, Icon, bg, hoverBg, onClick }: {
       </div>
       <div>
         <p className="text-xs font-bold text-white uppercase tracking-wide">{label}</p>
-        <p className="text-xl font-bold text-white">{value}</p>
+        <p className="text-xl font-bold text-green-400">{value}</p>
       </div>
     </button>
   );
@@ -106,20 +106,20 @@ export function DashboardPage() {
   return (
     <div>
       {/* Dark header */}
-      <div className="bg-[#0f1f14] bg-gradient-to-r from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3">
               <DashboardIcon sx={{ fontSize: 32, color: 'white' }} />
               <span>DASH<span className="text-emerald-400">BOARD</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
-              Welcome back, <span className="text-emerald-300 font-semibold">{user?.displayName}</span>
+            <p className="text-sm text-slate-200 mt-1">
+              Welcome back, <span className="text-emerald-400 font-semibold">{user?.displayName}</span>
             </p>
           </div>
           <div className="text-right hidden sm:block">
             <p className="text-xs text-white uppercase tracking-wider">World Cup 2026</p>
-            <p className="text-lg font-bold text-white">{todayStr}</p>
+            <p className="text-lg font-bold text-emerald-400">{todayStr}</p>
           </div>
         </div>
       </div>
@@ -158,12 +158,12 @@ export function DashboardPage() {
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
               <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                 <div className="flex items-center gap-2">
-                  <SportsSoccerIcon sx={{ fontSize: 20, color: '#10b981' }} />
-                  <h2 className="text-sm font-bold text-emerald-500 uppercase tracking-wide">Upcoming Matches</h2>
+                  <SportsSoccerIcon sx={{ fontSize: 20, color: '#167254' }} />
+                  <h2 className="text-sm font-bold text-emerald-700 uppercase tracking-wide">Upcoming Matches</h2>
                 </div>
                 <button
               onClick={goTo('/matches')}
-                  className="text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-0.5 transition-colors"
+                  className="text-xs font-medium text-emerald-700 hover:text-emerald-700 flex items-center gap-0.5 transition-colors"
                 >
                   View All <ArrowIcon sx={{ fontSize: 14 }} />
                 </button>

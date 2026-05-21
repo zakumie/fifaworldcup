@@ -109,7 +109,7 @@ export function ProfilePage() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
         <h1 className="text-2xl font-black text-white flex items-center gap-3">
           <PersonIcon sx={{ fontSize: 32, color: 'white' }} />
           <span>MY <span className="text-emerald-400">PROFILE</span></span>

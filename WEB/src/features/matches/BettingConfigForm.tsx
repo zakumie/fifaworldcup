@@ -161,7 +161,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       <div className="rounded-xl border border-gray-100 p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <PaidIcon sx={{ fontSize: 16, color: '#059669' }} />
+            <PaidIcon sx={{ fontSize: 16, color: '#055596' }} />
             <p className="text-xs font-bold text-gray-600 uppercase tracking-wide">Bet Amount</p>
           </div>
           <Controller name="isFixedBet" control={control}
@@ -169,7 +169,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
               <FormControlLabel
                 control={
                   <Switch checked={field.value} onChange={field.onChange} size="small"
-                    sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#059669' }, '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#059669' } }}
+                    sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#055596' }, '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#055596' } }}
                   />
                 }
                 label={<span className="text-[11px] font-semibold text-gray-500">Fixed Amount</span>}
@@ -271,9 +271,9 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
           startIcon={isSaving ? <CircularProgress size={16} /> : <SaveIcon sx={{ fontSize: 16 }} />}
           sx={{
             borderRadius: 2, textTransform: 'none', px: 4, fontWeight: 600,
-            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-            boxShadow: '0 4px 14px rgba(5,150,105,0.3)',
-            '&:hover': { boxShadow: '0 6px 20px rgba(5,150,105,0.4)' },
+            background: 'linear-gradient(135deg, #053a96 0%, #042f78 100%)',
+            boxShadow: '0 4px 6px rgba(5, 56, 150, 0.3)',
+            '&:hover': { boxShadow: '0 6px 10px rgba(5, 29, 150, 0.4)' },
           }}
         >
           {isEdit ? 'Update Config' : 'Create Config'}

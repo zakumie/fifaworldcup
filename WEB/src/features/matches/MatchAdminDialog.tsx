@@ -83,7 +83,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
 
       {/* Header */}
-      <div className="relative bg-gradient-to-br from-emerald-950 to-green-950 px-6 pt-6 pb-8">
+      <div className="relative bg-gradient-to-t from-slate-800 to-blue-900 px-6 pt-6 pb-8">
         <IconButton onClick={onClose} size="small"
           sx={{ position: 'absolute', top: 12, right: 12, color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
           <CloseIcon fontSize="small" />
@@ -95,7 +95,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
           </div>
           <div>
             <h2 className="text-white text-lg font-bold">Match Administration</h2>
-            <p className="text-emerald-200 text-xs">{formatStage(match.stage, match.group)}</p>
+            <p className="text-sky-200 text-xs">{formatStage(match.stage, match.group)}</p>
           </div>
         </div>
 
@@ -135,20 +135,20 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
           onClick={() => setActiveTab('betting')}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold transition-all
             ${activeTab === 'betting'
-              ? 'text-emerald-600 border-b-2 border-emerald-500 bg-emerald-50/50'
+            ? 'text-blue-900 border-b-2 border-blue-900 bg-blue-50/50'
               : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
             }
           `}
         >
           <TuneIcon sx={{ fontSize: 18 }} />
           Betting Config
-          {!config && <span className="w-2 h-2 bg-amber-400 rounded-full" />}
+          {!config && <span className="w-2 h-2 bg-blue-600 rounded-full" />}
         </button>
         <button
           onClick={() => setActiveTab('score')}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold transition-all
             ${activeTab === 'score'
-              ? 'text-emerald-600 border-b-2 border-emerald-500 bg-emerald-50/50'
+            ? 'text-blue-900 border-b-2 border-blue-900 bg-blue-50/50'
               : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
             }
           `}
@@ -290,7 +290,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                     variant="outlined"
                     size="small"
                     onClick={() => setShowBettingForm(true)}
-                    sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600, borderColor: '#059669', color: '#059669', padding: '0.45rem', float: 'right' }}
+                    sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600, borderColor: '#054696', color: '#052e96', padding: '0.45rem', float: 'right' }}
                   >
                     Edit Config
                   </Button>
@@ -323,9 +323,9 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
             startIcon={isLoading ? <CircularProgress size={16} /> : <SaveIcon sx={{ fontSize: 16 }} />}
             sx={{
               borderRadius: 2, textTransform: 'none', px: 4, fontWeight: 600,
-              background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-              boxShadow: '0 4px 14px rgba(5,150,105,0.3)',
-              '&:hover': { boxShadow: '0 6px 20px rgba(5,150,105,0.4)' },
+              background: 'linear-gradient(135deg, #053a96 0%, #042f78 100%)',
+              boxShadow: '0 4px 6px rgba(5, 56, 150, 0.3)',
+              '&:hover': { boxShadow: '0 6px 10px rgba(5, 29, 150, 0.4)' },
             }}
           >
             Save Changes

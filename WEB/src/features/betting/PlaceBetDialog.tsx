@@ -80,7 +80,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
     >
       <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-[#0f1f14] to-[#1a3520] px-6 pt-5 pb-6">
+        <div className="relative bg-gradient-to-b from-[#1a4527] to-[#2e5b38] px-6 pt-5 pb-6">
           <button
             onClick={handleClose}
             className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"

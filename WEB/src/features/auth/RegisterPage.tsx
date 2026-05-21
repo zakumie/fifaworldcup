@@ -61,7 +61,7 @@ export function RegisterPage() {
     }`;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#173b2a] via-[#2e503b] to-[#173b2a] relative overflow-hidden">
+    <div data-theme="light" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#173b2a] via-[#2e503b] to-[#173b2a] relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-emerald-500/5 blur-3xl" />
