@@ -18,6 +18,8 @@ public class AppDbContext : DbContext
     public DbSet<Bet> Bets => Set<Bet>();
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<LeaderboardSnapshot> LeaderboardSnapshots => Set<LeaderboardSnapshot>();
+    public DbSet<ChampionPredictionConfig> ChampionPredictionConfigs => Set<ChampionPredictionConfig>();
+    public DbSet<ChampionPrediction> ChampionPredictions => Set<ChampionPrediction>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

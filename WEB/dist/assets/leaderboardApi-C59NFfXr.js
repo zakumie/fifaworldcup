@@ -1,0 +1,1 @@
+import{a5 as a}from"./index-Bztzlygo.js";const o=a.injectEndpoints({endpoints:e=>({getLeaderboard:e.query({query:({groupId:r})=>`/leaderboard/groups/${r}`,providesTags:["Leaderboard"]})})}),{useGetLeaderboardQuery:s}=o;export{s as u};

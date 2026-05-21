@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IMatchService, MatchService>();
         services.AddScoped<IBettingService, BettingService>();
+        services.AddScoped<IChampionPredictionService, ChampionPredictionService>();
         services.AddScoped<ILeaderboardService, LeaderboardService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICacheService, CacheService>();

@@ -252,3 +252,52 @@ export interface UpdateProfileRequest {
   avatarUrl: string | null;
   timeZone?: string;
 }
+
+// Champion Prediction Types
+export interface ChampionConfigDto {
+  id: string;
+  groupId: string;
+  isEnabled: boolean;
+  predictionOpenTime: string;
+  predictionCloseTime: string;
+  winnerTeamId: string | null;
+  winnerTeamName: string | null;
+  isSettled: boolean;
+  createdAt: string;
+}
+
+export interface CreateChampionConfigRequest {
+  groupId: string;
+  isEnabled: boolean;
+  predictionOpenTime: string;
+  predictionCloseTime: string;
+}
+
+export interface UpdateChampionConfigRequest {
+  isEnabled: boolean;
+  predictionOpenTime: string;
+  predictionCloseTime: string;
+}
+
+export interface PlaceChampionPredictionRequest {
+  groupId: string;
+  selectedTeamId: string;
+}
+
+export interface ChampionPredictionDto {
+  id: string;
+  userId: string;
+  userDisplayName: string;
+  groupId: string;
+  configId: string;
+  selectedTeamId: string;
+  selectedTeamName: string;
+  isCorrect: boolean | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SettleChampionPredictionRequest {
+  groupId: string;
+  winnerTeamId: string;
+}

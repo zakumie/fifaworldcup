@@ -74,7 +74,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
       <Box component="form" onSubmit={form.handleSubmit(handleSubmit)}>
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-slate-700 to-slate-900 px-6 pt-6 pb-8">
+        <div className="relative bg-gradient-to-b from-sky-700 to-blue-900 px-6 pt-6 pb-8">
           <IconButton onClick={onClose} size="small"
             sx={{ position: 'absolute', top: 12, right: 12, color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
             <CloseIcon fontSize="small" />

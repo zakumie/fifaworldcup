@@ -16,6 +16,8 @@ const ManageUsersPage = lazy(() => import('./features/users/ManageUsersPage').th
 const ProfilePage = lazy(() => import('./features/users/ProfilePage').then(m => ({ default: m.ProfilePage })));
 const BetHistoryPage = lazy(() => import('./features/betting/BetHistoryPage').then(m => ({ default: m.BetHistoryPage })));
 const LeaderboardPage = lazy(() => import('./features/leaderboard/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })));
+const ChampionPredictionPage = lazy(() => import('./features/predictions/ChampionPredictionPage').then(m => ({ default: m.default })));
+const ManageChampionPredictionsPage = lazy(() => import('./features/predictions/ManageChampionPredictionsPage').then(m => ({ default: m.default })));
 
 const Loader = () => (
   <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
@@ -34,10 +36,12 @@ function App() {
           <Route path="/dashboard" element={<Suspense fallback={<Loader />}><DashboardPage /></Suspense>} />
           <Route path="/groups" element={<Suspense fallback={<Loader />}><GroupListPage /></Suspense>} />
           <Route path="/groups/:id" element={<Suspense fallback={<Loader />}><GroupDetailPage /></Suspense>} />
+          <Route path="/groups/:groupId/predictions" element={<Suspense fallback={<Loader />}><ChampionPredictionPage /></Suspense>} />
           <Route path="/matches" element={<Suspense fallback={<Loader />}><MatchListPage /></Suspense>} />
           <Route path="/admin/matches" element={<Suspense fallback={<Loader />}><ManageMatchesPage /></Suspense>} />
           <Route path="/admin/groups" element={<Suspense fallback={<Loader />}><ManageGroupsPage /></Suspense>} />
           <Route path="/admin/users" element={<Suspense fallback={<Loader />}><ManageUsersPage /></Suspense>} />
+          <Route path="/admin/champion-predictions/:groupId" element={<Suspense fallback={<Loader />}><ManageChampionPredictionsPage /></Suspense>} />
           <Route path="/profile" element={<Suspense fallback={<Loader />}><ProfilePage /></Suspense>} />
           <Route path="/bets" element={<Suspense fallback={<Loader />}><BetHistoryPage /></Suspense>} />
           <Route path="/leaderboard" element={<Suspense fallback={<Loader />}><LeaderboardPage /></Suspense>} />

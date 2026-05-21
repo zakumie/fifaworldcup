@@ -47,7 +47,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Leaderboard', path: '/leaderboard', icon: <EmojiEventsOutlinedIcon fontSize="small" />, section: 'main' },
   { label: 'Manage Matches', path: '/admin/matches', icon: <ManageHistoryRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
   { label: 'Manage Groups', path: '/admin/groups', icon: <RoofingRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
-  { label: 'Manage Users', path: '/admin/users', icon: <ManageAccountsIcon fontSize="small" />, adminOnly: true, section: 'admin' },
+  { label: 'Manage Users', path: '/admin/users', icon: <ManageAccountsIcon fontSize="small" />, adminOnly: true, section: 'admin' }
 ];
 
 export function AppLayout() {

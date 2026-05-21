@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/api';
-import type { MatchDto, PagedResult, UpdateScoreRequest } from '../../types';
+import type { MatchDto, PagedResult, UpdateScoreRequest, TeamDto } from '../../types';
 
 export const matchesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,6 +15,10 @@ export const matchesApi = apiSlice.injectEndpoints({
       query: (id) => `/matches/${id}`,
       providesTags: (_result, _err, id) => [{ type: 'Matches', id }],
     }),
+    getTeams: builder.query<TeamDto[], void>({
+      query: () => '/matches/teams',
+      providesTags: ['Matches'],
+    }),
     updateScore: builder.mutation<MatchDto, { id: string; body: UpdateScoreRequest }>({
       query: ({ id, body }) => ({ url: `/matches/${id}/score`, method: 'PUT', body }),
       invalidatesTags: ['Matches'],
@@ -22,4 +26,4 @@ export const matchesApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetMatchesQuery, useGetMatchQuery, useUpdateScoreMutation } = matchesApi;
+export const { useGetMatchesQuery, useGetMatchQuery, useGetTeamsQuery, useUpdateScoreMutation } = matchesApi;
