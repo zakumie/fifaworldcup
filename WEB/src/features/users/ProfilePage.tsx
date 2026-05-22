@@ -120,8 +120,8 @@ export function ProfilePage() {
       {/* Profile Card */}
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         {/* Avatar Section */}
-              <div className="flex flex-col items-center pt-8 pb-6 border-b border-gray-100 bg-gradient-to-b from-slate-100 to-stone-100">
-          <div className="relative group">
+        <div className="flex flex-col items-center pt-8 pb-6 border-b border-stone-200 bg-gradient-to-r from-gray-200 via-stone-100 to-gray-200">
+            <div className="relative group">
             {avatarUrl ? (
               <img
                 src={avatarUrl}

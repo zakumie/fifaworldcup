@@ -9,8 +9,10 @@ import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CloseIcon from '@mui/icons-material/Close';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { useGetGroupQuery } from './groupsApi';
 import { useGetLeaderboardQuery } from '../leaderboard/leaderboardApi';
+import { useGetChampionConfigQuery } from '../predictions/championApi';
 import type { GroupMemberDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 
@@ -25,6 +27,7 @@ export function GroupDetailPage() {
   const navigate = useNavigate();
   const { data: group, isLoading, error } = useGetGroupQuery(id ?? '', { skip: !id });
   const { data: leaderboard } = useGetLeaderboardQuery({ groupId: id ?? '' }, { skip: !id });
+  const { data: championConfig } = useGetChampionConfigQuery({ groupId: id ?? '' }, { skip: !id });
   const [copied, setCopied] = useState(false);
   const [selectedMember, setSelectedMember] = useState<GroupMemberDto | null>(null);
   const { formatDate } = useUserTimeZone();
@@ -86,12 +89,26 @@ export function GroupDetailPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {championConfig?.isEnabled && (
+              <button
+                onClick={() => navigate(`/groups/${id}/predictions`)}
+                disabled={new Date(championConfig.predictionCloseTime) < new Date()}
+                className={`flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-bold transition-all ${
+                  new Date(championConfig.predictionCloseTime) < new Date()
+                    ? 'bg-yellow-900/30 text-yellow-700/50 border border-yellow-800/30 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-sm shadow-yellow-500/25 hover:shadow-lg hover:shadow-yellow-500/40 hover:from-yellow-300 hover:to-amber-300'
+                }`}
+              >
+                <EmojiEventsIcon sx={{ fontSize: 18 }} />
+                Champion Prediction
+              </button>
+            )}
             <div className="flex items-center gap-2 px-4 py-2 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl">
               <span className="text-xs text-slate-400">Invite Code:</span>
               <span className="text-sm font-mono font-bold text-amber-400 tracking-wider">{group.inviteCode}</span>
               <button
                 onClick={handleCopy}
-                className="p-1 rounded-lg hover:bg-emerald-800/50 transition-colors"
+                className="px-2 py-1 rounded-lg hover:bg-emerald-800/50 transition-colors"
                 title="Copy invite code"
               >
                 {copied

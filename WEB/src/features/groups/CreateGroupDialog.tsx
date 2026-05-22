@@ -10,10 +10,12 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CloseIcon from '@mui/icons-material/Close';
 import GavelIcon from '@mui/icons-material/Gavel';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useCreateGroupMutation } from './groupsApi';
+import { useCreateChampionConfigMutation } from '../predictions/championApi';
 import type { CreateGroupRequest } from '../../types';
 
 const createSchema = yup.object({
@@ -33,7 +35,11 @@ interface Props {
 
 export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) {
   const [createGroup] = useCreateGroupMutation();
+  const [createChampionConfig] = useCreateChampionConfigMutation();
   const [error, setError] = useState('');
+  const [championEnabled, setChampionEnabled] = useState(false);
+  const [championOpenTime, setChampionOpenTime] = useState('');
+  const [championCloseTime, setChampionCloseTime] = useState('');
 
   const form = useForm<CreateGroupRequest>({
     resolver: yupResolver(createSchema),
@@ -44,7 +50,24 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
     try {
       setError('');
       const result = await createGroup(formData).unwrap();
+
+      if (championEnabled && championOpenTime && championCloseTime) {
+        try {
+          await createChampionConfig({
+            groupId: result.id,
+            isEnabled: true,
+            predictionOpenTime: new Date(championOpenTime).toISOString(),
+            predictionCloseTime: new Date(championCloseTime).toISOString(),
+          }).unwrap();
+        } catch {
+          // Group created but champion config failed - still proceed
+        }
+      }
+
       form.reset();
+      setChampionEnabled(false);
+      setChampionOpenTime('');
+      setChampionCloseTime('');
       onCreated(result.id);
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;
@@ -57,6 +80,9 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
   const handleClose = () => {
     setError('');
     form.reset();
+    setChampionEnabled(false);
+    setChampionOpenTime('');
+    setChampionCloseTime('');
     onClose();
   };
 
@@ -153,6 +179,59 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                 </div>
               </label>
             </div>
+          </div>
+
+          {/* Champion Prediction */}
+          <div className="mt-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+              <MilitaryTechIcon sx={{ fontSize: 14 }} /> Champion Prediction
+            </p>
+            <div
+              onClick={() => setChampionEnabled(!championEnabled)}
+              className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
+                championEnabled ? 'border-amber-500 bg-amber-50/50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    championEnabled ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-400'
+                  }`}>
+                    <EmojiEventsIcon sx={{ fontSize: 18 }} />
+                  </div>
+                  <div>
+                    <span className="text-sm font-semibold text-gray-700">Enable Champion Prediction</span>
+                    <p className="text-[10px] text-gray-400">Members predict the World Cup winner</p>
+                  </div>
+                </div>
+                <div className={`w-10 h-5 rounded-full transition-colors ${championEnabled ? 'bg-amber-500' : 'bg-gray-300'} relative`}>
+                  <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${championEnabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                </div>
+              </div>
+            </div>
+
+            {championEnabled && (
+              <div className="grid grid-cols-2 gap-3 mt-3">
+                <TextField
+                  label="Open Time"
+                  type="datetime-local"
+                  value={championOpenTime}
+                  onChange={(e) => setChampionOpenTime(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  size="small"
+                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                />
+                <TextField
+                  label="Close Time"
+                  type="datetime-local"
+                  value={championCloseTime}
+                  onChange={(e) => setChampionCloseTime(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  size="small"
+                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                />
+              </div>
+            )}
           </div>
         </DialogContent>
 

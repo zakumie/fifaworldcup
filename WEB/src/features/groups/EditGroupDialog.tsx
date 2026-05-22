@@ -10,11 +10,20 @@ import CloseIcon from '@mui/icons-material/Close';
 import GavelIcon from '@mui/icons-material/Gavel';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EditIcon from '@mui/icons-material/Edit';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useUpdateGroupMutation } from './groupsApi';
-import type { UpdateGroupRequest, GroupDto } from '../../types';
+import {
+  useGetChampionConfigQuery,
+  useCreateChampionConfigMutation,
+  useUpdateChampionConfigMutation,
+  useSettleChampionPredictionsMutation,
+} from '../predictions/championApi';
+import { useGetTeamsQuery } from '../matches/matchesApi';
+import type { UpdateGroupRequest, GroupDto, TeamDto } from '../../types';
 
 const editSchema = yup.object({
   name: yup.string().min(3).max(50).required('Name is required'),
@@ -37,6 +46,21 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
   const [updateGroup] = useUpdateGroupMutation();
   const [error, setError] = useState('');
 
+  // Champion prediction state
+  const { data: championConfig } = useGetChampionConfigQuery(
+    { groupId: group?.id ?? '' },
+    { skip: !group?.id || !open }
+  );
+  const { data: teams } = useGetTeamsQuery(undefined, { skip: !open });
+  const [createChampionConfig] = useCreateChampionConfigMutation();
+  const [updateChampionConfig] = useUpdateChampionConfigMutation();
+  const [settleChampion, { isLoading: isSettling }] = useSettleChampionPredictionsMutation();
+
+  const [championEnabled, setChampionEnabled] = useState(false);
+  const [championOpenTime, setChampionOpenTime] = useState('');
+  const [championCloseTime, setChampionCloseTime] = useState('');
+  const [settleWinnerTeamId, setSettleWinnerTeamId] = useState('');
+
   const form = useForm<UpdateGroupRequest>({
     resolver: yupResolver(editSchema),
   });
@@ -55,17 +79,74 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
     }
   }, [group, open]);
 
+  useEffect(() => {
+    if (championConfig) {
+      setChampionEnabled(championConfig.isEnabled);
+      setChampionOpenTime(championConfig.predictionOpenTime ? toLocalDatetime(championConfig.predictionOpenTime) : '');
+      setChampionCloseTime(championConfig.predictionCloseTime ? toLocalDatetime(championConfig.predictionCloseTime) : '');
+    } else {
+      setChampionEnabled(false);
+      setChampionOpenTime('');
+      setChampionCloseTime('');
+    }
+    setSettleWinnerTeamId('');
+  }, [championConfig, open]);
+
+  const toLocalDatetime = (iso: string) => {
+    const d = new Date(iso);
+    const offset = d.getTimezoneOffset();
+    const local = new Date(d.getTime() - offset * 60000);
+    return local.toISOString().slice(0, 16);
+  };
+
   const handleSubmit = async (formData: UpdateGroupRequest) => {
     if (!group) return;
     try {
       setError('');
       await updateGroup({ id: group.id, body: formData }).unwrap();
+
+      // Save champion config
+      if (championEnabled && championOpenTime && championCloseTime) {
+        const configBody = {
+          isEnabled: true,
+          predictionOpenTime: new Date(championOpenTime).toISOString(),
+          predictionCloseTime: new Date(championCloseTime).toISOString(),
+        };
+        if (championConfig) {
+          await updateChampionConfig({ groupId: group.id, body: configBody }).unwrap();
+        } else {
+          await createChampionConfig({ groupId: group.id, ...configBody }).unwrap();
+        }
+      } else if (championConfig && !championEnabled) {
+        await updateChampionConfig({
+          groupId: group.id,
+          body: {
+            isEnabled: false,
+            predictionOpenTime: championConfig.predictionOpenTime,
+            predictionCloseTime: championConfig.predictionCloseTime,
+          },
+        }).unwrap();
+      }
+
       onSuccess?.('Group updated successfully!');
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;
       const msg = status === 403 ? 'You do not have permission to edit this group.' : 'Failed to update group';
       setError(msg);
       onError?.(msg);
+    }
+  };
+
+  const handleSettle = async () => {
+    if (!group || !settleWinnerTeamId) return;
+    try {
+      await settleChampion({
+        groupId: group.id,
+        body: { groupId: group.id, winnerTeamId: settleWinnerTeamId },
+      }).unwrap();
+      onSuccess?.('Champion predictions settled!');
+    } catch {
+      setError('Failed to settle champion predictions');
     }
   };
 
@@ -160,6 +241,102 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                 </div>
               </label>
             </div>
+          </div>
+
+          {/* Champion Prediction */}
+          <div className="mt-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+              <MilitaryTechIcon sx={{ fontSize: 14 }} /> Champion Prediction
+            </p>
+
+            {championConfig?.isSettled ? (
+              <Alert icon={<CheckCircleIcon />} severity="success" sx={{ borderRadius: 3 }}>
+                Settled — Winner: <strong>{championConfig.winnerTeamName}</strong>
+              </Alert>
+            ) : (
+              <>
+                <div
+                  onClick={() => setChampionEnabled(!championEnabled)}
+                  className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
+                    championEnabled ? 'border-amber-500 bg-amber-50/50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        championEnabled ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-400'
+                      }`}>
+                        <EmojiEventsIcon sx={{ fontSize: 18 }} />
+                      </div>
+                      <div>
+                        <span className="text-sm font-semibold text-gray-700">Enable Champion Prediction</span>
+                        <p className="text-[10px] text-gray-400">Members predict the World Cup winner</p>
+                      </div>
+                    </div>
+                    <div className={`w-10 h-5 rounded-full transition-colors ${championEnabled ? 'bg-amber-500' : 'bg-gray-300'} relative`}>
+                      <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${championEnabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                    </div>
+                  </div>
+                </div>
+
+                {championEnabled && (
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <TextField
+                      label="Open Time"
+                      type="datetime-local"
+                      value={championOpenTime}
+                      onChange={(e) => setChampionOpenTime(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                      size="small"
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                    />
+                    <TextField
+                      label="Close Time"
+                      type="datetime-local"
+                      value={championCloseTime}
+                      onChange={(e) => setChampionCloseTime(e.target.value)}
+                      InputLabelProps={{ shrink: true }}
+                      size="small"
+                      sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                    />
+                  </div>
+                )}
+
+                {/* Settle section - only if config exists and not settled */}
+                {championConfig && !championConfig.isSettled && (
+                  <div className="mt-3 p-3 rounded-xl border-2 border-amber-200 bg-amber-50/50">
+                    <div className="flex gap-2">
+                      <TextField
+                        select
+                        size="small"
+                        value={settleWinnerTeamId}
+                        onChange={(e) => setSettleWinnerTeamId(e.target.value)}
+                        sx={{ flex: 1, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                        SelectProps={{ native: true }}
+                      >
+                        <option value="">Champions</option>
+                        {teams?.map((t: TeamDto) => (
+                          <option key={t.id} value={t.id}>{t.name}</option>
+                        ))}
+                      </TextField>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        disabled={!settleWinnerTeamId || isSettling}
+                        onClick={handleSettle}
+                        sx={{
+                          color: 'white !important',
+                          borderRadius: 2, textTransform: 'none',
+                          background: 'linear-gradient(135deg, #d97706 0%, #ee802c 100%)'
+                        }}
+                      >
+                        Settle
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Deactivate Group */}
