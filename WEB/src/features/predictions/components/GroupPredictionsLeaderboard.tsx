@@ -125,11 +125,15 @@ export default function GroupPredictionsLeaderboard({ predictions, isSettled, te
 
               {/* Member */}
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center shadow-sm shrink-0">
-                  <span className="text-xs font-bold text-white">
-                    {prediction.userDisplayName?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+                {prediction.userAvatarUrl ? (
+                  <img src={prediction.userAvatarUrl} alt={prediction.userDisplayName} className="w-8 h-8 rounded-full object-cover shadow-sm shrink-0" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center shadow-sm shrink-0">
+                    <span className="text-xs font-bold text-white">
+                      {prediction.userDisplayName?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
                 <p className="text-sm font-semibold text-gray-800 truncate">{prediction.userDisplayName}</p>
               </div>
 

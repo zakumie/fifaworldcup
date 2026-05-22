@@ -211,7 +211,7 @@ export function GroupDetailPage() {
                   {member.role}
                 </span>
                 <span className="text-sm font-bold text-gray-800 min-w-[80px] text-right">
-                  $ {member.balance.toLocaleString()}
+                  {member.balance.toLocaleString()}
                 </span>
               </div>
             </div>

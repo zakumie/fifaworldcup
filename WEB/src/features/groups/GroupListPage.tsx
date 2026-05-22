@@ -146,7 +146,7 @@ export function GroupListPage() {
                     Default Balance
                   </span>
                   <span className="text-xs font-bold text-emerald-600">
-                    $ {group.defaultBalance.toLocaleString()}
+                    {group.defaultBalance.toLocaleString()}
                   </span>
                 </div>
 

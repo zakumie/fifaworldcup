@@ -273,6 +273,7 @@ public class ChampionPredictionService : IChampionPredictionService
             prediction.Id,
             prediction.UserId,
             prediction.User.DisplayName,
+            prediction.User.AvatarUrl,
             prediction.GroupId,
             prediction.ConfigId,
             prediction.SelectedTeamId,

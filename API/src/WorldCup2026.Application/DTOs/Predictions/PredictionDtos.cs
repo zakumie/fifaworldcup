@@ -30,6 +30,7 @@ public record ChampionPredictionDto(
     Guid Id,
     Guid UserId,
     string UserDisplayName,
+    string? UserAvatarUrl,
     Guid GroupId,
     Guid ConfigId,
     Guid SelectedTeamId,

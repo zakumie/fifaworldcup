@@ -288,6 +288,7 @@ export interface ChampionPredictionDto {
   id: string;
   userId: string;
   userDisplayName: string;
+  userAvatarUrl: string | null;
   groupId: string;
   configId: string;
   selectedTeamId: string;
