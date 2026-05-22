@@ -33,6 +33,18 @@ interface Props {
   onError?: (message: string) => void;
 }
 
+const fieldSx = {
+  mt: 2,
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 2.5,
+    fontSize: '0.875rem',
+    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#94a3b8' },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6', borderWidth: 2 },
+  },
+  '& .MuiInputLabel-root': { fontSize: '0.8rem', fontWeight: 500 },
+  '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
+};
+
 export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) {
   const [createGroup] = useCreateGroupMutation();
   const [createChampionConfig] = useCreateChampionConfigMutation();
@@ -90,10 +102,10 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth
-      PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
-      <Box component="form" onSubmit={form.handleSubmit(handleSubmit)}>
+      PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' } }}>
+      <Box component="form" onSubmit={form.handleSubmit(handleSubmit)} sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-blue-950 to-indigo-950 px-6 pt-6 pb-8">
+        <div className="relative bg-gradient-to-b from-sky-700 to-blue-900 px-6 pt-6 pb-8 shrink-0">
           <IconButton onClick={handleClose} size="small"
             sx={{ position: 'absolute', top: 12, right: 12, color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
             <CloseIcon fontSize="small" />
@@ -109,33 +121,33 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
           </div>
         </div>
 
-        <DialogContent sx={{ pt: 3, pb: 2, px: 3 }}>
+        <DialogContent sx={{ pt: 3, pb: 2, px: 3, overflowY: 'auto', flex: 1 }}>
           {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{error}</Alert>}
 
           {/* Group Name */}
-          <TextField {...form.register('name')} label="Group Name" fullWidth margin="normal"
+          <TextField {...form.register('name')} label="Group Name" fullWidth size="small"
             placeholder="e.g. World Cup Legends"
             error={!!form.formState.errors.name} helperText={form.formState.errors.name?.message}
             autoFocus
-            InputProps={{ startAdornment: <InputAdornment position="start"><GroupsIcon fontSize="small" color="action" /></InputAdornment> }}
-            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }} />
+            InputProps={{ startAdornment: <InputAdornment position="start"><GroupsIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
+            sx={fieldSx} />
 
           {/* Description */}
-          <TextField {...form.register('description')} label="Description (optional)" fullWidth margin="normal"
+          <TextField {...form.register('description')} label="Description (optional)" fullWidth size="small"
             placeholder="What's this group about?"
             multiline rows={2}
-            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }} />
+            sx={fieldSx} />
 
           {/* Two columns: Max Members & Default Balance */}
-          <div className="grid grid-cols-2 gap-3 mt-2">
-            <TextField {...form.register('maxMembers')} label="Max Members" type="number" fullWidth
+          <div className="grid grid-cols-2 gap-3 mt-3">
+            <TextField {...form.register('maxMembers')} label="Max Members" type="number" fullWidth size="small"
               error={!!form.formState.errors.maxMembers} helperText={form.formState.errors.maxMembers?.message}
-              InputProps={{ startAdornment: <InputAdornment position="start"><PeopleAltIcon fontSize="small" color="action" /></InputAdornment> }}
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }} />
-            <TextField {...form.register('defaultBalance')} label="Starting Balance" type="number" fullWidth
+              InputProps={{ startAdornment: <InputAdornment position="start"><PeopleAltIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
+              sx={fieldSx} />
+            <TextField {...form.register('defaultBalance')} label="Starting Balance" type="number" fullWidth size="small"
               error={!!form.formState.errors.defaultBalance} helperText={form.formState.errors.defaultBalance?.message}
-              InputProps={{ startAdornment: <InputAdornment position="start"><AccountBalanceWalletIcon fontSize="small" color="action" /></InputAdornment> }}
-              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }} />
+              InputProps={{ startAdornment: <InputAdornment position="start"><AccountBalanceWalletIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
+              sx={fieldSx} />
           </div>
 
           {/* Settlement Mode - Card selector */}
@@ -221,7 +233,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   onChange={(e) => setChampionOpenTime(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   size="small"
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                  sx={fieldSx}
                 />
                 <TextField
                   label="Close Time"
@@ -230,7 +242,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   onChange={(e) => setChampionCloseTime(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   size="small"
-                  sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                  sx={fieldSx}
                 />
               </div>
             )}
@@ -238,7 +250,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
         </DialogContent>
 
         {/* Footer */}
-        <div className="px-6 pb-5 pt-2 flex justify-end gap-2">
+        <div className="px-6 pb-5 pt-2 flex justify-end gap-2 shrink-0 border-t border-gray-100">
           <Button onClick={handleClose}
             sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}>
             Cancel
