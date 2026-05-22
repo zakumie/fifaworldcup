@@ -39,18 +39,18 @@ export function ManageGroupsPage() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <SettingsIcon sx={{ fontSize: 28, color: '#94a3b8' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <SettingsIcon sx={{ fontSize: { xs: 24, sm: 28 }, color: '#94a3b8' }} />
               <span>MANAGE <span className="text-blue-400">GROUPS</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Create, edit, and manage all betting groups</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Create, edit, and manage all betting groups</p>
           </div>
           <button
             onClick={() => setCreateOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-sm shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-200 active:scale-95"
+            className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-sm shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-200 active:scale-95"
           >
             <AddIcon sx={{ fontSize: 18 }} />
             New Group
@@ -70,16 +70,16 @@ export function ManageGroupsPage() {
         </div>
 
         {/* Stats row */}
-        <div className="flex items-center gap-4 mt-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <GroupsIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-xs text-slate-400">Total:</span>
-            <span className="text-xs font-bold text-white">{groups?.length ?? 0}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Total:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-white">{groups?.length ?? 0}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <PeopleAltIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-xs text-slate-400">Active:</span>
-            <span className="text-xs font-bold text-emerald-400">{groups?.filter(g => g.isActive).length ?? 0}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Active:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-emerald-400">{groups?.filter(g => g.isActive).length ?? 0}</span>
           </div>
         </div>
       </div>

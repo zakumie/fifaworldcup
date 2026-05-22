@@ -156,14 +156,14 @@ export function LeaderboardPage() {
   return (
     <div>
       {/* Dark header */}
-      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <EmojiEventsOutlinedIcon sx={{ fontSize: 32, color: 'white' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <EmojiEventsOutlinedIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
               <span>LEADER<span className="text-emerald-400">BOARD</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Top players · Win rates · Rankings</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Top players · Win rates · Rankings</p>
           </div>
           {leaderboard && (
             <div className="text-right hidden sm:block">

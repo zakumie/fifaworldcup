@@ -87,14 +87,14 @@ export function ManageUsersPage() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 mb-6">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <SettingsIcon sx={{ fontSize: 28, color: '#94a3b8' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <SettingsIcon sx={{ fontSize: { xs: 24, sm: 28 }, color: '#94a3b8' }} />
               <span>MANAGE <span className="text-blue-400">USERS</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Manage user roles and account status</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Manage user roles and account status</p>
           </div>
         </div>
 
@@ -111,21 +111,21 @@ export function ManageUsersPage() {
         </div>
 
         {/* Stats row */}
-        <div className="flex items-center gap-4 mt-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <PeopleIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-xs text-slate-400">Total:</span>
-            <span className="text-xs font-bold text-white">{users?.length ?? 0}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Total:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-white">{users?.length ?? 0}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <CheckCircleIcon sx={{ fontSize: 16, color: '#34d399' }} />
-            <span className="text-xs text-slate-400">Active:</span>
-            <span className="text-xs font-bold text-emerald-400">{activeCount}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Active:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-emerald-400">{activeCount}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <AdminPanelSettingsIcon sx={{ fontSize: 16, color: '#fbbf24' }} />
-            <span className="text-xs text-slate-400">Admins:</span>
-            <span className="text-xs font-bold text-amber-400">{adminCount}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Admins:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-amber-400">{adminCount}</span>
           </div>
         </div>
 
@@ -135,7 +135,7 @@ export function ManageUsersPage() {
             <button
               key={label}
               onClick={() => setTab(i)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 tab === i
                   ? 'bg-blue-500 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'

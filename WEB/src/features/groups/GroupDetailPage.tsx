@@ -76,44 +76,44 @@ export function GroupDetailPage() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-[#0f1f14] bg-gradient-to-r from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
+      <div className="bg-[#0f1f14] bg-gradient-to-r from-emerald-900 to-emerald-700 rounded-2xl p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             <button
               onClick={() => navigate('/groups')}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-emerald-800/50 transition-all"
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-emerald-800/50 transition-all flex-shrink-0"
             >
               <ArrowBackIcon sx={{ fontSize: 20 }} />
             </button>
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md">
-              <span className="text-xl font-black text-white leading-none">{group.name.charAt(0).toUpperCase()}</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md flex-shrink-0">
+              <span className="text-lg sm:text-xl font-black text-white leading-none">{group.name.charAt(0).toUpperCase()}</span>
             </div>
-            <div>
-              <h1 className="text-2xl font-black text-white">{group.name}</h1>
-              <p className="text-sm text-slate-400 mt-0.5">{group.description || 'No description'}</p>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-2xl font-black text-white truncate">{group.name}</h1>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">{group.description || 'No description'}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {championConfig?.isEnabled && (
               <button
                 onClick={() => navigate(`/groups/${id}/predictions`)}
                 disabled={isPredictionExpired}
-                className={`flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-bold transition-all ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isPredictionExpired
                     ? 'bg-yellow-900/30 text-yellow-700/50 border border-yellow-800/30 cursor-not-allowed'
                     : 'bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-sm shadow-yellow-500/25 hover:shadow-lg hover:shadow-yellow-500/40 hover:from-yellow-300 hover:to-amber-300'
                 }`}
               >
                 <EmojiEventsIcon sx={{ fontSize: 18 }} />
-                Champion Prediction
+                <span className="hidden xs:inline">Champion</span> Prediction
               </button>
             )}
-            <div className="flex items-center gap-2 px-4 py-2 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl">
-              <span className="text-xs text-slate-400">Invite Code:</span>
-              <span className="text-sm font-mono font-bold text-amber-400 tracking-wider">{group.inviteCode}</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl">
+              <span className="text-[10px] sm:text-xs text-slate-400">Code:</span>
+              <span className="text-xs sm:text-sm font-mono font-bold text-amber-400 tracking-wider">{group.inviteCode}</span>
               <button
                 onClick={handleCopy}
-                className="px-2 py-1 rounded-lg hover:bg-emerald-800/50 transition-colors"
+                className="px-1.5 sm:px-2 py-1 rounded-lg hover:bg-emerald-800/50 transition-colors"
                 title="Copy invite code"
               >
                 {copied
@@ -127,41 +127,41 @@ export function GroupDetailPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
-          <div className="p-2.5 rounded-lg bg-white/15">
-            <PeopleAltIcon sx={{ fontSize: 24, color: 'white' }} />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
+        <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
+          <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/15">
+            <PeopleAltIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
-          <div>
-            <p className="text-xs font-bold text-stone-100 uppercase tracking-wide">Members</p>
-            <p className="text-md font-bold text-white">{group.members.length}<span className="text-sm text-emerald-300 font-normal ml-1">/{group.maxMembers}</span></p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
-          <div className="p-2.5 rounded-lg bg-white/15">
-            <AccountBalanceWalletIcon sx={{ fontSize: 24, color: 'white' }} />
-          </div>
-          <div>
-            <p className="text-xs font-bold text-stone-100 uppercase tracking-wide">Balance</p>
-            <p className="text-md font-bold text-white">{group.defaultBalance.toLocaleString()}</p>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Members</p>
+            <p className="text-sm sm:text-md font-bold text-white">{group.members.length}<span className="text-xs sm:text-sm text-emerald-300 font-normal ml-1">/{group.maxMembers}</span></p>
           </div>
         </div>
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
-          <div className="p-2.5 rounded-lg bg-white/15">
-            <CalendarTodayIcon sx={{ fontSize: 24, color: 'white' }} />
+        <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
+          <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/15">
+            <AccountBalanceWalletIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
-          <div>
-            <p className="text-xs font-bold text-stone-100 uppercase tracking-wide">Created</p>
-            <p className="text-md font-bold text-white">{formatDate(group.createdAt, 'MMM dd, yyyy')}</p>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Balance</p>
+            <p className="text-sm sm:text-md font-bold text-white truncate">{group.defaultBalance.toLocaleString()}</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
-          <div className="p-2.5 rounded-lg bg-white/15">
-            <div className={`w-3 h-3 rounded-full ${group.isActive ? 'bg-emerald-400' : 'bg-gray-400'}`} />
+        <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
+          <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/15">
+            <CalendarTodayIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
-          <div>
-            <p className="text-xs font-bold text-stone-100 uppercase tracking-wide">Status</p>
-            <p className={`text-md font-bold ${group.isActive ? 'text-white' : 'text-emerald-400'}`}>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Created</p>
+            <p className="text-sm sm:text-md font-bold text-white truncate">{formatDate(group.createdAt, 'MMM dd, yyyy')}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-800 to-emerald-700 shadow-sm hover:shadow-lg hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200">
+          <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/15">
+            <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${group.isActive ? 'bg-emerald-400' : 'bg-gray-400'}`} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Status</p>
+            <p className={`text-sm sm:text-md font-bold ${group.isActive ? 'text-white' : 'text-emerald-400'}`}>
               {group.isActive ? 'Active' : 'Inactive'}
             </p>
           </div>

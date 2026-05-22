@@ -308,14 +308,14 @@ export function MatchListPage() {
   return (
     <div>
       {/* Dark header section */}
-      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-5">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <SportsSoccerIcon sx={{ fontSize: 32, color: 'white' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <SportsSoccerIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
               <span>MATCH <span className="text-emerald-400">CENTER</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Predict results · Place bets · Win big</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Predict results · Place bets · Win big</p>
           </div>
         </div>
 
@@ -331,13 +331,13 @@ export function MatchListPage() {
               className="w-full pl-10 pr-4 py-2.5 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
             />
           </div>
-          <div className="flex items-center gap-1 bg-[#1a2e1f] rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-[#1a2e1f] rounded-xl p-1 overflow-x-auto scrollbar-hide">
             {STATUS_TABS.map((t) => (
               <button
                 key={t}
                 onClick={() => handleTabChange(t)}
                 className={`
-                  px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5
+                  px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap flex-shrink-0
                   ${activeTab === t
                     ? 'bg-amber-400 text-gray-900 shadow-sm'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-[#243a2a]'

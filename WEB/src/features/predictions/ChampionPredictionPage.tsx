@@ -84,25 +84,25 @@ export default function ChampionPredictionPage() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-500 rounded-2xl p-6 mb-6 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-500 rounded-2xl p-4 sm:p-6 mb-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white" />
           <div className="absolute -left-4 -bottom-4 w-24 h-24 rounded-full bg-white" />
         </div>
-        <div className="relative flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => navigate(-1)}
               className="p-2 rounded-xl text-amber-900/60 hover:text-amber-900 hover:bg-white/20 transition-all"
             >
               <ArrowBackIcon sx={{ fontSize: 20 }} />
             </button>
-            <div className="w-12 h-12 rounded-xl bg-white/25 backdrop-blur flex items-center justify-center">
-              <EmojiEventsIcon sx={{ fontSize: 26, color: '#a04500' }} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/25 backdrop-blur flex items-center justify-center flex-shrink-0">
+              <EmojiEventsIcon sx={{ fontSize: { xs: 22, sm: 26 }, color: '#a04500' }} />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-amber-950">Champion Prediction</h1>
-              <p className="text-sm text-amber-800/70">Pick the World Cup 2026 winner</p>
+              <h1 className="text-lg sm:text-2xl font-black text-amber-950 leading-tight">Champion Prediction</h1>
+              <p className="text-xs sm:text-sm text-amber-800/70">Pick the World Cup 2026 winner</p>
             </div>
           </div>
           {isOpen && <PredictionDeadlineTimer closeTime={config.predictionCloseTime} />}

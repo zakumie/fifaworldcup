@@ -76,7 +76,7 @@ export function AppLayout() {
   const mainItems = visibleItems.filter((item) => item.section === 'main');
   const adminItems = visibleItems.filter((item) => item.section === 'admin');
 
-  const renderNavButton = (item: NavItem) => {
+  const renderNavButton = (item: NavItem, isCollapsed: boolean) => {
     const isActive = location.pathname === item.path;
     const btn = (
       <button
@@ -84,7 +84,7 @@ export function AppLayout() {
         className={`
           w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
           transition-all duration-200 group
-          ${collapsed ? 'justify-center' : ''}
+          ${isCollapsed ? 'justify-center' : ''}
           ${isActive
             ? 'bg-primary text-white shadow-md shadow-primary/25'
             : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white'
@@ -94,13 +94,13 @@ export function AppLayout() {
         <span className={`transition-colors flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
           {item.icon}
         </span>
-        {!collapsed && item.label}
-        {!collapsed && isActive && (
+        {!isCollapsed && item.label}
+        {!isCollapsed && isActive && (
           <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/80" />
         )}
       </button>
     );
-    return collapsed ? <Tooltip title={item.label} placement="right" key={item.path}><li>{btn}</li></Tooltip> : <li key={item.path}>{btn}</li>;
+    return isCollapsed ? <Tooltip title={item.label} placement="right" key={item.path}><li>{btn}</li></Tooltip> : <li key={item.path}>{btn}</li>;
   };
 
   const drawerContent = (isCollapsed: boolean) => (
@@ -125,7 +125,7 @@ export function AppLayout() {
         {!isCollapsed && <p className="px-3 pt-4 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Menu</p>}
         {isCollapsed && <div className="pt-4" />}
         <ul className="space-y-0.5">
-          {mainItems.map(renderNavButton)}
+          {mainItems.map((item) => renderNavButton(item, isCollapsed))}
         </ul>
 
         {adminItems.length > 0 && (
@@ -133,7 +133,7 @@ export function AppLayout() {
             {!isCollapsed && <p className="px-3 pt-6 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Admin</p>}
             {isCollapsed && <div className="pt-4 mb-2 border-t border-gray-100 dark:border-gray-700 mx-2" />}
             <ul className="space-y-0.5">
-              {adminItems.map(renderNavButton)}
+              {adminItems.map((item) => renderNavButton(item, isCollapsed))}
             </ul>
           </>
         )}
@@ -198,8 +198,8 @@ export function AppLayout() {
             </div>
           </div>
 
-          {/* Center - Music Player */}
-          <div className="flex-1 flex justify-center">
+          {/* Center - Music Player (hidden on mobile) */}
+          <div className="flex-1 hidden sm:flex justify-center">
             <MusicPlayer />
           </div>
 

@@ -185,14 +185,14 @@ export function BetHistoryPage() {
   return (
     <div>
       {/* Dark header section - same style as Matches page */}
-      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-5">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <FavoriteBorderRoundedIcon sx={{ fontSize: 32, color: 'white' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <FavoriteBorderRoundedIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
               <span>MY <span className="text-emerald-400">BETS</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Track your predictions · Analyze performance</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Track your predictions · Analyze performance</p>
           </div>
         </div>
 

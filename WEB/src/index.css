@@ -36,6 +36,14 @@
 
 /* ─── Global Dark Mode Overrides (scoped to #root to exclude MUI Dialog portals) ─── */
 @layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Card / panel backgrounds */
   .dark #root .bg-white {
     background-color: #1e1e1e !important;

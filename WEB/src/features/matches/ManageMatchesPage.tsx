@@ -264,22 +264,22 @@ export function ManageMatchesPage() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <SettingsIcon sx={{ fontSize: 28, color: '#94a3b8' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <SettingsIcon sx={{ fontSize: { xs: 24, sm: 28 }, color: '#94a3b8' }} />
               <span>MANAGE <span className="text-emerald-400">MATCHES</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Configure match status, scores and betting</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Configure match status, scores and betting</p>
           </div>
           {groups.length > 1 && (
-            <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-slate-800/60 border border-slate-700">
               <Groups2Icon sx={{ fontSize: 18, color: '#94a3b8' }} />
               <select
                 value={groupId}
                 onChange={(e) => dispatch(setSelectedGroupId(e.target.value))}
-                className="text-sm font-medium text-slate-200 bg-transparent border-none outline-none cursor-pointer py-0 pr-2"
+                className="text-xs sm:text-sm font-medium text-slate-200 bg-transparent border-none outline-none cursor-pointer py-0 pr-2"
               >
                 {groups.map((g) => (
                   <option key={g.id} value={g.id} className="bg-slate-800 text-slate-200">{g.name}</option>
@@ -302,27 +302,27 @@ export function ManageMatchesPage() {
         </div>
 
         {/* Stats row */}
-        <div className="flex flex-wrap items-center gap-3 mt-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <SportsSoccerIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-xs text-slate-400">Total:</span>
-            <span className="text-xs font-bold text-white">{totalMatches}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Total:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-white">{totalMatches}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <TuneIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-xs text-slate-400">Configured:</span>
-            <span className="text-xs font-bold text-emerald-400">{configuredCount}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Configured:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-emerald-400">{configuredCount}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <span className="w-2 h-2 bg-amber-400 rounded-full" />
-            <span className="text-xs text-slate-400">Pending:</span>
-            <span className="text-xs font-bold text-amber-400">{totalMatches - configuredCount}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">Pending:</span>
+            <span className="text-[10px] sm:text-xs font-bold text-amber-400">{totalMatches - configuredCount}</span>
           </div>
           {liveCount > 0 && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-xs text-red-300">Live:</span>
-              <span className="text-xs font-bold text-red-400">{liveCount}</span>
+              <span className="text-[10px] sm:text-xs text-red-300">Live:</span>
+              <span className="text-[10px] sm:text-xs font-bold text-red-400">{liveCount}</span>
             </div>
           )}
         </div>
