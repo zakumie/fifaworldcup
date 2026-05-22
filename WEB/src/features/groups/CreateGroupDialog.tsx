@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import GavelIcon from '@mui/icons-material/Gavel';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useCreateGroupMutation } from './groupsApi';
@@ -45,6 +45,8 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
     resolver: yupResolver(createSchema),
     defaultValues: { name: '', description: '', maxMembers: 20, defaultBalance: 10000, settlementMode: 'Normal' },
   });
+
+  const settlementMode = useWatch({ control: form.control, name: 'settlementMode' });
 
   const handleSubmit = async (formData: CreateGroupRequest) => {
     try {
@@ -144,7 +146,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
             <div className="grid grid-cols-2 gap-3">
               <label
                 className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
-                  form.watch('settlementMode') === 'Normal'
+                  settlementMode === 'Normal'
                     ? 'border-blue-500 bg-blue-50 shadow-sm'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
@@ -152,7 +154,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                 <input type="radio" value="Normal" {...form.register('settlementMode')} className="sr-only" />
                 <div className="flex flex-col items-center text-center gap-1">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    form.watch('settlementMode') === 'Normal' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
+                    settlementMode === 'Normal' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
                   }`}>
                     <AccountBalanceWalletIcon sx={{ fontSize: 18 }} />
                   </div>
@@ -162,7 +164,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
               </label>
               <label
                 className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
-                  form.watch('settlementMode') === 'WinnerKeepsLoserPays'
+                  settlementMode === 'WinnerKeepsLoserPays'
                     ? 'border-amber-500 bg-amber-50 shadow-sm'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
@@ -170,7 +172,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                 <input type="radio" value="WinnerKeepsLoserPays" {...form.register('settlementMode')} className="sr-only" />
                 <div className="flex flex-col items-center text-center gap-1">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    form.watch('settlementMode') === 'WinnerKeepsLoserPays' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-400'
+                    settlementMode === 'WinnerKeepsLoserPays' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-400'
                   }`}>
                     <EmojiEventsIcon sx={{ fontSize: 18 }} />
                   </div>

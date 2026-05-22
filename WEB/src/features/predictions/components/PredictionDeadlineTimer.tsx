@@ -29,9 +29,18 @@ export default function PredictionDeadlineTimer({ closeTime }: Props) {
 
   useEffect(() => {
     updateTimer();
-    const interval = setInterval(updateTimer, 1000);
+    const interval = setInterval(() => {
+      const diff = new Date(closeTime).getTime() - Date.now();
+      if (diff <= 0) {
+        setTimeLeft('00:00:00');
+        setIsPassed(true);
+        clearInterval(interval);
+        return;
+      }
+      updateTimer();
+    }, 1000);
     return () => clearInterval(interval);
-  }, [updateTimer]);
+  }, [updateTimer, closeTime]);
 
   return (
     <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border backdrop-blur ${

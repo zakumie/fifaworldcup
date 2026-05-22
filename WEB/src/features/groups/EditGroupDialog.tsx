@@ -12,7 +12,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EditIcon from '@mui/icons-material/Edit';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useUpdateGroupMutation } from './groupsApi';
@@ -65,6 +65,9 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
     resolver: yupResolver(editSchema),
   });
 
+  const settlementMode = useWatch({ control: form.control, name: 'settlementMode' });
+  const isActive = useWatch({ control: form.control, name: 'isActive' });
+
   useEffect(() => {
     if (group && open) {
       form.reset({
@@ -79,6 +82,13 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
     }
   }, [group, open]);
 
+  const toLocalDatetime = (iso: string) => {
+    const d = new Date(iso);
+    const offset = d.getTimezoneOffset();
+    const local = new Date(d.getTime() - offset * 60000);
+    return local.toISOString().slice(0, 16);
+  };
+
   useEffect(() => {
     if (championConfig) {
       setChampionEnabled(championConfig.isEnabled);
@@ -91,13 +101,6 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
     }
     setSettleWinnerTeamId('');
   }, [championConfig, open]);
-
-  const toLocalDatetime = (iso: string) => {
-    const d = new Date(iso);
-    const offset = d.getTimezoneOffset();
-    const local = new Date(d.getTime() - offset * 60000);
-    return local.toISOString().slice(0, 16);
-  };
 
   const handleSubmit = async (formData: UpdateGroupRequest) => {
     if (!group) return;
@@ -206,7 +209,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
             <div className="grid grid-cols-2 gap-3">
               <label
                 className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
-                  form.watch('settlementMode') === 'Normal'
+                  settlementMode === 'Normal'
                     ? 'border-blue-500 bg-blue-50 shadow-sm'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
@@ -214,7 +217,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                 <input type="radio" value="Normal" {...form.register('settlementMode')} className="sr-only" />
                 <div className="flex flex-col items-center text-center gap-1">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    form.watch('settlementMode') === 'Normal' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
+                    settlementMode === 'Normal' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'
                   }`}>
                     <AccountBalanceWalletIcon sx={{ fontSize: 18 }} />
                   </div>
@@ -224,7 +227,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
               </label>
               <label
                 className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
-                  form.watch('settlementMode') === 'WinnerKeepsLoserPays'
+                  settlementMode === 'WinnerKeepsLoserPays'
                     ? 'border-amber-500 bg-amber-50 shadow-sm'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
@@ -232,7 +235,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                 <input type="radio" value="WinnerKeepsLoserPays" {...form.register('settlementMode')} className="sr-only" />
                 <div className="flex flex-col items-center text-center gap-1">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    form.watch('settlementMode') === 'WinnerKeepsLoserPays' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-400'
+                    settlementMode === 'WinnerKeepsLoserPays' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-400'
                   }`}>
                     <EmojiEventsIcon sx={{ fontSize: 18 }} />
                   </div>
@@ -345,7 +348,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
               <div>
                 <p className="text-sm font-semibold text-gray-700">Group Status</p>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  {form.watch('isActive') ? 'Group is active and accepting bets' : 'Group is deactivated'}
+                  {isActive ? 'Group is active and accepting bets' : 'Group is deactivated'}
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">

@@ -37,6 +37,8 @@ export function ProfilePage() {
   const [updateProfile, { isLoading: isSaving }] = useUpdateProfileMutation();
   const dispatch = useAppDispatch();
   const authUser = useAppSelector((s) => s.auth.user);
+  const authToken = useAppSelector((s) => s.auth.token);
+  const authRefreshToken = useAppSelector((s) => s.auth.refreshToken);
   const { formatDate } = useUserTimeZone();
 
   const [displayName, setDisplayName] = useState('');
@@ -62,16 +64,12 @@ export function ProfilePage() {
     setError('');
     try {
       const updated = await updateProfile({ displayName: displayName.trim(), avatarUrl, timeZone }).unwrap();
-      if (authUser) {
-        const token = sessionStorage.getItem('token');
-        const refreshToken = sessionStorage.getItem('refreshToken');
-        if (token && refreshToken) {
-          dispatch(setCredentials({
-            accessToken: token,
-            refreshToken,
-            user: { ...authUser, displayName: updated.displayName, avatarUrl: updated.avatarUrl, timeZone: updated.timeZone },
-          }));
-        }
+      if (authUser && authToken && authRefreshToken) {
+        dispatch(setCredentials({
+          accessToken: authToken,
+          refreshToken: authRefreshToken,
+          user: { ...authUser, displayName: updated.displayName, avatarUrl: updated.avatarUrl, timeZone: updated.timeZone },
+        }));
       }
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);

@@ -37,6 +37,11 @@ export function GroupDetailPage() {
     return new Map(leaderboard.map(e => [e.userId, e]));
   }, [leaderboard]);
 
+  const isPredictionExpired = useMemo(
+    () => championConfig ? new Date(championConfig.predictionCloseTime) < new Date() : false,
+    [championConfig]
+  );
+
   const handleCopy = useCallback(() => {
     if (!group) return;
     navigator.clipboard.writeText(group.inviteCode);
@@ -55,7 +60,7 @@ export function GroupDetailPage() {
 
   if (!group) {
     const errorMessage = error && typeof error === 'object' && 'data' in error 
-      ? (error.data as any)?.message || 'Group not found'
+      ? ((error.data as Record<string, unknown>)?.message as string) || 'Group not found'
       : 'Group not found';
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-400">
@@ -92,9 +97,9 @@ export function GroupDetailPage() {
             {championConfig?.isEnabled && (
               <button
                 onClick={() => navigate(`/groups/${id}/predictions`)}
-                disabled={new Date(championConfig.predictionCloseTime) < new Date()}
+                disabled={isPredictionExpired}
                 className={`flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-bold transition-all ${
-                  new Date(championConfig.predictionCloseTime) < new Date()
+                  isPredictionExpired
                     ? 'bg-yellow-900/30 text-yellow-700/50 border border-yellow-800/30 cursor-not-allowed'
                     : 'bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-sm shadow-yellow-500/25 hover:shadow-lg hover:shadow-yellow-500/40 hover:from-yellow-300 hover:to-amber-300'
                 }`}
