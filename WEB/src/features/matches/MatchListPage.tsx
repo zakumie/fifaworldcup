@@ -139,11 +139,11 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
             <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 mb-3">
               <div className="flex items-center gap-1.5 text-xs text-slate-600">
                 <span className="font-medium text-slate-400">Handicap:</span>
-                {config.handicap !== 0 && (
+                {config.handicap !== 0 ? (
                   <span className="font-bold text-gray-800">
                     {config.favoredTeamName ?? 'Home'} {config.handicap > 0 ? '+' : ''}{config.handicap}
                   </span>
-                )}
+                ) : <span className='font-bold text-gray-800'>Even</span>}
               </div>
               <span className="bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold">
                 {config.isFixedBet
