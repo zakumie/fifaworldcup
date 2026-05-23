@@ -92,6 +92,7 @@ public class BettingService : IBettingService
     {
         var config = await _db.MatchBettingConfigs
             .Include(c => c.Match)
+            .Include(c => c.Group)
             .FirstOrDefaultAsync(c => c.Id == request.MatchBettingConfigId);
 
         if (config == null) return Result<BetDto>.Failure("Betting config not found.");
@@ -130,7 +131,10 @@ public class BettingService : IBettingService
             m => m.GroupId == config.GroupId && m.UserId == userId && m.IsActive);
         if (member == null)
             return Result<BetDto>.Failure("You are not a member of this group.");
-        if (member.Balance < betAmount)
+
+        // WinnerKeepsLoserPays: balance deducted at settlement, not at placement
+        bool isDeferredMode = config.Group.SettlementMode == SettlementMode.WinnerKeepsLoserPays;
+        if (!isDeferredMode && member.Balance < betAmount)
             return Result<BetDto>.Failure("Insufficient balance.");
 
         // Place bet in transaction
@@ -141,9 +145,6 @@ public class BettingService : IBettingService
             await strategy.ExecuteAsync(async () =>
             {
                 using var transaction = await _db.Database.BeginTransactionAsync();
-
-                decimal balanceBefore = member.Balance;
-                member.Balance -= betAmount;
 
                 var bet = new Bet
                 {
@@ -156,17 +157,23 @@ public class BettingService : IBettingService
                 };
                 _db.Bets.Add(bet);
 
-                _db.Transactions.Add(new Transaction
+                if (!isDeferredMode)
                 {
-                    UserId = userId,
-                    GroupId = config.GroupId,
-                    Type = TransactionType.BetPlaced,
-                    Amount = -betAmount,
-                    BalanceBefore = balanceBefore,
-                    BalanceAfter = member.Balance,
-                    ReferenceId = bet.Id,
-                    Description = $"Bet placed on match {config.MatchId}"
-                });
+                    decimal balanceBefore = member.Balance;
+                    member.Balance -= betAmount;
+
+                    _db.Transactions.Add(new Transaction
+                    {
+                        UserId = userId,
+                        GroupId = config.GroupId,
+                        Type = TransactionType.BetPlaced,
+                        Amount = -betAmount,
+                        BalanceBefore = balanceBefore,
+                        BalanceAfter = member.Balance,
+                        ReferenceId = bet.Id,
+                        Description = $"Bet placed on match {config.MatchId}"
+                    });
+                }
 
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -187,6 +194,8 @@ public class BettingService : IBettingService
         var bet = await _db.Bets
             .Include(b => b.BettingConfig)
                 .ThenInclude(c => c.Match)
+            .Include(b => b.BettingConfig)
+                .ThenInclude(c => c.Group)
             .FirstOrDefaultAsync(b => b.Id == betId);
 
         if (bet == null) return Result<BetDto>.Failure("Bet not found.");
@@ -194,6 +203,7 @@ public class BettingService : IBettingService
         if (bet.Status != BetStatus.Pending) return Result<BetDto>.Failure("Only pending bets can be edited.");
 
         var config = bet.BettingConfig;
+        bool isDeferredMode = config.Group.SettlementMode == SettlementMode.WinnerKeepsLoserPays;
         var now = DateTime.UtcNow;
         if (now > config.BettingCloseTime)
             return Result<BetDto>.Failure("Betting is closed.");
@@ -217,9 +227,12 @@ public class BettingService : IBettingService
         if (member == null)
             return Result<BetDto>.Failure("You are not a member of this group.");
 
-        decimal difference = newBetAmount - bet.BetAmount;
-        if (difference > 0 && member.Balance < difference)
-            return Result<BetDto>.Failure("Insufficient balance.");
+        if (!isDeferredMode)
+        {
+            decimal difference = newBetAmount - bet.BetAmount;
+            if (difference > 0 && member.Balance < difference)
+                return Result<BetDto>.Failure("Insufficient balance.");
+        }
 
         var strategy = _db.Database.CreateExecutionStrategy();
         try
@@ -228,32 +241,36 @@ public class BettingService : IBettingService
             {
                 using var transaction = await _db.Database.BeginTransactionAsync();
 
-                // Re-read entities inside retry scope to avoid stale tracker state
-                var freshMember = await _db.GroupMembers
-                    .FirstAsync(m => m.GroupId == config.GroupId && m.UserId == userId && m.IsActive);
                 var freshBet = await _db.Bets.FirstAsync(b => b.Id == betId);
 
-                decimal freshDifference = newBetAmount - freshBet.BetAmount;
-                if (freshDifference > 0 && freshMember.Balance < freshDifference)
-                    throw new InvalidOperationException("Insufficient balance.");
+                if (!isDeferredMode)
+                {
+                    // Re-read member inside retry scope to avoid stale tracker state
+                    var freshMember = await _db.GroupMembers
+                        .FirstAsync(m => m.GroupId == config.GroupId && m.UserId == userId && m.IsActive);
 
-                decimal balanceBefore = freshMember.Balance;
-                freshMember.Balance -= freshDifference;
+                    decimal freshDifference = newBetAmount - freshBet.BetAmount;
+                    if (freshDifference > 0 && freshMember.Balance < freshDifference)
+                        throw new InvalidOperationException("Insufficient balance.");
+
+                    decimal balanceBefore = freshMember.Balance;
+                    freshMember.Balance -= freshDifference;
+
+                    _db.Transactions.Add(new Transaction
+                    {
+                        UserId = userId,
+                        GroupId = config.GroupId,
+                        Type = TransactionType.BetUpdated,
+                        Amount = -freshDifference,
+                        BalanceBefore = balanceBefore,
+                        BalanceAfter = freshMember.Balance,
+                        ReferenceId = freshBet.Id,
+                        Description = $"Bet updated on match {config.MatchId}"
+                    });
+                }
 
                 freshBet.SelectedTeamId = request.SelectedTeamId;
                 freshBet.BetAmount = newBetAmount;
-
-                _db.Transactions.Add(new Transaction
-                {
-                    UserId = userId,
-                    GroupId = config.GroupId,
-                    Type = TransactionType.BetUpdated,
-                    Amount = -freshDifference,
-                    BalanceBefore = balanceBefore,
-                    BalanceAfter = freshMember.Balance,
-                    ReferenceId = freshBet.Id,
-                    Description = $"Bet updated on match {config.MatchId}"
-                });
 
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -360,7 +377,8 @@ public class BettingService : IBettingService
 
                     if (config.Group.SettlementMode == SettlementMode.WinnerKeepsLoserPays)
                     {
-                        // Custom mode: Won/HalfWon → get bet back (no profit), Push/HalfLost → lose 50%, Lost → nothing back
+                        // Deferred mode: balance was NOT deducted at placement
+                        // Only apply the net loss at settlement (winners keep balance unchanged)
                         bet.Profit = result.Status switch
                         {
                             BetStatus.Won or BetStatus.HalfWon => 0m,
@@ -368,13 +386,7 @@ public class BettingService : IBettingService
                             BetStatus.HalfLost => -(bet.BetAmount * 0.5m),
                             _ => -bet.BetAmount
                         };
-                        balanceChange = result.Status switch
-                        {
-                            BetStatus.Won or BetStatus.HalfWon => bet.BetAmount,
-                            BetStatus.Push => bet.BetAmount * 0.5m,
-                            BetStatus.HalfLost => bet.BetAmount * 0.5m,
-                            _ => 0m
-                        };
+                        balanceChange = bet.Profit;
                         // Simplify status: no half states in this mode
                         if (result.Status == BetStatus.HalfWon) bet.Status = BetStatus.Won;
                         if (result.Status == BetStatus.HalfLost) bet.Status = BetStatus.Lost;
@@ -397,7 +409,8 @@ public class BettingService : IBettingService
                     member.Balance += balanceChange;
 
                     var txType = bet.Profit >= 0 ? TransactionType.BetWon : TransactionType.BetLost;
-                    if (bet.Status == BetStatus.Push) txType = TransactionType.BetRefund;
+                    if (bet.Status == BetStatus.Push && config.Group.SettlementMode == SettlementMode.Normal)
+                        txType = TransactionType.BetRefund;
 
                     _db.Transactions.Add(new Transaction
                     {

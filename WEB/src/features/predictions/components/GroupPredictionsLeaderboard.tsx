@@ -69,59 +69,59 @@ export default function GroupPredictionsLeaderboard({ predictions, isSettled, te
 
   const colHeaderClass = (field: SortField) =>
     `cursor-pointer select-none flex items-center gap-0.5 transition-colors ${
-      sortField === field ? 'text-amber-700' : 'text-gray-400 hover:text-gray-600'
+      sortField === field ? 'text-amber-700 dark:text-amber-400' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
     }`;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+      <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center">
             <EmojiEventsIcon sx={{ fontSize: 18, color: '#d97706' }} />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-gray-800">Group Predictions</h3>
+            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-100">Group Predictions</h3>
             {isSettled && (
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[11px] text-gray-500 dark:text-gray-400">
                 {correctCount}/{totalCount} predicted correctly
               </p>
             )}
           </div>
         </div>
-        <span className="text-xs font-medium text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full">
+        <span className="text-xs font-medium text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-800 px-2.5 py-1 rounded-full">
           {totalCount} {totalCount === 1 ? 'member' : 'members'}
         </span>
       </div>
 
       {/* Column Headers */}
-      <div className="grid grid-cols-[32px_1fr_1fr_auto_auto] items-center gap-3 px-5 py-2.5 border-b border-gray-100 bg-gray-50/50 text-[11px] font-bold uppercase tracking-wider">
-        <span className="text-gray-400 text-center">#</span>
+      <div className="grid grid-cols-[32px_1fr_1fr_auto_auto] items-center gap-3 px-5 py-2.5 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-[11px] font-bold uppercase tracking-wider">
+        <span className="text-gray-400 dark:text-gray-500 text-center">#</span>
         <span className={colHeaderClass('name')} onClick={() => handleSort('name')}>
           Member <SortIcon field="name" />
         </span>
         <span className={colHeaderClass('team')} onClick={() => handleSort('team')}>
           Team <SortIcon field="team" />
         </span>
-        {isSettled && <span className="text-gray-400">Result</span>}
+        {isSettled && <span className="text-gray-400 dark:text-gray-500">Result</span>}
         <span className={colHeaderClass('date')} onClick={() => handleSort('date')}>
           Date <SortIcon field="date" />
         </span>
       </div>
 
       {/* List */}
-      <div className="divide-y divide-gray-50">
+      <div className="divide-y divide-gray-50 dark:divide-gray-800">
         {sortedPredictions.map((prediction, idx) => {
           const team = teamsById.get(prediction.selectedTeamId);
           return (
             <div
               key={prediction.id}
-              className={`grid grid-cols-[32px_1fr_1fr_auto_auto] items-center gap-3 px-5 py-3 transition-colors hover:bg-gray-50/50 ${
-                isSettled && prediction.isCorrect ? 'bg-emerald-50/30' : ''
+              className={`grid grid-cols-[32px_1fr_1fr_auto_auto] items-center gap-3 px-5 py-3 transition-colors hover:bg-gray-50/50 dark:hover:bg-gray-800/50 ${
+                isSettled && prediction.isCorrect ? 'bg-emerald-50/30 dark:bg-emerald-900/10' : ''
               }`}
             >
               {/* # */}
-              <span className="text-center text-xs font-bold text-gray-400">{idx + 1}</span>
+              <span className="text-center text-xs font-bold text-gray-400 dark:text-gray-500">{idx + 1}</span>
 
               {/* Member */}
               <div className="flex items-center gap-2.5 min-w-0">
@@ -134,7 +134,7 @@ export default function GroupPredictionsLeaderboard({ predictions, isSettled, te
                     </span>
                   </div>
                 )}
-                <p className="text-sm font-semibold text-gray-800 truncate">{prediction.userDisplayName}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{prediction.userDisplayName}</p>
               </div>
 
               {/* Team */}
@@ -142,19 +142,19 @@ export default function GroupPredictionsLeaderboard({ predictions, isSettled, te
                 {team?.flagUrl ? (
                   <img src={team.flagUrl} alt={prediction.selectedTeamName} className="w-5 h-5 rounded-full object-cover ring-1 ring-gray-200 shrink-0" />
                 ) : (
-                  <div className="w-5 h-5 rounded-full bg-gray-100 shrink-0" />
+                  <div className="w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-700 shrink-0" />
                 )}
-                <p className="text-sm text-gray-700 truncate">{prediction.selectedTeamName}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300 truncate">{prediction.selectedTeamName}</p>
               </div>
 
               {/* Result */}
               {isSettled && (
                 prediction.isCorrect ? (
-                  <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 whitespace-nowrap">
+                  <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-700 whitespace-nowrap">
                     <CheckCircleIcon sx={{ fontSize: 12 }} /> Correct
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1 text-[11px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full border border-red-200 whitespace-nowrap">
+                  <span className="flex items-center gap-1 text-[11px] font-bold text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded-full border border-red-200 dark:border-red-700 whitespace-nowrap">
                     <CancelIcon sx={{ fontSize: 12 }} /> Wrong
                   </span>
                 )
@@ -162,10 +162,10 @@ export default function GroupPredictionsLeaderboard({ predictions, isSettled, te
 
               {/* Date */}
               <div className="text-right whitespace-nowrap">
-                <p className="text-xs font-semibold text-gray-700">
+                <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
                   {new Date(prediction.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </p>
-                <p className="text-[10px] text-gray-400">
+                <p className="text-[10px] text-gray-400 dark:text-gray-500">
                   {new Date(prediction.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default function GroupPredictionsLeaderboard({ predictions, isSettled, te
       {predictions.length === 0 && (
         <div className="text-center py-10">
           <EmojiEventsIcon sx={{ fontSize: 36, color: '#d1d5db' }} />
-          <p className="text-sm text-gray-400 mt-2">No predictions yet</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">No predictions yet</p>
         </div>
       )}
     </div>

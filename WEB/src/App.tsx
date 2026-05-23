@@ -18,6 +18,7 @@ const BetHistoryPage = lazy(() => import('./features/betting/BetHistoryPage').th
 const LeaderboardPage = lazy(() => import('./features/leaderboard/LeaderboardPage').then(m => ({ default: m.LeaderboardPage })));
 const ChampionPredictionPage = lazy(() => import('./features/predictions/ChampionPredictionPage').then(m => ({ default: m.default })));
 const ManageChampionPredictionsPage = lazy(() => import('./features/predictions/ManageChampionPredictionsPage').then(m => ({ default: m.default })));
+const ChangePasswordPage = lazy(() => import('./features/auth/ChangePasswordPage').then(m => ({ default: m.ChangePasswordPage })));
 
 const Loader = () => (
   <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
@@ -43,6 +44,7 @@ function App() {
           <Route path="/admin/users" element={<Suspense fallback={<Loader />}><ManageUsersPage /></Suspense>} />
           <Route path="/admin/champion-predictions/:groupId" element={<Suspense fallback={<Loader />}><ManageChampionPredictionsPage /></Suspense>} />
           <Route path="/profile" element={<Suspense fallback={<Loader />}><ProfilePage /></Suspense>} />
+          <Route path="/change-password" element={<Suspense fallback={<Loader />}><ChangePasswordPage /></Suspense>} />
           <Route path="/bets" element={<Suspense fallback={<Loader />}><BetHistoryPage /></Suspense>} />
           <Route path="/leaderboard" element={<Suspense fallback={<Loader />}><LeaderboardPage /></Suspense>} />
         </Route>

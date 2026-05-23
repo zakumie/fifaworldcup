@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/api';
-import type { LoginRequest, RegisterRequest, AuthResponse } from '../../types';
+import type { LoginRequest, RegisterRequest, AuthResponse, ChangePasswordRequest } from '../../types';
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -31,9 +31,16 @@ export const authApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    changePassword: builder.mutation<void, ChangePasswordRequest>({
+      query: (data) => ({
+        url: '/auth/change-password',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
 export const {
-  useLoginMutation, useRegisterMutation, useGoogleLoginMutation, useRefreshTokenMutation,
+  useLoginMutation, useRegisterMutation, useGoogleLoginMutation, useRefreshTokenMutation, useChangePasswordMutation,
 } = authApi;

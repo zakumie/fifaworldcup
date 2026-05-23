@@ -36,7 +36,7 @@ public class LeaderboardService : ILeaderboardService
 
         var betStats = await _db.Bets
             .AsNoTracking()
-            .Where(b => b.GroupId == groupId && b.Status != BetStatus.Pending && b.Status != BetStatus.Cancelled)
+            .Where(b => b.GroupId == groupId && b.Status != BetStatus.Cancelled)
             .GroupBy(b => b.UserId)
             .Select(g => new
             {
@@ -45,9 +45,9 @@ public class LeaderboardService : ILeaderboardService
                 Wins = g.Count(b => b.Status == BetStatus.Won || b.Status == BetStatus.HalfWon),
                 Losses = g.Count(b => b.Status == BetStatus.Lost || b.Status == BetStatus.HalfLost),
                 Draws = g.Count(b => b.Status == BetStatus.Push),
-                TotalWagered = g.Sum(b => b.BetAmount),
-                TotalPayout = g.Sum(b => b.BetAmount + b.Profit),
-                Profit = g.Sum(b => b.Profit),
+                TotalWagered = g.Sum(b => b.Status != BetStatus.Pending ? b.BetAmount : 0),
+                TotalPayout = g.Sum(b => b.Status != BetStatus.Pending ? b.BetAmount + b.Profit : 0),
+                Profit = g.Sum(b => b.Status != BetStatus.Pending ? b.Profit : 0),
             })
             .ToDictionaryAsync(e => e.UserId, ct);
 

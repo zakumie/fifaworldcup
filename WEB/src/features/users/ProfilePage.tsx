@@ -95,9 +95,9 @@ export function ProfilePage() {
 
   if (!profile) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-gray-100">
+      <div className="flex flex-col items-center justify-center py-12 sm:py-16 bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700 mx-4 sm:mx-0">
         <PersonIcon sx={{ fontSize: 48, color: '#cbd5e1' }} />
-        <p className="text-lg font-semibold text-gray-700 mt-3">Profile not found</p>
+        <p className="text-lg font-semibold text-gray-700 dark:text-gray-300 mt-3">Profile not found</p>
       </div>
     );
   }
@@ -105,76 +105,76 @@ export function ProfilePage() {
   const hasChanges = displayName !== profile.displayName || avatarUrl !== profile.avatarUrl || timeZone !== (profile.timeZone || getBrowserTimeZone());
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto px-4 sm:px-0">
       {/* Header */}
-      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
-        <h1 className="text-2xl font-black text-white flex items-center gap-3">
-          <PersonIcon sx={{ fontSize: 32, color: 'white' }} />
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+          <PersonIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
           <span>MY <span className="text-emerald-400">PROFILE</span></span>
         </h1>
-        <p className="text-sm text-slate-400 mt-1">Manage your account settings</p>
+        <p className="text-xs sm:text-sm text-slate-400 mt-1">Manage your account settings</p>
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
         {/* Avatar Section */}
-        <div className="flex flex-col items-center pt-8 pb-6 border-b border-stone-200 bg-gradient-to-r from-gray-200 via-stone-100 to-gray-200">
+        <div className="flex flex-col items-center pt-6 sm:pt-8 pb-4 sm:pb-6 border-b border-stone-200 dark:border-gray-700 bg-gradient-to-r from-gray-200 via-stone-100 to-gray-200 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800">
             <div className="relative group">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={displayName}
-                className="w-24 h-24 rounded-full object-cover ring-4 ring-white shadow-lg bg-white"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover ring-4 ring-white shadow-lg bg-white"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-600 ring-4 ring-white shadow-lg flex items-center justify-center">
-                <span className="text-3xl font-black text-white">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-600 ring-4 ring-white dark:ring-gray-700 shadow-lg flex items-center justify-center">
+                <span className="text-2xl sm:text-3xl font-black text-white">
                   {profile.displayName.charAt(0).toUpperCase()}
                 </span>
               </div>
             )}
             <button
               onClick={() => setAvatarUrl(null)}
-              className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center text-gray-500 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"
+              className="absolute -bottom-1 -right-1 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-red-500 hover:border-red-200 dark:hover:border-red-700 transition-colors shadow-sm"
               title="Remove avatar"
             >
-              <CameraIcon sx={{ fontSize: 16 }} />
+              <CameraIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />
             </button>
           </div>
-          <p className="text-lg font-bold text-gray-800 mt-3">{profile.displayName}</p>
-          <p className="text-sm text-slate-400">{profile.email}</p>
+          <p className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-100 mt-2 sm:mt-3">{profile.displayName}</p>
+          <p className="text-xs sm:text-sm text-slate-400 dark:text-slate-500 max-w-[90%] truncate">{profile.email}</p>
         </div>
 
         {/* Info & Form */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Read-only info */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-gray-800">
               <EmailIcon sx={{ fontSize: 20, color: '#64748b' }} />
-              <div>
-                <p className="text-[10px] font-semibold text-slate-400 uppercase">Email</p>
-                <p className="text-sm font-medium text-gray-700">{profile.email}</p>
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">Email</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{profile.email}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-gray-800">
               <AuthIcon sx={{ fontSize: 20, color: '#64748b' }} />
               <div>
-                <p className="text-[10px] font-semibold text-slate-400 uppercase">Auth Provider</p>
-                <p className="text-sm font-medium text-gray-700 capitalize">{profile.authProvider}</p>
+                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">Auth Provider</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">{profile.authProvider}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 sm:col-span-2">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-gray-800 sm:col-span-2">
               <CalendarIcon sx={{ fontSize: 20, color: '#64748b' }} />
               <div>
-                <p className="text-[10px] font-semibold text-slate-400 uppercase">Member Since</p>
-                <p className="text-sm font-medium text-gray-700">{formatDate(profile.createdAt, 'MMMM dd, yyyy')}</p>
+                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">Member Since</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{formatDate(profile.createdAt, 'MMMM dd, yyyy')}</p>
               </div>
             </div>
           </div>
 
           {/* Editable: Display Name */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
               Display Name
             </label>
             <input
@@ -182,42 +182,42 @@ export function ProfilePage() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               maxLength={50}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
             />
           </div>
 
           {/* Timezone */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
               <TimezoneIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'middle' }} />
               Timezone
             </label>
             <select
               value={timeZone}
               onChange={(e) => setTimeZone(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
             >
               {ALLOWED_TIMEZONES.map((tz) => (
                 <option key={tz.value} value={tz.value}>{tz.label}</option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400 mt-1">All times will be displayed in this timezone</p>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">All times will be displayed in this timezone</p>
           </div>
 
           {/* Avatar Picker */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
               Choose Avatar
             </label>
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {AVATAR_PRESETS.map((url) => (
                 <button
                   key={url}
                   onClick={() => setAvatarUrl(url)}
                   className={`w-full aspect-square rounded-xl border-2 overflow-hidden transition-all hover:scale-105 ${
                     avatarUrl === url
-                      ? 'border-emerald-500 ring-2 ring-emerald-200 shadow-md'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-emerald-500 ring-2 ring-emerald-200 dark:ring-emerald-800 shadow-md'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <img src={url} alt="avatar" className="w-full h-full object-cover" />
@@ -226,19 +226,19 @@ export function ProfilePage() {
             </div>
 
             {/* Custom URL */}
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={customUrl}
                 onChange={(e) => setCustomUrl(e.target.value)}
                 placeholder="Or paste an image URL..."
-                className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 onKeyDown={(e) => e.key === 'Enter' && handleCustomUrlApply()}
               />
               <button
                 onClick={handleCustomUrlApply}
                 disabled={!customUrl.trim()}
-                className="px-4 py-2 rounded-xl bg-slate-100 text-sm font-medium text-gray-600 hover:bg-slate-200 disabled:opacity-40 transition-colors"
+                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-gray-700 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-600 disabled:opacity-40 transition-colors sm:w-auto w-full"
               >
                 Apply
               </button>
@@ -247,7 +247,7 @@ export function ProfilePage() {
 
           {/* Error */}
           {error && (
-            <div className="px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600 font-medium">
+            <div className="px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-sm text-red-600 dark:text-red-400 font-medium">
               {error}
             </div>
           )}
@@ -260,8 +260,8 @@ export function ProfilePage() {
               saved
                 ? 'bg-emerald-500 text-white'
                 : hasChanges
-                  ? 'bg-emerald-700 text-white hover:bg-emerald-600 shadow-md shadow-emerald-200'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? 'bg-emerald-700 text-white hover:bg-emerald-600 shadow-md shadow-emerald-200 dark:shadow-emerald-900/30'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
             }`}
           >
             {isSaving ? (

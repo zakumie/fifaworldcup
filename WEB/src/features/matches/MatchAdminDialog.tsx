@@ -83,41 +83,41 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
 
       {/* Header */}
-      <div className="relative bg-gradient-to-t from-slate-800 to-blue-900 px-6 pt-6 pb-8">
+      <div className="relative bg-gradient-to-t from-slate-800 to-blue-900 px-4 sm:px-6 pt-4 sm:pt-6 pb-6 sm:pb-8">
         <IconButton onClick={onClose} size="small"
-          sx={{ position: 'absolute', top: 12, right: 12, color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+          sx={{ position: 'absolute', top: 8, right: 8, color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
           <CloseIcon fontSize="small" />
         </IconButton>
 
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-            <SportsSoccerIcon sx={{ color: 'white', fontSize: 22 }} />
+        <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+            <SportsSoccerIcon sx={{ color: 'white', fontSize: { xs: 18, sm: 22 } }} />
           </div>
           <div>
-            <h2 className="text-white text-lg font-bold">Match Administration</h2>
-            <p className="text-sky-200 text-xs">{formatStage(match.stage, match.group)}</p>
+            <h2 className="text-white text-base sm:text-lg font-bold">Match Administration</h2>
+            <p className="text-sky-200 text-[10px] sm:text-xs">{formatStage(match.stage, match.group)}</p>
           </div>
         </div>
 
         {/* Match teams display */}
-        <div className="flex items-center justify-center gap-4 mt-2">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2.5 sm:gap-4 mt-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
             {match.homeTeam.flagUrl && (
-              <img src={match.homeTeam.flagUrl} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white/30" />
+              <img src={match.homeTeam.flagUrl} alt="" className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-white/30 shrink-0" />
             )}
-            <span className="text-white font-bold text-sm">{match.homeTeam.name}</span>
+            <span className="text-white font-bold text-xs sm:text-sm truncate">{match.homeTeam.name}</span>
           </div>
-          <div className={`px-3 py-1 rounded-lg ${isLive ? 'bg-red-500/30' : 'bg-white/10'}`}>
+          <div className={`px-2.5 sm:px-3 py-1 rounded-lg shrink-0 ${isLive ? 'bg-red-500/30' : 'bg-white/10'}`}>
             {match.status === 'Live' || match.status === 'Finished' ? (
-              <span className="text-white font-black text-lg">{match.homeScore} - {match.awayScore}</span>
+              <span className="text-white font-black text-base sm:text-lg">{match.homeScore} - {match.awayScore}</span>
             ) : (
-              <span className="text-white/60 font-semibold text-sm">vs</span>
+              <span className="text-white/60 font-semibold text-xs sm:text-sm">vs</span>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-white font-bold text-sm">{match.awayTeam.name}</span>
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span className="text-white font-bold text-xs sm:text-sm truncate">{match.awayTeam.name}</span>
             {match.awayTeam.flagUrl && (
-              <img src={match.awayTeam.flagUrl} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-white/30" />
+              <img src={match.awayTeam.flagUrl} alt="" className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-white/30 shrink-0" />
             )}
           </div>
         </div>
@@ -158,7 +158,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
         </button>
       </div>
 
-      <DialogContent sx={{ pt: 3, pb: 2, px: 3 }}>
+      <DialogContent sx={{ pt: 3, pb: 2, px: { xs: 2, sm: 3 } }}>
         {/* ── Tab: Status & Score ── */}
         {activeTab === 'score' && (
           <div className="space-y-4">
@@ -311,7 +311,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
 
       {/* Footer - only show for Score tab */}
       {activeTab === 'score' && (
-        <div className="px-6 pb-5 pt-2 flex justify-end gap-2 border-t border-gray-100">
+        <div className="px-4 sm:px-6 pb-4 sm:pb-5 pt-2 flex justify-end gap-2 border-t border-gray-100">
           <Button onClick={onClose}
             sx={{ borderRadius: 2, textTransform: 'none', px: 3, color: '#64748b' }}>
             Close

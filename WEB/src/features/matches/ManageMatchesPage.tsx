@@ -71,65 +71,104 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
     <>
       <div
         onClick={() => setAdminDialogOpen(true)}
-        className={`
-          grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-center px-5 py-4
-          border-b border-slate-50 hover:bg-slate-50/50 transition-colors cursor-pointer
-        `}
+        className="px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-50 hover:bg-slate-50/50 transition-colors cursor-pointer"
       >
-        {/* Match teams */}
-        <div className="col-span-3 flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-xl ${iconStyle} flex items-center justify-center shadow-sm shrink-0`}>
-            <SportsSoccerIcon sx={{ fontSize: 18, color: '#fff' }} />
-          </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-1.5">
-              {match.homeTeam.flagUrl && (
-                <img src={match.homeTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
-              )}
-              <span className="text-sm font-bold text-gray-800 truncate">{match.homeTeam.code}</span>
-              <span className="text-xs text-slate-400">vs</span>
-              {match.awayTeam.flagUrl && (
-                <img src={match.awayTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
-              )}
-              <span className="text-sm font-bold text-gray-800 truncate">{match.awayTeam.code}</span>
+        {/* Mobile card layout */}
+        <div className="flex sm:hidden items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className={`w-9 h-9 rounded-lg ${iconStyle} flex items-center justify-center shadow-sm shrink-0`}>
+              <SportsSoccerIcon sx={{ fontSize: 16, color: '#fff' }} />
             </div>
-            <p className="text-xs text-blue-800 font-semibold truncate">{formatDate(match.startTime, 'MMM dd, HH:mm')}</p>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                {match.homeTeam.flagUrl && (
+                  <img src={match.homeTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
+                )}
+                <span className="text-sm font-bold text-gray-800">{match.homeTeam.code}</span>
+                <span className="text-[10px] text-slate-400">vs</span>
+                {match.awayTeam.flagUrl && (
+                  <img src={match.awayTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
+                )}
+                <span className="text-sm font-bold text-gray-800">{match.awayTeam.code}</span>
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="text-[10px] text-slate-400 truncate">{formatStage(match.stage, match.group)}</span>
+                <span className="text-[10px] text-slate-300">·</span>
+                <span className="text-[10px] text-blue-800 font-semibold">{formatDate(match.startTime, 'MMM dd, HH:mm')}</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            {(match.status === 'Open' || match.status === 'Upcoming') ? (
+              <span className="text-xs text-slate-400 font-medium">— : —</span>
+            ) : (
+              <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
+                {match.homeScore} - {match.awayScore}
+              </span>
+            )}
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${statusStyle}`}>
+              {statusLabel}
+            </span>
           </div>
         </div>
 
-        {/* Stage */}
-        <div className="col-span-2 text-center">
-          <span className="text-xs text-slate-500">{formatStage(match.stage, match.group)}</span>
-        </div>
+        {/* Desktop table row */}
+        <div className="hidden sm:grid grid-cols-12 gap-4 items-center">
+          {/* Match teams */}
+          <div className="col-span-3 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl ${iconStyle} flex items-center justify-center shadow-sm shrink-0`}>
+              <SportsSoccerIcon sx={{ fontSize: 18, color: '#fff' }} />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                {match.homeTeam.flagUrl && (
+                  <img src={match.homeTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
+                )}
+                <span className="text-sm font-bold text-gray-800 truncate">{match.homeTeam.code}</span>
+                <span className="text-xs text-slate-400">vs</span>
+                {match.awayTeam.flagUrl && (
+                  <img src={match.awayTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
+                )}
+                <span className="text-sm font-bold text-gray-800 truncate">{match.awayTeam.code}</span>
+              </div>
+              <p className="text-xs text-blue-800 font-semibold truncate">{formatDate(match.startTime, 'MMM dd, HH:mm')}</p>
+            </div>
+          </div>
 
-        {/* Score */}
-        <div className="col-span-1 text-center">
-          {(match.status === 'Open' || match.status === 'Upcoming') ? (
-            <span className="text-sm text-slate-400">— : —</span>
-          ) : (
-            <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
-              {match.homeScore} - {match.awayScore}
+          {/* Stage */}
+          <div className="col-span-2 text-center">
+            <span className="text-xs text-slate-500">{formatStage(match.stage, match.group)}</span>
+          </div>
+
+          {/* Score */}
+          <div className="col-span-1 text-center">
+            {(match.status === 'Open' || match.status === 'Upcoming') ? (
+              <span className="text-sm text-slate-400">— : —</span>
+            ) : (
+              <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
+                {match.homeScore} - {match.awayScore}
+              </span>
+            )}
+          </div>
+
+          {/* Status */}
+          <div className="col-span-2 text-center">
+            <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full ${statusStyle}`}>
+              {statusLabel}
             </span>
-          )}
-        </div>
+          </div>
 
-        {/* Status */}
-        <div className="col-span-2 text-center">
-          <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full ${statusStyle}`}>
-            {statusLabel}
-          </span>
-        </div>
+          {/* Date */}
+          <div className="col-span-3 text-center">
+            <span className="text-xs text-slate-500">{formatDate(match.startTime, 'MMM dd, HH:mm')}</span>
+          </div>
 
-        {/* Date */}
-        <div className="col-span-3 text-center">
-          <span className="text-xs text-slate-500">{formatDate(match.startTime, 'MMM dd, HH:mm')}</span>
-        </div>
-
-        {/* Action */}
-        <div className="col-span-1 flex items-center justify-end">
-          <IconButton size="small" title="Manage match">
-            <TuneIcon fontSize="small" sx={{ color: '#64748b' }} />
-          </IconButton>
+          {/* Action */}
+          <div className="col-span-1 flex items-center justify-end">
+            <IconButton size="small" title="Manage match">
+              <TuneIcon fontSize="small" sx={{ color: '#64748b' }} />
+            </IconButton>
+          </div>
         </div>
       </div>
 

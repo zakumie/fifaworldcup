@@ -13,6 +13,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ManageHistoryRoundedIcon from '@mui/icons-material/ManageHistoryRounded';
 import Groups2Icon from '@mui/icons-material/Groups2';
@@ -266,6 +267,12 @@ export function AppLayout() {
                 <ListItemIcon><PersonOutlinedIcon fontSize="small" /></ListItemIcon>
                 <span className="text-sm">Profile</span>
               </MenuItem>
+              {user?.authProvider === 'Local' && (
+                <MenuItem onClick={() => { setAnchorEl(null); navigate('/change-password'); }} sx={{ py: 1.5, px: 2.5 }}>
+                  <ListItemIcon><LockOutlinedIcon fontSize="small" /></ListItemIcon>
+                  <span className="text-sm">Change Password</span>
+                </MenuItem>
+              )}
               <MenuItem onClick={handleLogout} sx={{ py: 1.5, px: 2.5, color: 'error.main' }}>
                 <ListItemIcon><LogoutOutlinedIcon fontSize="small" sx={{ color: 'error.main' }} /></ListItemIcon>
                 <span className="text-sm">Logout</span>
