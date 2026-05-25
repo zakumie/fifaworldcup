@@ -29,7 +29,7 @@ const COVER_IMAGES = [
   'https://images.unsplash.com/photo-1446057032654-9d8885db76c6?w=400&h=400&fit=crop',
   'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=400&h=400&fit=crop',
   'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1468164016595-6108e4a95d90?w=400&h=400&fit=crop',
+  'https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop',
 ];
 
 function getCoverForSong(index: number) {
