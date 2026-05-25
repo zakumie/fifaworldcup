@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   Box, Dialog, DialogContent, TextField, Alert, Button,
-  IconButton, InputAdornment,
+  IconButton, InputAdornment, ThemeProvider,
 } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -24,6 +24,11 @@ import {
 } from '../predictions/championApi';
 import { useGetTeamsQuery } from '../matches/matchesApi';
 import type { UpdateGroupRequest, GroupDto, TeamDto } from '../../types';
+import { getTheme } from '../../app/theme';
+import { toLocalDatetimeInput } from '../../utils/timezone';
+import { inputSx } from '../../utils/formStyles';
+
+const lightTheme = getTheme('light');
 
 const editSchema = yup.object({
   name: yup.string().min(3).max(50).required('Name is required'),
@@ -41,18 +46,6 @@ interface Props {
   onSuccess?: (message: string) => void;
   onError?: (message: string) => void;
 }
-
-const fieldSx = {
-  mt: 2,
-  '& .MuiOutlinedInput-root': {
-    borderRadius: 2.5,
-    fontSize: '0.875rem',
-    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#94a3b8' },
-    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6', borderWidth: 2 },
-  },
-  '& .MuiInputLabel-root': { fontSize: '0.8rem', fontWeight: 500 },
-  '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
-};
 
 export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Props) {
   const [updateGroup] = useUpdateGroupMutation();
@@ -94,18 +87,11 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
     }
   }, [group, open]);
 
-  const toLocalDatetime = (iso: string) => {
-    const d = new Date(iso);
-    const offset = d.getTimezoneOffset();
-    const local = new Date(d.getTime() - offset * 60000);
-    return local.toISOString().slice(0, 16);
-  };
-
   useEffect(() => {
     if (championConfig) {
       setChampionEnabled(championConfig.isEnabled);
-      setChampionOpenTime(championConfig.predictionOpenTime ? toLocalDatetime(championConfig.predictionOpenTime) : '');
-      setChampionCloseTime(championConfig.predictionCloseTime ? toLocalDatetime(championConfig.predictionCloseTime) : '');
+      setChampionOpenTime(championConfig.predictionOpenTime ? toLocalDatetimeInput(championConfig.predictionOpenTime) : '');
+      setChampionCloseTime(championConfig.predictionCloseTime ? toLocalDatetimeInput(championConfig.predictionCloseTime) : '');
     } else {
       setChampionEnabled(false);
       setChampionOpenTime('');
@@ -166,6 +152,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
   };
 
   return (
+    <ThemeProvider theme={lightTheme}>
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' } }}>
       <Box component="form" onSubmit={form.handleSubmit(handleSubmit)} sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -194,23 +181,23 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
             error={!!form.formState.errors.name} helperText={form.formState.errors.name?.message}
             autoFocus
             InputProps={{ startAdornment: <InputAdornment position="start"><GroupsIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
-            sx={fieldSx} />
+            sx={[inputSx, { mt: 2 }]} />
 
           {/* Description */}
           <TextField {...form.register('description')} label="Description" fullWidth size="small"
             multiline rows={2}
-            sx={fieldSx} />
+            sx={[inputSx, { mt: 2 }]} />
 
           {/* Two columns: Max Members & Default Balance */}
           <div className="grid grid-cols-2 gap-3 mt-3">
             <TextField {...form.register('maxMembers')} label="Max Members" type="number" fullWidth size="small"
               error={!!form.formState.errors.maxMembers} helperText={form.formState.errors.maxMembers?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><PeopleAltIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
-              sx={fieldSx} />
+              sx={inputSx} />
             <TextField {...form.register('defaultBalance')} label="Default Balance" type="number" fullWidth size="small"
               error={!!form.formState.errors.defaultBalance} helperText={form.formState.errors.defaultBalance?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><AccountBalanceWalletIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
-              sx={fieldSx} />
+              sx={inputSx} />
           </div>
 
           {/* Settlement Mode - Card selector */}
@@ -273,7 +260,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                 <div
                   onClick={() => setChampionEnabled(!championEnabled)}
                   className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
-                    championEnabled ? 'border-amber-500 bg-amber-50/50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                    championEnabled ? 'border-amber-400 bg-amber-50/50 shadow-sm' : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -294,39 +281,40 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                   </div>
                 </div>
 
-                {championEnabled && (
-                  <div className="grid grid-cols-2 gap-3 mt-3">
-                    <TextField
-                      label="Open Time"
-                      type="datetime-local"
-                      value={championOpenTime}
-                      onChange={(e) => setChampionOpenTime(e.target.value)}
-                      InputLabelProps={{ shrink: true }}
-                      size="small"
-                      sx={fieldSx}
-                    />
-                    <TextField
-                      label="Close Time"
-                      type="datetime-local"
-                      value={championCloseTime}
-                      onChange={(e) => setChampionCloseTime(e.target.value)}
-                      InputLabelProps={{ shrink: true }}
-                      size="small"
-                      sx={fieldSx}
-                    />
-                  </div>
-                )}
+                
 
                 {/* Settle section - only if config exists and not settled */}
-                {championConfig && !championConfig.isSettled && (
-                  <div className="mt-3 p-3 rounded-xl border-2 border-amber-200 bg-amber-50/50">
-                    <div className="flex gap-2">
+                    {championEnabled && championConfig && !championConfig.isSettled && (
+                  <div className="mt-3 p-3 rounded-xl border-2 border-amber-400 bg-amber-50/50">
+                        {championEnabled && (
+                          <div className="grid grid-cols-2 gap-3 mt-3">
+                            <TextField
+                              label="Open Time"
+                              type="datetime-local"
+                              value={championOpenTime}
+                              onChange={(e) => setChampionOpenTime(e.target.value)}
+                              InputLabelProps={{ shrink: true }}
+                              size="small"
+                              sx={inputSx}
+                            />
+                            <TextField
+                              label="Close Time"
+                              type="datetime-local"
+                              value={championCloseTime}
+                              onChange={(e) => setChampionCloseTime(e.target.value)}
+                              InputLabelProps={{ shrink: true }}
+                              size="small"
+                              sx={inputSx}
+                            />
+                          </div>
+                        )}
+                    <div className="flex gap-2 mt-3">
                       <TextField
                         select
                         size="small"
                         value={settleWinnerTeamId}
                         onChange={(e) => setSettleWinnerTeamId(e.target.value)}
-                        sx={{ flex: 1, ...fieldSx, mt: 0 }}
+                        sx={[inputSx, { flex: 1 }]}
                         SelectProps={{ native: true }}
                       >
                         <option value="">Select winner team...</option>
@@ -394,5 +382,6 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
         </div>
       </Box>
     </Dialog>
+    </ThemeProvider>
   );
 }

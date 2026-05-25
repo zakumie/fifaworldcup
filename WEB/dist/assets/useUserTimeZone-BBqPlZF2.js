@@ -1,1 +1,0 @@
-import{a as r,a2 as s,r as n,a6 as m}from"./index-Bztzlygo.js";function i(){const o=r(t=>{var e;return(e=t.auth.user)==null?void 0:e.timeZone})||s(),a=n.useCallback((t,e="MMM dd, yyyy")=>m(t,e,o),[o]);return{timeZone:o,formatDate:a}}export{i as u};

@@ -50,7 +50,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
   const isFinished = match.status === 'Finished';
   const hasConfig = !!config;
   const isSettled = hasConfig && config.isSettled;
-  const showView = (isLive || isFinished) && !!groupId;
+  const showView = (isLive || isFinished || isSettled) && !!groupId;
   const canBet = hasConfig && !isSettled && bettingOpen && !isLive && !isFinished
     && ((!myBet && !!groupId) || myBet?.status === 'Pending');
 

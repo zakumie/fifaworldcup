@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Grid, Button, Alert, CircularProgress, Dialog, DialogContent, IconButton } from '@mui/material';
+import { Grid, Button, Alert, CircularProgress, Dialog, DialogContent, IconButton, ThemeProvider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
@@ -11,6 +11,7 @@ import { useGetChampionConfigQuery, useGetMyChampionPredictionQuery, usePlaceCha
 import { useGetTeamsQuery } from '../matches/matchesApi';
 import { useAlert } from '../../components/AlertSnackbar';
 import type { TeamDto } from '../../types';
+import { getTheme } from '../../app/theme';
 import PredictionDeadlineTimer from './components/PredictionDeadlineTimer';
 import ChampionPredictionCard from './components/ChampionPredictionCard';
 import GroupPredictionsLeaderboard from './components/GroupPredictionsLeaderboard';
@@ -237,6 +238,7 @@ export default function ChampionPredictionPage() {
       )}
 
       {/* Confirm Prediction Dialog */}
+      <ThemeProvider theme={getTheme('light')}>
       <Dialog
         open={!!pendingTeam}
         onClose={() => setPendingTeam(null)}
@@ -268,8 +270,8 @@ export default function ChampionPredictionPage() {
                 </p>
               </div>
             </div>
-            <div className="p-5 dark:bg-gray-800">
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-4">
+            <div className="p-5">
+              <p className="text-sm text-gray-500 text-center mb-4">
                 {myPrediction
                   ? <>You will change from <strong>{myPrediction.selectedTeamName}</strong> to <strong>{pendingTeam.name}</strong></>
                   : <>You are about to predict <strong>{pendingTeam.name}</strong> as the World Cup 2026 champion</>}
@@ -301,6 +303,7 @@ export default function ChampionPredictionPage() {
           </DialogContent>
         )}
       </Dialog>
+      </ThemeProvider>
     </div>
   );
 }

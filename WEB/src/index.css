@@ -275,4 +275,20 @@
   .dark #root [data-theme="light"] .border-gray-100 {
     border-color: #f3f4f6 !important;
   }
+
+  /* Force native input icons (number spinners, date/time pickers) to stay light */
+  .dark #root input[type="number"],
+  .dark #root input[type="datetime-local"],
+  .dark #root input[type="date"],
+  .dark #root input[type="time"] {
+    color-scheme: light;
+  }
+
+  /* Also force light color-scheme inside MUI dialog portals (rendered outside #root) */
+  .dark .MuiDialog-root input[type="number"],
+  .dark .MuiDialog-root input[type="datetime-local"],
+  .dark .MuiDialog-root input[type="date"],
+  .dark .MuiDialog-root input[type="time"] {
+    color-scheme: light;
+  }
 }

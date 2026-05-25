@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   Skeleton, IconButton, Chip, Dialog, DialogContent,
-  TextField, MenuItem, Avatar,
+  TextField, MenuItem, Avatar, ThemeProvider,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
@@ -15,6 +15,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import { useGetAllUsersQuery, useUpdateUserRoleMutation, useToggleUserActiveMutation } from './usersApi';
 import { AlertSnackbar, useAlert } from '../../components/AlertSnackbar';
 import type { AdminUserDto } from '../../types';
+import { getTheme } from '../../app/theme';
+import { inputSx } from '../../utils/formStyles';
+
+const lightTheme = getTheme('light');
 
 const STATUS_TABS = ['All', 'Active', 'Inactive'] as const;
 const ROLES = ['User', 'Admin'] as const;
@@ -255,6 +259,7 @@ export function ManageUsersPage() {
       )}
 
       {/* Edit Role Dialog */}
+      <ThemeProvider theme={lightTheme}>
       <Dialog
         open={!!editingUser}
         onClose={() => setEditingUser(null)}
@@ -295,7 +300,7 @@ export function ManageUsersPage() {
                 size="small"
                 value={editRole}
                 onChange={(e) => setEditRole(e.target.value)}
-                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                sx={inputSx}
               >
                 {ROLES.map((r) => (
                   <MenuItem key={r} value={r}>{r}</MenuItem>
@@ -316,6 +321,7 @@ export function ManageUsersPage() {
           </>
         )}
       </Dialog>
+      </ThemeProvider>
 
       {/* Alert Snackbar */}
       <AlertSnackbar alert={alert} onClose={closeAlert} />

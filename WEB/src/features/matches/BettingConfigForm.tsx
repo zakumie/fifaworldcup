@@ -10,6 +10,8 @@ import PaidIcon from '@mui/icons-material/Paid';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import type { BettingConfigDto, CreateBettingConfigRequest, MatchDto } from '../../types';
 import { useCreateBettingConfigMutation, useUpdateBettingConfigMutation } from '../betting/bettingApi';
+import { toLocalDatetimeInput } from '../../utils/timezone';
+import { inputSx } from '../../utils/formStyles';
 
 interface Props {
   match: MatchDto;
@@ -30,14 +32,6 @@ interface BettingFormValues {
   bettingOpenTime: string;
   bettingCloseTime: string;
 }
-
-function toLocalDatetimeInput(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
-const inputSx = { '& .MuiOutlinedInput-root': { borderRadius: 2, backgroundColor: '#f8fafc' } };
 
 export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, onCancel }: Props) {
   const isEdit = !!existingConfig;

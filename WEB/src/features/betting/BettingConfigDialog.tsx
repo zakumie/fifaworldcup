@@ -3,10 +3,15 @@ import { useForm, Controller } from 'react-hook-form';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   Button, Grid, TextField, FormControlLabel, Switch,
-  MenuItem, Typography, CircularProgress, Alert,
+  MenuItem, Typography, CircularProgress, Alert, ThemeProvider,
 } from '@mui/material';
 import type { BettingConfigDto, CreateBettingConfigRequest, MatchDto } from '../../types';
 import { useCreateBettingConfigMutation, useUpdateBettingConfigMutation } from './bettingApi';
+import { toLocalDatetimeInput } from '../../utils/timezone';
+import { getTheme } from '../../app/theme';
+import { inputSx } from '../../utils/formStyles';
+
+const lightTheme = getTheme('light');
 
 interface Props {
   open: boolean;
@@ -26,12 +31,6 @@ interface FormValues {
   isFixedBet: boolean;
   bettingOpenTime: string;
   bettingCloseTime: string;
-}
-
-function toLocalDatetimeInput(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 export function BettingConfigDialog({ open, match, groupId, existingConfig, onClose }: Props) {
@@ -105,7 +104,9 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
   ];
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <ThemeProvider theme={lightTheme}>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
+      PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
       <DialogTitle>
         {isEdit ? 'Edit Betting Config' : 'Setup Betting'}
         <Typography variant="body2" color="text.secondary">
@@ -120,7 +121,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
           </Alert>
         )}
 
-        <Grid container spacing={2} mt={0}>
+        <Grid container spacing={2} mt={0} sx={inputSx}>
           <Grid item xs={6}>
             <Controller name="handicap" control={control}
               render={({ field }) => (
@@ -205,5 +206,6 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
         </Button>
       </DialogActions>
     </Dialog>
+    </ThemeProvider>
   );
 }

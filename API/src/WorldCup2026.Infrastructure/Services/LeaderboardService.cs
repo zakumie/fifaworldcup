@@ -60,7 +60,8 @@ public class LeaderboardService : ILeaderboardService
                 int losses = s?.Losses ?? 0;
                 int draws = s?.Draws ?? 0;
                 decimal profit = s?.Profit ?? 0;
-                decimal winRate = totalBets > 0 ? (decimal)wins / totalBets : 0;
+                int settledBets = wins + losses + draws;
+                decimal winRate = settledBets > 0 ? (decimal)wins / settledBets : 0;
                 return new
                 {
                     m.UserId,

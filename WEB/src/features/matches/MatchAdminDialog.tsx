@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import {
   Dialog, DialogContent, TextField, MenuItem,
   CircularProgress, Alert, IconButton, Button,
+  ThemeProvider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
@@ -15,6 +16,10 @@ import { useUpdateScoreMutation } from './matchesApi';
 import { BettingConfigForm } from './BettingConfigForm';
 import { formatStage } from '../../utils/formatStage';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
+import { getTheme } from '../../app/theme';
+import { inputSx } from '../../utils/formStyles';
+
+const lightTheme = getTheme('light');
 
 interface Props {
   open: boolean;
@@ -79,6 +84,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
   const isLive = match.status === 'Live';
 
   return (
+    <ThemeProvider theme={lightTheme}>
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
 
@@ -170,13 +176,13 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
 
             {/* Status selector */}
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 flex items-center gap-1">
                 <AccessTimeIcon sx={{ fontSize: 14 }} /> Match Status
               </p>
               <Controller name="status" control={control}
                 render={({ field }) => (
                   <TextField {...field} select fullWidth size="small"
-                    sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}>
+                    sx={inputSx}>
                     {STATUSES.map((s) => (
                       <MenuItem key={s} value={s}>{s}</MenuItem>
                     ))}
@@ -203,7 +209,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                           inputProps={{ min: 0 }}
                           value={field.value}
                           onChange={(e) => field.onChange(e.target.value === '' ? '' : Number(e.target.value))}
-                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                          sx={inputSx}
                         />
                       )} />
                   </div>
@@ -222,7 +228,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                           inputProps={{ min: 0 }}
                           value={field.value}
                           onChange={(e) => field.onChange(e.target.value === '' ? '' : Number(e.target.value))}
-                          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+                          sx={inputSx}
                         />
                       )} />
                   </div>
@@ -333,5 +339,6 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
         </div>
       )}
     </Dialog>
+    </ThemeProvider>
   );
 }

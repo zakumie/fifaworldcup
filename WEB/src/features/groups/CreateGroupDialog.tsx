@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Box, Dialog, DialogContent, TextField, Alert, Button,
-  IconButton, InputAdornment,
+  IconButton, InputAdornment, ThemeProvider,
 } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import AddIcon from '@mui/icons-material/Add';
@@ -17,6 +17,10 @@ import * as yup from 'yup';
 import { useCreateGroupMutation } from './groupsApi';
 import { useCreateChampionConfigMutation } from '../predictions/championApi';
 import type { CreateGroupRequest } from '../../types';
+import { getTheme } from '../../app/theme';
+import { inputSx } from '../../utils/formStyles';
+
+const lightTheme = getTheme('light');
 
 const createSchema = yup.object({
   name: yup.string().min(3).max(50).required('Name is required'),
@@ -32,18 +36,6 @@ interface Props {
   onCreated: (groupId: string) => void;
   onError?: (message: string) => void;
 }
-
-const fieldSx = {
-  mt: 2,
-  '& .MuiOutlinedInput-root': {
-    borderRadius: 2.5,
-    fontSize: '0.875rem',
-    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#94a3b8' },
-    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#3b82f6', borderWidth: 2 },
-  },
-  '& .MuiInputLabel-root': { fontSize: '0.8rem', fontWeight: 500 },
-  '& .MuiInputLabel-root.Mui-focused': { color: '#3b82f6' },
-};
 
 export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) {
   const [createGroup] = useCreateGroupMutation();
@@ -101,6 +93,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
   };
 
   return (
+    <ThemeProvider theme={lightTheme}>
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' } }}>
       <Box component="form" onSubmit={form.handleSubmit(handleSubmit)} sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -130,24 +123,24 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
             error={!!form.formState.errors.name} helperText={form.formState.errors.name?.message}
             autoFocus
             InputProps={{ startAdornment: <InputAdornment position="start"><GroupsIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
-            sx={fieldSx} />
+            sx={[inputSx, { mt: 2 }]} />
 
           {/* Description */}
           <TextField {...form.register('description')} label="Description (optional)" fullWidth size="small"
             placeholder="What's this group about?"
             multiline rows={2}
-            sx={fieldSx} />
+            sx={[inputSx, { mt: 2 }]} />
 
           {/* Two columns: Max Members & Default Balance */}
           <div className="grid grid-cols-2 gap-3 mt-3">
             <TextField {...form.register('maxMembers')} label="Max Members" type="number" fullWidth size="small"
               error={!!form.formState.errors.maxMembers} helperText={form.formState.errors.maxMembers?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><PeopleAltIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
-              sx={fieldSx} />
+              sx={inputSx} />
             <TextField {...form.register('defaultBalance')} label="Starting Balance" type="number" fullWidth size="small"
               error={!!form.formState.errors.defaultBalance} helperText={form.formState.errors.defaultBalance?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><AccountBalanceWalletIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
-              sx={fieldSx} />
+              sx={inputSx} />
           </div>
 
           {/* Settlement Mode - Card selector */}
@@ -233,7 +226,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   onChange={(e) => setChampionOpenTime(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   size="small"
-                  sx={fieldSx}
+                  sx={inputSx}
                 />
                 <TextField
                   label="Close Time"
@@ -242,7 +235,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   onChange={(e) => setChampionCloseTime(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   size="small"
-                  sx={fieldSx}
+                  sx={inputSx}
                 />
               </div>
             )}
@@ -268,5 +261,6 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
         </div>
       </Box>
     </Dialog>
+    </ThemeProvider>
   );
 }
