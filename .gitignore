@@ -11,6 +11,9 @@ API/.vs/
 node_modules/
 WEB/node_modules/
 
+# Frontend build outputs
+WEB/dist/
+
 # .NET build outputs
 API/**/bin/
 API/**/obj/
