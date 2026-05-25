@@ -23,6 +23,7 @@ export interface UserInfo {
   avatarUrl: string | null;
   role?: UserRole;
   timeZone: string;
+  authProvider?: string;
 }
 
 export type UserRole = 'Admin' | 'Manager' | 'User';
@@ -253,6 +254,11 @@ export interface UpdateProfileRequest {
   timeZone?: string;
 }
 
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
 // Champion Prediction Types
 export interface ChampionConfigDto {
   id: string;
@@ -288,6 +294,7 @@ export interface ChampionPredictionDto {
   id: string;
   userId: string;
   userDisplayName: string;
+  userAvatarUrl: string | null;
   groupId: string;
   configId: string;
   selectedTeamId: string;

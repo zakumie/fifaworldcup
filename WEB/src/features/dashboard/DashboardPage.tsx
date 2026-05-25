@@ -106,14 +106,14 @@ export function DashboardPage() {
   return (
     <div>
       {/* Dark header */}
-      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <DashboardIcon sx={{ fontSize: 32, color: 'white' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <DashboardIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
               <span>DASH<span className="text-emerald-400">BOARD</span></span>
             </h1>
-            <p className="text-sm text-slate-200 mt-1">
+            <p className="text-xs sm:text-sm text-slate-200 mt-1">
               Welcome back, <span className="text-emerald-400 font-semibold">{user?.displayName}</span>
             </p>
           </div>

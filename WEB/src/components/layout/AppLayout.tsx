@@ -13,6 +13,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ManageHistoryRoundedIcon from '@mui/icons-material/ManageHistoryRounded';
 import Groups2Icon from '@mui/icons-material/Groups2';
@@ -20,13 +21,14 @@ import RoofingRoundedIcon from '@mui/icons-material/RoofingRounded';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { logout } from '../../features/auth/authSlice';
 import { apiSlice } from '../../app/api';
 import { setSelectedGroupId } from '../../features/groups/groupSlice';
 import { toggleThemeMode } from '../../features/settings/themeSlice';
 import { useGroupId } from '../../features/groups/useGroupId';
-import { MusicPlayer } from '../MusicPlayer';
+import { MusicPlayerDialog } from '../MusicPlayer';
 
 const DRAWER_WIDTH = 260;
 const COLLAPSED_WIDTH = 72;
@@ -54,6 +56,7 @@ export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [musicOpen, setMusicOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -76,7 +79,7 @@ export function AppLayout() {
   const mainItems = visibleItems.filter((item) => item.section === 'main');
   const adminItems = visibleItems.filter((item) => item.section === 'admin');
 
-  const renderNavButton = (item: NavItem) => {
+  const renderNavButton = (item: NavItem, isCollapsed: boolean) => {
     const isActive = location.pathname === item.path;
     const btn = (
       <button
@@ -84,7 +87,7 @@ export function AppLayout() {
         className={`
           w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
           transition-all duration-200 group
-          ${collapsed ? 'justify-center' : ''}
+          ${isCollapsed ? 'justify-center' : ''}
           ${isActive
             ? 'bg-primary text-white shadow-md shadow-primary/25'
             : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 hover:text-slate-900 dark:hover:text-white'
@@ -94,13 +97,13 @@ export function AppLayout() {
         <span className={`transition-colors flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
           {item.icon}
         </span>
-        {!collapsed && item.label}
-        {!collapsed && isActive && (
+        {!isCollapsed && item.label}
+        {!isCollapsed && isActive && (
           <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/80" />
         )}
       </button>
     );
-    return collapsed ? <Tooltip title={item.label} placement="right" key={item.path}><li>{btn}</li></Tooltip> : <li key={item.path}>{btn}</li>;
+    return isCollapsed ? <Tooltip title={item.label} placement="right" key={item.path}><li>{btn}</li></Tooltip> : <li key={item.path}>{btn}</li>;
   };
 
   const drawerContent = (isCollapsed: boolean) => (
@@ -125,7 +128,7 @@ export function AppLayout() {
         {!isCollapsed && <p className="px-3 pt-4 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Menu</p>}
         {isCollapsed && <div className="pt-4" />}
         <ul className="space-y-0.5">
-          {mainItems.map(renderNavButton)}
+          {mainItems.map((item) => renderNavButton(item, isCollapsed))}
         </ul>
 
         {adminItems.length > 0 && (
@@ -133,7 +136,7 @@ export function AppLayout() {
             {!isCollapsed && <p className="px-3 pt-6 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Admin</p>}
             {isCollapsed && <div className="pt-4 mb-2 border-t border-gray-100 dark:border-gray-700 mx-2" />}
             <ul className="space-y-0.5">
-              {adminItems.map(renderNavButton)}
+              {adminItems.map((item) => renderNavButton(item, isCollapsed))}
             </ul>
           </>
         )}
@@ -141,6 +144,25 @@ export function AppLayout() {
 
       {/* Settings section at bottom */}
       <div className="p-3 border-t border-gray-100 dark:border-gray-700 space-y-1">
+        {/* Music player */}
+        {isCollapsed ? (
+          <Tooltip title="Play Music" placement="right">
+            <button
+              onClick={() => setMusicOpen(true)}
+              className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"
+            >
+              <MusicNoteOutlinedIcon fontSize="small" />
+            </button>
+          </Tooltip>
+        ) : (
+          <button
+            onClick={() => setMusicOpen(true)}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"
+          >
+            <MusicNoteOutlinedIcon fontSize="small" />
+            <span className="text-sm font-medium">Play Music</span>
+          </button>
+        )}
         {/* Theme toggle */}
         {isCollapsed ? (
           <Tooltip title={themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'} placement="right">
@@ -196,11 +218,6 @@ export function AppLayout() {
                 {visibleItems.find((i) => i.path === location.pathname)?.label ?? 'World Cup 2026'}
               </h2>
             </div>
-          </div>
-
-          {/* Center - Music Player */}
-          <div className="flex-1 flex justify-center">
-            <MusicPlayer />
           </div>
 
           {/* Right actions */}
@@ -266,6 +283,12 @@ export function AppLayout() {
                 <ListItemIcon><PersonOutlinedIcon fontSize="small" /></ListItemIcon>
                 <span className="text-sm">Profile</span>
               </MenuItem>
+              {user?.authProvider === 'Local' && (
+                <MenuItem onClick={() => { setAnchorEl(null); navigate('/change-password'); }} sx={{ py: 1.5, px: 2.5 }}>
+                  <ListItemIcon><LockOutlinedIcon fontSize="small" /></ListItemIcon>
+                  <span className="text-sm">Change Password</span>
+                </MenuItem>
+              )}
               <MenuItem onClick={handleLogout} sx={{ py: 1.5, px: 2.5, color: 'error.main' }}>
                 <ListItemIcon><LogoutOutlinedIcon fontSize="small" sx={{ color: 'error.main' }} /></ListItemIcon>
                 <span className="text-sm">Logout</span>
@@ -342,6 +365,9 @@ export function AppLayout() {
           <Outlet />
         </div>
       </Box>
+
+      {/* Music Player Dialog */}
+      <MusicPlayerDialog open={musicOpen} onClose={() => setMusicOpen(false)} />
     </Box>
   );
 }

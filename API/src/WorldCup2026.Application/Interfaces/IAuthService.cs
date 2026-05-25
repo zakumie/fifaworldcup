@@ -11,6 +11,7 @@ public interface IAuthService
     Task<Result<AuthResponse>> GoogleLoginAsync(GoogleLoginRequest request);
     Task<Result<AuthResponse>> RefreshTokenAsync(RefreshTokenRequest request);
     Task<Result> LogoutAsync(Guid userId);
+    Task<Result> ChangePasswordAsync(Guid userId, ChangePasswordRequest request);
 }
 
 public interface IGoogleTokenValidator

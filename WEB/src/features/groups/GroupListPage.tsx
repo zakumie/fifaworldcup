@@ -45,19 +45,19 @@ export function GroupListPage() {
   return (
     <div>
       {/* Dark header section */}
-      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#0f1f14] bg-gradient-to-b from-emerald-900 to-emerald-700 rounded-2xl p-4 sm:p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
-              <GroupsIcon sx={{ fontSize: 32, color: 'white' }} />
+            <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
+              <GroupsIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
               <span>MY <span className="text-emerald-400">GROUPS</span></span>
             </h1>
-            <p className="text-sm text-slate-400 mt-1">Join groups · Compete with friends · Climb the leaderboard</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Join groups · Compete with friends · Climb the leaderboard</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setJoinOpen(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-white border border-white hover:bg-emerald-600/50 transition-all duration-200 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white border border-white hover:bg-emerald-600/50 transition-all duration-200 active:scale-95"
             >
               <LoginIcon sx={{ fontSize: 18 }} />
               Join Group
@@ -146,7 +146,7 @@ export function GroupListPage() {
                     Default Balance
                   </span>
                   <span className="text-xs font-bold text-emerald-600">
-                    $ {group.defaultBalance.toLocaleString()}
+                    {group.defaultBalance.toLocaleString()}
                   </span>
                 </div>
 

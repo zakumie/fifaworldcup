@@ -35,3 +35,12 @@ export function getBrowserTimeZone(): string {
   if (offsetMin >= 300) return 'Pacific/Easter';     // UTC-5 or more west → Easter
   return 'UTC';
 }
+
+/**
+ * Convert an ISO date string to the format expected by <input type="datetime-local">.
+ */
+export function toLocalDatetimeInput(iso: string): string {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}

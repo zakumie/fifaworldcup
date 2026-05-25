@@ -55,6 +55,46 @@ export function getTheme(mode: 'light' | 'dark') {
           },
         },
       },
+      ...(isDark && {
+        MuiOutlinedInput: {
+          styleOverrides: {
+            root: {
+              '& .MuiSvgIcon-root': {
+                color: 'rgba(0, 0, 0, 0.54)',
+              },
+            },
+            input: {
+              colorScheme: 'light',
+            },
+            notchedOutline: {
+              borderColor: 'rgba(0, 0, 0, 0.23)',
+            },
+          },
+        },
+        MuiSelect: {
+          styleOverrides: {
+            icon: {
+              color: 'rgba(255, 255, 255, 0.54)',
+            },
+          },
+        },
+        MuiInputLabel: {
+          styleOverrides: {
+            root: {
+              color: 'rgba(0, 0, 0, 0.6)',
+            },
+          },
+        },
+        MuiInputAdornment: {
+          styleOverrides: {
+            root: {
+              '& .MuiSvgIcon-root': {
+                color: 'rgba(0, 0, 0, 0.54)',
+              },
+            },
+          },
+        },
+      }),
     },
   });
 }

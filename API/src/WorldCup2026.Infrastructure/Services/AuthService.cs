@@ -145,8 +145,28 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await _db.SaveChangesAsync();
 
-        var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString(), user.TimeZone);
+        var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString(), user.TimeZone, user.AuthProvider.ToString());
         return Result<AuthResponse>.Success(new AuthResponse(accessToken, refreshToken, userInfo));
+    }
+
+    public async Task<Result> ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
+    {
+        var user = await _db.Users.FindAsync(userId);
+        if (user == null) return Result.Failure("User not found.");
+
+        if (user.AuthProvider != AuthProvider.Local)
+            return Result.Failure("Password change is only available for local accounts.");
+
+        if (string.IsNullOrEmpty(user.PasswordHash) || !BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash))
+            return Result.Failure("Current password is incorrect.");
+
+        if (request.NewPassword.Length < 6)
+            return Result.Failure("New password must be at least 6 characters.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        await _db.SaveChangesAsync();
+
+        return Result.Success();
     }
 
     private static readonly string[] AllowedTimeZones = { "Pacific/Easter", "UTC", "Asia/Ho_Chi_Minh" };

@@ -14,10 +14,15 @@ import {
   Alert,
   FormControlLabel,
   Switch,
+  ThemeProvider,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useGetChampionConfigQuery, useCreateChampionConfigMutation, useUpdateChampionConfigMutation, useSettleChampionPredictionsMutation } from './championApi';
+import { getTheme } from '../../app/theme';
+import { inputSx } from '../../utils/formStyles';
+
+const lightTheme = getTheme('light');
 import { useGetTeamsQuery } from '../matches/matchesApi';
 import { useAlert } from '../../components/AlertSnackbar';
 import type { TeamDto } from '../../types';
@@ -195,7 +200,9 @@ export default function ManageChampionPredictionsPage() {
       </Grid>
 
       {/* Settle Dialog */}
-      <Dialog open={settleDialogOpen} onClose={() => setSettleDialogOpen(false)} maxWidth="sm" fullWidth>
+      <ThemeProvider theme={lightTheme}>
+      <Dialog open={settleDialogOpen} onClose={() => setSettleDialogOpen(false)} maxWidth="sm" fullWidth
+        PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
         <DialogTitle>Settle Championship Prediction</DialogTitle>
         <DialogContent className="pt-6">
           <Typography variant="body2" className="text-gray-600 mb-4">
@@ -204,12 +211,14 @@ export default function ManageChampionPredictionsPage() {
           <TextField
             select
             fullWidth
+            size="small"
             label="Select Winner Team"
             value={selectedWinnerTeamId}
             onChange={(e) => setSelectedWinnerTeamId(e.target.value)}
             SelectProps={{
               native: true,
             }}
+            sx={inputSx}
           >
             <option value="">-- Choose Team --</option>
             {teams?.map((team: TeamDto) => (
@@ -231,6 +240,7 @@ export default function ManageChampionPredictionsPage() {
           </Button>
         </DialogActions>
       </Dialog>
+      </ThemeProvider>
     </div>
   );
 }

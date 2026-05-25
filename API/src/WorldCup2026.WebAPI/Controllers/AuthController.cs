@@ -40,6 +40,15 @@ public class AuthController : BaseApiController
         return HandleResult(await _auth.LogoutAsync(userId.Value));
     }
 
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        var userId = GetUserId();
+        if (userId == null) return Unauthorized();
+        return HandleResult(await _auth.ChangePasswordAsync(userId.Value, request));
+    }
+
     private Guid? GetUserId()
     {
         var claim = User.FindFirst("sub") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);

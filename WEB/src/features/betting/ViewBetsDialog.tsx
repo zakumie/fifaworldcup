@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import {
   Dialog, DialogContent, IconButton,
-  Skeleton, Chip,
+  Skeleton, ThemeProvider, useMediaQuery,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
@@ -12,6 +12,7 @@ import { useGetMatchBetsQuery, useGetBettingConfigQuery } from './bettingApi';
 import { useGetGroupQuery } from '../groups/groupsApi';
 import { formatStage } from '../../utils/formatStage';
 import type { MatchDto, BetDto, TeamDto } from '../../types';
+import { getTheme } from '../../app/theme';
 
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 
@@ -23,27 +24,19 @@ interface Props {
   onClose: () => void;
 }
 
-const STATUS_CONFIG: Record<string, { color: 'success' | 'error' | 'warning' | 'info' | 'default' }> = {
-  Won: { color: 'success' },
-  HalfWon: { color: 'success' },
-  Lost: { color: 'error' },
-  HalfLost: { color: 'error' },
-  Push: { color: 'warning' },
-  Pending: { color: 'info' },
-  Cancelled: { color: 'default' },
-};
+const lightTheme = getTheme('light');
 
 function TeamFlag({ flagUrl, name, code }: { flagUrl: string | null; name: string; code: string }) {
   return (
-    <div className="flex flex-col items-center gap-1.5">
+    <div className="flex flex-col items-center gap-1 sm:gap-1.5">
       {flagUrl ? (
-        <img src={flagUrl} alt={name} className="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-md" />
+        <img src={flagUrl} alt={name} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-white shadow-md" />
       ) : (
-        <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 ring-2 ring-white shadow-md">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 flex items-center justify-center text-[10px] sm:text-xs font-bold text-slate-500 ring-2 ring-white shadow-md">
           {code}
         </div>
       )}
-      <span className="text-xs font-semibold text-white/90 max-w-[72px] truncate text-center">{name}</span>
+      <span className="text-[11px] sm:text-xs font-semibold text-white/90 max-w-[64px] sm:max-w-[72px] truncate text-center">{name}</span>
     </div>
   );
 }
@@ -59,29 +52,25 @@ function ProfitDisplay({ profit }: { profit: number }) {
   );
 }
 
-function BetCard({ bet, hideAmount }: { bet: BetDto; hideAmount?: boolean }) {
-  const config = STATUS_CONFIG[bet.status] ?? { color: 'default' as const };
+function BetCard({ bet, hideAmount, avatarUrl }: { bet: BetDto; hideAmount?: boolean; avatarUrl?: string | null }) {
   const isSettled = bet.status !== 'Pending' && bet.status !== 'Cancelled';
 
   return (
-    <div className="flex items-center gap-2.5 p-2 rounded-lg bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all">
-      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm shrink-0">
-        {bet.userDisplayName?.charAt(0).toUpperCase()}
-      </div>
+    <div className="flex items-center gap-2 p-1.5 sm:p-2 rounded-lg bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all">
+      {avatarUrl ? (
+        <img src={avatarUrl} alt={bet.userDisplayName} className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-slate-200" />
+      ) : (
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm shrink-0">
+          {bet.userDisplayName?.charAt(0).toUpperCase()}
+        </div>
+      )}
       <div className="flex-1 min-w-0">
-        <p className="text-[13px] text-gray-800 truncate">{bet.userDisplayName}</p>
+        <p className="text-xs sm:text-[13px] text-gray-800 truncate">{bet.userDisplayName}</p>
         <div className="flex items-center gap-1.5 mt-0.5">
-          {!hideAmount && (<span className="text-xs font-bold text-gray-600">{bet.betAmount.toLocaleString()}</span>)}
+          {!hideAmount && (<span className="text-[11px] sm:text-xs font-bold text-gray-600">{bet.betAmount.toLocaleString()}</span>)}
           {isSettled && <ProfitDisplay profit={bet.profit} />}
         </div>
       </div>
-      <Chip
-        label={bet.status}
-        size="small"
-        color={config.color}
-        variant={bet.status === 'Pending' ? 'outlined' : 'filled'}
-        sx={{ fontSize: '0.6rem', height: 20, '& .MuiChip-label': { px: 0.75 } }}
-      />
     </div>
   );
 }
@@ -107,27 +96,32 @@ function NoBetUserCard({ user }: { user: NoBetUser }) {
   );
 }
 
-function ColumnHeader({ team, count, pool, color, border, hideAmount }: { team: TeamDto; count: number; pool: number; color: string; border: string; hideAmount?: boolean }) {
+function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }: { team: TeamDto; count: number; pool: number; color: string; border: string; hideAmount?: boolean; isWinner?: boolean }) {
   return (
-    <div className={`flex items-center gap-2 px-3 py-2.5 rounded-xl ${color} border ${border}`}>
+    <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl border transition-all
+      ${isWinner ? 'bg-amber-50 border-amber-300 ring-1 ring-amber-200' : `${color} ${border}`}`}>
       {team.flagUrl ? (
-        <img src={team.flagUrl} alt={team.name} className="w-6 h-6 rounded-full object-cover shadow-sm" />
+        <img src={team.flagUrl} alt={team.name} className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover shadow-sm shrink-0" />
       ) : (
-        <div className="w-6 h-6 rounded-full bg-white/60 flex items-center justify-center text-[9px] font-bold text-slate-600">
+        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/60 flex items-center justify-center text-[8px] sm:text-[9px] font-bold text-slate-600 shrink-0">
           {team.code}
         </div>
       )}
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-bold text-slate-800 truncate">{team.name}</p>
-        {!hideAmount && <p className="text-[10px] text-slate-500">{pool.toLocaleString()} wagered</p>}
+        <p className={`text-[11px] sm:text-xs font-bold truncate ${isWinner ? 'text-amber-800' : 'text-slate-800'}`}>
+          {team.name}
+        </p>       
+        {!hideAmount && <p className="text-[9px] sm:text-[10px] text-slate-500">{pool.toLocaleString()} wagered</p>}
       </div>
-      <span className="text-lg font-black text-slate-700">{count}</span>
+      <span> <p> {isWinner && '🏆'}</p></span>
+      <span className={`text-base sm:text-lg font-black ${isWinner ? 'text-amber-700' : 'text-slate-700'}`}>{count}</span>
     </div>
   );
 }
 
 export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props) {
   const { formatDate } = useUserTimeZone();
+  const isMobile = useMediaQuery('(max-width:480px)');
   const { data: bets, isLoading } = useGetMatchBetsQuery({ groupId, matchId }, { skip: !open });
   const { data: group } = useGetGroupQuery(groupId, { skip: !open || !groupId });
   const { data: config } = useGetBettingConfigQuery({ matchId, groupId }, { skip: !open || !groupId });
@@ -164,18 +158,32 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
   const hasScore = match.homeScore !== null && match.awayScore !== null;
   const winnerKeepsLoserPaysMode = group?.settlementMode === 'WinnerKeepsLoserPays';
 
+  // Determine winning team for settled matches
+  const isSettled = match.status === 'Finished' && hasScore;
+  const homeWins = isSettled && match.homeScore! > match.awayScore!;
+  const awayWins = isSettled && match.awayScore! > match.homeScore!;
+
+  // Avatar lookup from group members
+  const avatarMap = useMemo(() => {
+    const map = new Map<string, string | null>();
+    group?.members.forEach((m) => map.set(m.userId, m.avatarUrl));
+    return map;
+  }, [group?.members]);
+
   return (
+    <ThemeProvider theme={lightTheme}>
     <Dialog
       open={open}
       onClose={onClose}
       maxWidth="md"
       fullWidth
+      fullScreen={isMobile}
       PaperProps={{
-        sx: { borderRadius: 3, overflow: 'hidden' },
+        sx: { borderRadius: isMobile ? 0 : 3, overflow: 'hidden' },
       }}
     >
       {/* Match Header */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-6 pt-5 pb-4">
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4">
         <IconButton
           onClick={onClose}
           size="small"
@@ -184,23 +192,23 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
           <CloseIcon fontSize="small" />
         </IconButton>
 
-        <div className="flex items-center justify-center gap-5">
+        <div className="flex items-center justify-center gap-3 sm:gap-5">
           <TeamFlag flagUrl={match.homeTeam.flagUrl} name={match.homeTeam.name} code={match.homeTeam.code} />
 
           <div className="flex flex-col items-center gap-1">
             {hasScore ? (
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-black text-white">{match.homeScore}</span>
-                <span className="text-lg text-white/40">:</span>
-                <span className="text-2xl font-black text-white">{match.awayScore}</span>
+                <span className="text-xl sm:text-2xl font-black text-white">{match.homeScore}</span>
+                <span className="text-base sm:text-lg text-white/40">:</span>
+                <span className="text-xl sm:text-2xl font-black text-white">{match.awayScore}</span>
               </div>
             ) : (
               <div className="flex items-center gap-1.5 text-white/50">
-                <SportsSoccerIcon sx={{ fontSize: 18 }} />
-                <span className="text-sm font-medium">VS</span>
+                <SportsSoccerIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                <span className="text-xs sm:text-sm font-medium">VS</span>
               </div>
             )}
-            <span className="text-[10px] text-white/40 font-medium tracking-wider uppercase">
+            <span className="text-[9px] sm:text-[10px] text-white/40 font-medium tracking-wider uppercase">
               {formatStage(match.stage)}{match.group ? ` · ${formatStage(match.group)}` : ''}
             </span>
           </div>
@@ -209,7 +217,7 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
         </div>
 
         {/* Match Info Bar */}
-        <div className="mt-3 flex items-center justify-center gap-3">
+        <div className="mt-2 sm:mt-3 flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
             <span className="text-[10px] text-white/40 uppercase">Kick-off</span>
             <span className="text-xs font-semibold text-white/80">
@@ -245,9 +253,9 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
       </div>
 
       {/* Content */}
-      <DialogContent sx={{ p: 0, bgcolor: '#f8fafc' }}>
+      <DialogContent sx={{ p: 0, bgcolor: '#f8fafc', flex: isMobile ? 1 : undefined, overflow: 'auto' }}>
         {isLoading && (
-          <div className="p-4 grid grid-cols-2 gap-4">
+          <div className="p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {[1, 2, 3, 4].map((i) => (
               <Skeleton key={i} variant="rectangular" height={56} sx={{ borderRadius: 3 }} />
             ))}
@@ -277,42 +285,44 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
         )}
 
         {bets && bets.length > 0 && stats && (
-          <div className="p-4 space-y-4">
+          <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
             {/* Two-column: Home vs Away */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {/* Home column */}
-              <div className="space-y-2">
+              <div className="space-y-1.5 sm:space-y-2">
                 <ColumnHeader
                   team={match.homeTeam}
                   count={homeBets.length}
                   pool={stats.homePool}
                   color="bg-emerald-50"
                   border="border-emerald-200"
+                  isWinner={homeWins}
                 />
                 {homeBets.length > 0 ? (
-                  <div className="space-y-1.5">
-                    {homeBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} />)}
+                  <div className="space-y-1 sm:space-y-1.5">
+                    {homeBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
                   </div>
                 ) : (
-                  <p className="text-center text-xs text-slate-400 py-6">No one picked {match.homeTeam.name}</p>
+                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">No one picked {match.homeTeam.name}</p>
                 )}
               </div>
 
               {/* Away column */}
-              <div className="space-y-2">
+              <div className="space-y-1.5 sm:space-y-2">
                 <ColumnHeader
                   team={match.awayTeam}
                   count={awayBets.length}
                   pool={stats.awayPool}
-                  color="bg-blue-50"
-                  border="border-blue-200"
+                  color="bg-green-50"
+                  border="border-green-200"
+                  isWinner={awayWins}
                 />
                 {awayBets.length > 0 ? (
-                  <div className="space-y-1.5">
-                    {awayBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} />)}
+                  <div className="space-y-1 sm:space-y-1.5">
+                    {awayBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
                   </div>
                 ) : (
-                  <p className="text-center text-xs text-slate-400 py-6">No one picked {match.awayTeam.name}</p>
+                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">No one picked {match.awayTeam.name}</p>
                 )}
               </div>
             </div>
@@ -334,5 +344,6 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
         )}
       </DialogContent>
     </Dialog>
+    </ThemeProvider>
   );
 }

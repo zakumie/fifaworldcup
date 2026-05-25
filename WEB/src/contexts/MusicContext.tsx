@@ -1,4 +1,4 @@
-﻿import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
+﻿import { createContext, useContext, useState, useEffect, useRef, useCallback, ReactNode } from 'react';
 
 export interface Song {
   id: string;
@@ -33,6 +33,17 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.5);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const nextSongRef = useRef<() => void>(() => {});
+
+  const nextSong = useCallback(() => {
+    if (songs.length === 0) return;
+    setCurrentSongIndex((prev) => (prev + 1) % songs.length);
+    setIsPlaying(true);
+  }, [songs.length]);
+
+  useEffect(() => {
+    nextSongRef.current = nextSong;
+  }, [nextSong]);
 
   useEffect(() => {
     const loadSongs = async () => {
@@ -67,7 +78,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
-    const handleEnded = () => nextSong();
+    const handleEnded = () => nextSongRef.current();
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
@@ -112,12 +123,6 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
   const play = () => setIsPlaying(true);
   const pause = () => setIsPlaying(false);
-
-  const nextSong = () => {
-    if (songs.length === 0) return;
-    setCurrentSongIndex((prev) => (prev + 1) % songs.length);
-    setIsPlaying(true);
-  };
 
   const prevSong = () => {
     if (songs.length === 0) return;

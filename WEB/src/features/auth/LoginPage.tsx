@@ -27,6 +27,7 @@ export function LoginPage() {
   const [login, { isLoading }] = useLoginMutation();
   const [googleLogin] = useGoogleLoginMutation();
   const [error, setError] = useState('');
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginRequest>({
     resolver: yupResolver(schema),
@@ -38,6 +39,7 @@ export function LoginPage() {
       setError('');
       const result = await login(data).unwrap();
       dispatch(setCredentials(result));
+      setIsRedirecting(true);
       navigate('/dashboard');
     } catch {
       setError('Invalid email or password');
@@ -50,11 +52,24 @@ export function LoginPage() {
       setError('');
       const result = await googleLogin({ credential: response.credential }).unwrap();
       dispatch(setCredentials(result));
+      setIsRedirecting(true);
       navigate('/dashboard');
     } catch {
       setError('Google login failed');
     }
   };
+
+  if (isRedirecting) {
+    return (
+      <div data-theme="light" className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#173b2a] via-[#2e503b] to-[#173b2a]">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 shadow-lg shadow-emerald-900/40 mb-6 animate-pulse">
+          <BallIcon sx={{ fontSize: 40, color: 'white' }} />
+        </div>
+        <div className="w-8 h-8 border-[3px] border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin mb-4" />
+        <p className="text-emerald-300 text-sm font-medium animate-pulse">Signing in...</p>
+      </div>
+    );
+  }
 
   return (
     <div data-theme="light" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#173b2a] via-[#2e503b] to-[#173b2a] relative overflow-hidden">

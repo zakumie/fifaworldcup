@@ -10,6 +10,8 @@ import PaidIcon from '@mui/icons-material/Paid';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import type { BettingConfigDto, CreateBettingConfigRequest, MatchDto } from '../../types';
 import { useCreateBettingConfigMutation, useUpdateBettingConfigMutation } from '../betting/bettingApi';
+import { toLocalDatetimeInput } from '../../utils/timezone';
+import { inputSx } from '../../utils/formStyles';
 
 interface Props {
   match: MatchDto;
@@ -31,14 +33,6 @@ interface BettingFormValues {
   bettingCloseTime: string;
 }
 
-function toLocalDatetimeInput(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
-const inputSx = { '& .MuiOutlinedInput-root': { borderRadius: 2, backgroundColor: '#f8fafc' } };
-
 export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, onCancel }: Props) {
   const isEdit = !!existingConfig;
   const [createConfig, { isLoading: isCreating, error: createError }] = useCreateBettingConfigMutation();
@@ -56,7 +50,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       handicap: existingConfig?.handicap ?? 0,
       favoredTeamId: existingConfig?.favoredTeamId ?? match.homeTeam.id,
       odds: existingConfig?.odds ?? 1.0,
-      minBetAmount: existingConfig?.minBetAmount ?? 10,
+      minBetAmount: existingConfig?.minBetAmount ?? 0,
       maxBetAmount: existingConfig?.maxBetAmount ?? 1000,
       defaultBetAmount: existingConfig?.defaultBetAmount ?? 50,
       isFixedBet: existingConfig?.isFixedBet ?? true,
@@ -72,7 +66,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       handicap: existingConfig?.handicap ?? 0,
       favoredTeamId: existingConfig?.favoredTeamId ?? match.homeTeam.id,
       odds: existingConfig?.odds ?? 1.0,
-      minBetAmount: existingConfig?.minBetAmount ?? 10,
+      minBetAmount: existingConfig?.minBetAmount ?? 0,
       maxBetAmount: existingConfig?.maxBetAmount ?? 1000,
       defaultBetAmount: existingConfig?.defaultBetAmount ?? 10,
       isFixedBet: existingConfig?.isFixedBet ?? true,
@@ -118,13 +112,13 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       )}
 
       {/* ─── Section: Match Odds ─── */}
-      <div className="rounded-xl border border-gray-100 p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
+      <div className="rounded-xl border border-gray-100 p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
         <div className="flex items-center gap-2 mb-3">
           <BalanceIcon sx={{ fontSize: 16, color: '#6366f1' }} />
           <p className="text-xs font-bold text-gray-600 uppercase tracking-wide">Match Odds</p>
         </div>
-        <div className="grid grid-cols-12 gap-3">
-          <div className="col-span-4">
+        <div className="grid grid-cols-2 sm:grid-cols-12 gap-3">
+          <div className="col-span-1 sm:col-span-4">
             <p className="text-[10px] font-medium text-gray-400 mb-1">Handicap</p>
             <Controller name="handicap" control={control}
               render={({ field }) => (
@@ -133,7 +127,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
                   sx={inputSx} />
               )} />
           </div>
-          <div className="col-span-5">
+          <div className="col-span-2 sm:col-span-5">
             <p className="text-[10px] font-medium text-gray-400 mb-1">Favored Team</p>
             <Controller name="favoredTeamId" control={control}
               render={({ field }) => (
@@ -145,7 +139,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
                 </TextField>
               )} />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-1 sm:col-span-3">
             <p className="text-[10px] font-medium text-gray-400 mb-1">Odds ×</p>
             <Controller name="odds" control={control}
               render={({ field }) => (
@@ -158,7 +152,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       </div>
 
       {/* ─── Section: Bet Amounts ─── */}
-      <div className="rounded-xl border border-gray-100 p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
+      <div className="rounded-xl border border-gray-100 p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <PaidIcon sx={{ fontSize: 16, color: '#055596' }} />
@@ -219,12 +213,12 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       </div>
 
       {/* ─── Section: Betting Window ─── */}
-      <div className="rounded-xl border border-gray-100 p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
+      <div className="rounded-xl border border-gray-100 p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-gray-50/50">
         <div className="flex items-center gap-2 mb-3">
           <ScheduleIcon sx={{ fontSize: 16, color: '#d97706' }} />
           <p className="text-xs font-bold text-gray-600 uppercase tracking-wide">Betting Window</p>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <p className="text-[10px] font-medium text-gray-400 mb-1">Opens at</p>
             <Controller name="bettingOpenTime" control={control}
