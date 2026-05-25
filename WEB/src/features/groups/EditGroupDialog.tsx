@@ -284,7 +284,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                 
 
                 {/* Settle section - only if config exists and not settled */}
-                    {championEnabled && championConfig && !championConfig.isSettled && (
+                    {championEnabled && (
                   <div className="mt-3 p-3 rounded-xl border-2 border-amber-400 bg-amber-50/50">
                         {championEnabled && (
                           <div className="grid grid-cols-2 gap-3 mt-3">
@@ -308,34 +308,35 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                             />
                           </div>
                         )}
-                    <div className="flex gap-2 mt-3">
-                      <TextField
-                        select
-                        size="small"
-                        value={settleWinnerTeamId}
-                        onChange={(e) => setSettleWinnerTeamId(e.target.value)}
-                        sx={[inputSx, { flex: 1 }]}
-                        SelectProps={{ native: true }}
-                      >
-                        <option value="">Select winner team...</option>
-                        {teams?.map((t: TeamDto) => (
-                          <option key={t.id} value={t.id}>{t.name}</option>
-                        ))}
-                      </TextField>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        disabled={!settleWinnerTeamId || isSettling}
-                        onClick={handleSettle}
-                        sx={{
-                          color: 'white !important',
-                          borderRadius: 2, textTransform: 'none',
-                          background: 'linear-gradient(135deg, #d97706 0%, #ee802c 100%)'
-                        }}
-                      >
-                        Settle
-                      </Button>
-                    </div>
+                        { championConfig && !championConfig.isSettled && (
+                        <div className="flex gap-2 mt-3">
+                          <TextField
+                            select
+                            size="small"
+                            value={settleWinnerTeamId}
+                            onChange={(e) => setSettleWinnerTeamId(e.target.value)}
+                            sx={[inputSx, { flex: 1 }]}
+                            SelectProps={{ native: true }}
+                          >
+                            <option value="">Select winner team...</option>
+                            {teams?.map((t: TeamDto) => (
+                              <option key={t.id} value={t.id}>{t.name}</option>
+                            ))}
+                          </TextField>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            disabled={!settleWinnerTeamId || isSettling}
+                            onClick={handleSettle}
+                            sx={{
+                              color: 'white !important',
+                              borderRadius: 2, textTransform: 'none',
+                              background: 'linear-gradient(135deg, #d97706 0%, #ee802c 100%)'
+                            }}
+                          >
+                            Settle
+                          </Button>
+                          </div>)}
                   </div>
                 )}
               </>

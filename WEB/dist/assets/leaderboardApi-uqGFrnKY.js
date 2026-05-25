@@ -1,0 +1,1 @@
+import{af as a}from"./index-C04FGYsw.js";const o=a.injectEndpoints({endpoints:e=>({getLeaderboard:e.query({query:({groupId:r})=>`/leaderboard/groups/${r}`,providesTags:["Leaderboard"]})})}),{useGetLeaderboardQuery:s}=o;export{s as u};

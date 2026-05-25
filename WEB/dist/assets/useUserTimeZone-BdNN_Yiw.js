@@ -1,0 +1,1 @@
+import{a as r,ac as s,r as n,ag as m}from"./index-C04FGYsw.js";function c(){const o=r(t=>{var e;return(e=t.auth.user)==null?void 0:e.timeZone})||s(),a=n.useCallback((t,e="MMM dd, yyyy")=>m(t,e,o),[o]);return{timeZone:o,formatDate:a}}export{c as u};

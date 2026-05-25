@@ -21,13 +21,14 @@ import RoofingRoundedIcon from '@mui/icons-material/RoofingRounded';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { logout } from '../../features/auth/authSlice';
 import { apiSlice } from '../../app/api';
 import { setSelectedGroupId } from '../../features/groups/groupSlice';
 import { toggleThemeMode } from '../../features/settings/themeSlice';
 import { useGroupId } from '../../features/groups/useGroupId';
-import { MusicPlayer } from '../MusicPlayer';
+import { MusicPlayerDialog } from '../MusicPlayer';
 
 const DRAWER_WIDTH = 260;
 const COLLAPSED_WIDTH = 72;
@@ -55,6 +56,7 @@ export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [musicOpen, setMusicOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -142,6 +144,25 @@ export function AppLayout() {
 
       {/* Settings section at bottom */}
       <div className="p-3 border-t border-gray-100 dark:border-gray-700 space-y-1">
+        {/* Music player */}
+        {isCollapsed ? (
+          <Tooltip title="Play Music" placement="right">
+            <button
+              onClick={() => setMusicOpen(true)}
+              className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"
+            >
+              <MusicNoteOutlinedIcon fontSize="small" />
+            </button>
+          </Tooltip>
+        ) : (
+          <button
+            onClick={() => setMusicOpen(true)}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"
+          >
+            <MusicNoteOutlinedIcon fontSize="small" />
+            <span className="text-sm font-medium">Play Music</span>
+          </button>
+        )}
         {/* Theme toggle */}
         {isCollapsed ? (
           <Tooltip title={themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'} placement="right">
@@ -197,11 +218,6 @@ export function AppLayout() {
                 {visibleItems.find((i) => i.path === location.pathname)?.label ?? 'World Cup 2026'}
               </h2>
             </div>
-          </div>
-
-          {/* Center - Music Player (hidden on mobile) */}
-          <div className="flex-1 hidden sm:flex justify-center">
-            <MusicPlayer />
           </div>
 
           {/* Right actions */}
@@ -349,6 +365,9 @@ export function AppLayout() {
           <Outlet />
         </div>
       </Box>
+
+      {/* Music Player Dialog */}
+      <MusicPlayerDialog open={musicOpen} onClose={() => setMusicOpen(false)} />
     </Box>
   );
 }

@@ -1,1 +1,0 @@
-import{a as r,aa as s,r as n,ae as m}from"./index-BDNSsYCV.js";function i(){const a=r(o=>{var e;return(e=o.auth.user)==null?void 0:e.timeZone})||s(),t=n.useCallback((o,e="MMM dd, yyyy")=>m(o,e,a),[a]);return{timeZone:a,formatDate:t}}export{i as u};

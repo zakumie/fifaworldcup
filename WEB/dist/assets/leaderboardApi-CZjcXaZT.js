@@ -1,1 +1,0 @@
-import{ad as a}from"./index-BDNSsYCV.js";const d=a.injectEndpoints({endpoints:e=>({getLeaderboard:e.query({query:({groupId:r})=>`/leaderboard/groups/${r}`,providesTags:["Leaderboard"]})})}),{useGetLeaderboardQuery:s}=d;export{s as u};
