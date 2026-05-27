@@ -7,12 +7,13 @@ import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
-import { useGetAllUsersQuery, useUpdateUserRoleMutation, useToggleUserActiveMutation } from './usersApi';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import { useGetAllUsersQuery, useUpdateUserRoleMutation, useToggleUserActiveMutation, useResetPasswordMutation } from './usersApi';
 import { AlertSnackbar, useAlert } from '../../components/AlertSnackbar';
 import type { AdminUserDto } from '../../types';
 import { getTheme } from '../../app/theme';
@@ -27,12 +28,14 @@ export function ManageUsersPage() {
   const { data: users, isLoading } = useGetAllUsersQuery();
   const [updateRole] = useUpdateUserRoleMutation();
   const [toggleActive] = useToggleUserActiveMutation();
+  const [resetPassword] = useResetPasswordMutation();
 
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState(0);
   const { alert, showAlert, closeAlert } = useAlert();
   const [editingUser, setEditingUser] = useState<AdminUserDto | null>(null);
   const [editRole, setEditRole] = useState('');
+  const [resetTarget, setResetTarget] = useState<AdminUserDto | null>(null);
 
   const filteredUsers = useMemo(() => {
     if (!users) return [];
@@ -72,6 +75,17 @@ export function ManageUsersPage() {
   const handleOpenRoleDialog = (user: AdminUserDto) => {
     setEditingUser(user);
     setEditRole(user.role);
+  };
+
+  const handleResetPassword = async () => {
+    if (!resetTarget) return;
+    try {
+      await resetPassword(resetTarget.id).unwrap();
+      showAlert(`${resetTarget.displayName}'s password has been reset to default.`);
+      setResetTarget(null);
+    } catch {
+      showAlert('Failed to reset password.', 'error');
+    }
   };
 
   const handleSaveRole = async () => {
@@ -127,7 +141,7 @@ export function ManageUsersPage() {
             <span className="text-[10px] sm:text-xs font-bold text-emerald-400">{activeCount}</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
-            <AdminPanelSettingsIcon sx={{ fontSize: 16, color: '#fbbf24' }} />
+            <AdminPanelSettingsOutlinedIcon sx={{ fontSize: 16, color: '#fbbf24' }} />
             <span className="text-[10px] sm:text-xs text-slate-400">Admins:</span>
             <span className="text-[10px] sm:text-xs font-bold text-amber-400">{adminCount}</span>
           </div>
@@ -223,13 +237,24 @@ export function ManageUsersPage() {
 
               {/* Actions */}
               <div className="col-span-2 flex items-center justify-end gap-1">
+                {user.authProvider.toLowerCase() === 'local' && (
+                  <IconButton
+                    size="small"
+                    onClick={() => setResetTarget(user)}
+                    title="Reset password"
+                  >
+                    <LockResetIcon fontSize="small" sx={{ color: '#f59e0b' }} />
+                  </IconButton>
+                )}
+
                 <IconButton
                   size="small"
                   onClick={() => handleOpenRoleDialog(user)}
                   title="Change role"
                 >
-                  <AdminPanelSettingsIcon fontSize="small" sx={{ color: '#64748b' }} />
+                  <AdminPanelSettingsOutlinedIcon fontSize="small" sx={{ color: '#0860dc' }} />
                 </IconButton>
+                
                 <IconButton
                   size="small"
                   onClick={() => handleToggleActive(user)}
@@ -317,6 +342,61 @@ export function ManageUsersPage() {
                 <SaveIcon sx={{ fontSize: 18 }} />
                 Save Role
               </button>
+            </DialogContent>
+          </>
+        )}
+      </Dialog>
+      </ThemeProvider>
+
+      {/* Reset Password Confirmation Dialog */}
+      <ThemeProvider theme={lightTheme}>
+      <Dialog
+        open={!!resetTarget}
+        onClose={() => setResetTarget(null)}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}
+      >
+        {resetTarget && (
+          <>
+            <div className="relative bg-gradient-to-br from-amber-600 via-amber-500 to-amber-600 px-6 pt-5 pb-6">
+              <IconButton
+                onClick={() => setResetTarget(null)}
+                size="small"
+                sx={{ position: 'absolute', top: 12, right: 12, color: 'white', opacity: 0.8 }}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+              <div className="flex items-center gap-3">
+                <LockResetIcon sx={{ fontSize: 36, color: 'white' }} />
+                <div>
+                  <h2 className="text-white text-lg font-bold">Reset Password</h2>
+                  <p className="text-amber-100 text-xs">{resetTarget.displayName}</p>
+                </div>
+              </div>
+            </div>
+            <DialogContent sx={{ pt: 3, pb: 3, px: 3 }}>
+              <p className="text-sm text-gray-600">
+                  Are you sure you want to reset the password for <code className="bg-gray-100 px-1.5 py-0.5 rounded text-amber-600 font-mono text-xs">{resetTarget.displayName}</code> to default?
+              </p>
+              <p className="text-xs text-slate-400 mt-2">
+                The user will need to change their password after logging in.
+              </p>
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => setResetTarget(null)}
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleResetPassword}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-lg shadow-amber-500/25 transition-all duration-200 active:scale-95"
+                >
+                  <LockResetIcon sx={{ fontSize: 18 }} />
+                  Reset Password
+                </button>
+              </div>
             </DialogContent>
           </>
         )}

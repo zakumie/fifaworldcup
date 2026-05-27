@@ -104,4 +104,19 @@ public class UserService : IUserService
             user.AvatarUrl, user.AuthProvider.ToString(),
             user.Role.ToString(), user.IsActive, user.CreatedAt));
     }
+
+    public async Task<Result<string>> ResetPasswordAsync(Guid userId)
+    {
+        var user = await _db.Users.FindAsync(userId);
+        if (user == null) return Result<string>.Failure("User not found.");
+
+        if (user.AuthProvider != AuthProvider.Local)
+            return Result<string>.Failure("Password reset is only available for local accounts.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("123456");
+        user.UpdatedAt = DateTime.UtcNow;
+        await _db.SaveChangesAsync();
+
+        return Result<string>.Success("Password has been reset to default.");
+    }
 }
