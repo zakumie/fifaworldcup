@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Skeleton, Dialog, DialogContent, IconButton, ThemeProvider } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -8,16 +8,13 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CloseIcon from '@mui/icons-material/Close';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { useGetGroupQuery } from './groupsApi';
 import { useGetLeaderboardQuery } from '../leaderboard/leaderboardApi';
 import { useGetChampionConfigQuery } from '../predictions/championApi';
+import { MemberInfoDialog } from './MemberInfoDialog';
 import type { GroupMemberDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
-import { getTheme } from '../../app/theme';
-
-const lightTheme = getTheme('light');
 
 const ROLE_STYLE: Record<string, string> = {
   Manager: 'text-blue-700 bg-blue-50 border-blue-200',
@@ -223,87 +220,12 @@ export function GroupDetailPage() {
       </div>
 
       {/* Member Info Dialog */}
-      <ThemeProvider theme={lightTheme}>
-      <Dialog
-        open={!!selectedMember}
+      <MemberInfoDialog
+        member={selectedMember}
+        stats={selectedMember ? leaderboardMap.get(selectedMember.userId) : undefined}
+        settlementMode={group.settlementMode}
         onClose={() => setSelectedMember(null)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden' } }}
-      >
-        {selectedMember && (() => {
-          const stats = leaderboardMap.get(selectedMember.userId);
-          return (
-            <DialogContent sx={{ p: 0 }}>
-              {/* Header */}
-              <div className="bg-gradient-to-r from-emerald-800 to-emerald-600 p-5 relative">
-                <IconButton
-                  onClick={() => setSelectedMember(null)}
-                  sx={{ position: 'absolute', top: 8, right: 8, color: 'white' }}
-                  size="small"
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shadow-md">
-                    {selectedMember.avatarUrl ? (
-                      <img src={selectedMember.avatarUrl} alt="" className="w-12 h-12 rounded-full object-cover" />
-                    ) : (
-                      <span className="text-lg font-bold text-white">{selectedMember.displayName?.charAt(0).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-white">{selectedMember.displayName ?? 'Unknown'}</p>
-                    <p className="text-xs text-emerald-200">Joined {formatDate(selectedMember.joinedAt, 'MMM dd, yyyy')}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="p-5 grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Total Bets</p>
-                  <p className="text-xl font-bold text-gray-800">{stats?.totalBets ?? 0}</p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Win Rate</p>
-                  <p className="text-xl font-bold text-emerald-600">{stats ? `${stats.winRate.toFixed(1)}%` : '0%'}</p>
-                </div>
-                <div className="bg-emerald-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-emerald-600 uppercase">Wins</p>
-                  <p className="text-xl font-bold text-emerald-700">{stats?.wins ?? 0}</p>
-                </div>
-                <div className="bg-amber-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-amber-600 uppercase">Draws</p>
-                  <p className="text-xl font-bold text-amber-700">{stats?.draws ?? 0}</p>
-                </div>
-                <div className="bg-red-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-red-500 uppercase">Losses</p>
-                  <p className="text-xl font-bold text-red-600">{stats?.losses ?? 0}</p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Net Profit</p>
-                  <p className={`text-xl font-bold ${(stats?.profit ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {(stats?.profit ?? 0) >= 0 ? '+' : ''}{(stats?.profit ?? 0).toLocaleString()}
-                  </p>
-                </div>
-                <div className={`rounded-xl p-3 text-center ${selectedMember.penaltyAmount > 0 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                  <p className={`text-[11px] font-semibold uppercase ${selectedMember.penaltyAmount > 0 ? 'text-red-500' : 'text-slate-500'}`}>Penalty</p>
-                  <p className={`text-xl font-bold ${selectedMember.penaltyAmount > 0 ? 'text-red-600' : 'text-gray-500'}`}>
-                    {selectedMember.penaltyAmount > 0 ? `-${selectedMember.penaltyAmount.toLocaleString()}` : '0'}
-                  </p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Balance</p>
-                  <p className="text-xl font-bold text-green-800">{selectedMember.balance.toLocaleString()}</p>
-                </div>
-                
-              </div>
-            </DialogContent>
-          );
-        })()}
-      </Dialog>
-      </ThemeProvider>
+      />
     </div>
   );
 }

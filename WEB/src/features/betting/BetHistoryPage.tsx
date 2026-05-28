@@ -15,6 +15,7 @@ import {
 
 import { useGetMyBetsQuery } from './bettingApi';
 import { useGroupId } from '../groups/useGroupId';
+import { useGetGroupQuery } from '../groups/groupsApi';
 import type { BetDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 
@@ -44,7 +45,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   );
 }
 
-function BetRow({ bet }: { bet: BetDto }) {
+function BetRow({ bet, profitLabel = 'Profit' }: { bet: BetDto; profitLabel?: string }) {
   const profitColor = bet.profit > 0 ? 'text-emerald-600' : bet.profit < 0 ? 'text-red-600' : 'text-gray-500';
   const statusStyle = STATUS_COLORS[bet.status] || STATUS_COLORS.Cancelled;
   const { formatDate } = useUserTimeZone();
@@ -85,7 +86,7 @@ function BetRow({ bet }: { bet: BetDto }) {
 
       {/* Profit */}
       <div className="flex flex-col items-center min-w-[80px]">
-        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">Profit</span>
+        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{profitLabel}</span>
         <span className={`text-sm font-bold ${profitColor}`}>
           {bet.profit > 0 ? '+' : ''}{bet.profit.toLocaleString()}
         </span>
@@ -104,6 +105,9 @@ function BetRow({ bet }: { bet: BetDto }) {
 export function BetHistoryPage() {
   const { groupId } = useGroupId();
   const { data, isLoading } = useGetMyBetsQuery({ groupId }, { skip: !groupId });
+  const { data: group } = useGetGroupQuery(groupId, { skip: !groupId });
+  const profitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? 'Net Loss' : 'Net Profit';
+  const betProfitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? 'Loss' : 'Profit';
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -272,8 +276,8 @@ export function BetHistoryPage() {
             />
             <StatCard
               icon={<ProfitIcon sx={{ fontSize: 24, color: '#fff' }} />}
-              label="Net Profit"
-              value={`${stats.netProfit >= 0 ? '+' : ''} ${stats.netProfit.toLocaleString()}`}
+              label={profitLabel}
+              value={`${stats.netProfit > 0 ? '+' : ''} ${stats.netProfit.toLocaleString()}`}
             />
             <StatCard
               icon={<TrophyIcon sx={{ fontSize: 24, color: '#fff' }} />}
@@ -285,7 +289,7 @@ export function BetHistoryPage() {
           {/* Bet List */}
           <div className="space-y-2">
             {paginatedBets.map((bet) => (
-              <BetRow key={bet.id} bet={bet} />
+              <BetRow key={bet.id} bet={bet} profitLabel={betProfitLabel} />
             ))}
 
             {filteredBets.length === 0 && data.length > 0 && (

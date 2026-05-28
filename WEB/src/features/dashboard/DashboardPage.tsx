@@ -10,7 +10,7 @@ import {
   Percent as WinRateIcon,
   ArrowForward as ArrowIcon
 } from '@mui/icons-material';
-import { useGetGroupsQuery } from '../groups/groupsApi';
+import { useGetGroupsQuery, useGetGroupQuery } from '../groups/groupsApi';
 import { useGroupId } from '../groups/useGroupId';
 import { useGetMatchesQuery } from '../matches/matchesApi';
 import { useGetMyBetsQuery, useGetGroupConfigsQuery } from '../betting/bettingApi';
@@ -69,6 +69,8 @@ export function DashboardPage() {
   const { data: matches, isLoading: matchesLoading } = useGetMatchesQuery(matchesArg);
   const { data: bets, isLoading: betsLoading } = useGetMyBetsQuery({ groupId }, { skip: !groupId });
   const { data: groupConfigs } = useGetGroupConfigsQuery({ groupId }, { skip: !groupId });
+  const { data: group } = useGetGroupQuery(groupId, { skip: !groupId });
+  const profitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? 'Net Loss' : 'Net Profit';
 
   const isLoading = groupsLoading || matchesLoading || betsLoading;
 
@@ -144,8 +146,8 @@ export function DashboardPage() {
             <StatCard label="Upcoming" value={upcomingMatches.length} Icon={SportsSoccerIcon} bg={STAT_CARDS[1].bg} hoverBg={STAT_CARDS[1].hoverBg} onClick={goTo('/matches')} />
             <StatCard label="Win Rate" value={`${stats.winRate}%`} Icon={WinRateIcon} bg={STAT_CARDS[2].bg} hoverBg={STAT_CARDS[2].hoverBg} onClick={goTo('/bets')} />
             <StatCard
-              label="Net Profit"
-              value={`${stats.netProfit >= 0 ? '+' : ''}${stats.netProfit.toLocaleString()}`}
+              label={profitLabel}
+              value={`${stats.netProfit > 0 ? '+' : ''}${stats.netProfit.toLocaleString()}`}
               Icon={TrendingUpIcon}
               bg={STAT_CARDS[2].bg} hoverBg={STAT_CARDS[2].hoverBg}
               onClick={goTo('/bets')}
