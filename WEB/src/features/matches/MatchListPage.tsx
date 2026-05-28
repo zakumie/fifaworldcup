@@ -84,7 +84,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-orange-400 animate-pulse" />
         )}
 
-        <div className="p-5">
+        <div className="p-5" onClick={ () => settlementMode === "WinnerKeepsLoserPays" && setViewBetsOpen(true) }>
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-medium text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full">
               {formatStage(match.stage, match.group)}

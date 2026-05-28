@@ -22,6 +22,7 @@ import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { logout } from '../../features/auth/authSlice';
 import { apiSlice } from '../../app/api';
@@ -29,6 +30,7 @@ import { setSelectedGroupId } from '../../features/groups/groupSlice';
 import { toggleThemeMode } from '../../features/settings/themeSlice';
 import { useGroupId } from '../../features/groups/useGroupId';
 import { MusicPlayerDialog } from '../MusicPlayer';
+import { HelpDialog } from '../HelpDialog';
 
 const DRAWER_WIDTH = 260;
 const COLLAPSED_WIDTH = 72;
@@ -57,6 +59,7 @@ export function AppLayout() {
   const [collapsed, setCollapsed] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [musicOpen, setMusicOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -144,6 +147,25 @@ export function AppLayout() {
 
       {/* Settings section at bottom */}
       <div className="p-3 border-t border-gray-100 dark:border-gray-700 space-y-1">
+        {/* Help */}
+        {isCollapsed ? (
+          <Tooltip title="Help" placement="right">
+            <button
+              onClick={() => setHelpOpen(true)}
+              className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+            >
+              <HelpOutlineOutlinedIcon fontSize="small" />
+            </button>
+          </Tooltip>
+        ) : (
+          <button
+            onClick={() => setHelpOpen(true)}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+          >
+            <HelpOutlineOutlinedIcon fontSize="small" />
+            <span className="text-sm font-medium">Help</span>
+          </button>
+        )}
         {/* Music player */}
         {isCollapsed ? (
           <Tooltip title="Play Music" placement="right">
@@ -368,6 +390,7 @@ export function AppLayout() {
 
       {/* Music Player Dialog */}
       <MusicPlayerDialog open={musicOpen} onClose={() => setMusicOpen(false)} />
+      <HelpDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
     </Box>
   );
 }
