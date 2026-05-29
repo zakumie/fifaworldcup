@@ -57,8 +57,8 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const LANGUAGE_OPTIONS: { code: Language; label: string; flag: string }[] = [
-  { code: 'en', label: 'English', flag: '/images/en.webp' },
-  { code: 'vi', label: 'Tiếng Việt', flag: '/images/vi.jpg' },
+  { code: 'en', label: 'English', flag: '/images/en.png' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '/images/vi.png' },
 ];
 
 export function AppLayout() {
