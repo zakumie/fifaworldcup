@@ -5,6 +5,7 @@ import {
   WorkspacePremium as MedalIcon,
   EmojiEventsOutlined as EmojiEventsOutlinedIcon
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { useGetLeaderboardQuery } from './leaderboardApi';
 import { useGroupId } from '../groups/useGroupId';
 import { useGetGroupQuery } from '../groups/groupsApi';
@@ -14,6 +15,7 @@ import { RankingRow } from './RankingRow';
 import type { LeaderboardEntryDto, GroupMemberDto } from '../../types';
 
 export function LeaderboardPage() {
+  const { t } = useTranslation();
   const { groupId, groupsLoading } = useGroupId();
   const { data: leaderboard, isLoading, isError } = useGetLeaderboardQuery(
     { groupId },
@@ -36,7 +38,7 @@ export function LeaderboardPage() {
     }
   };
 
-  const profitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? 'Loss' : 'Profit';
+  const profitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? t('leaderboard.table.loss') : t('leaderboard.table.profit');
 
   const top3 = useMemo(() => leaderboard?.slice(0, 3) ?? [], [leaderboard]);
 
@@ -48,13 +50,13 @@ export function LeaderboardPage() {
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
               <EmojiEventsOutlinedIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
-              <span>LEADER<span className="text-emerald-400">BOARD</span></span>
+              <span>{t('leaderboard.title')}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Top players · Win rates · Rankings</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('leaderboard.subtitle')}</p>
           </div>
           {leaderboard && (
             <div className="text-right hidden sm:block">
-              <p className="text-xs text-white font-bold uppercase tracking-wider">Total Players</p>
+              <p className="text-xs text-white font-bold uppercase tracking-wider">{t('leaderboard.totalPlayers')}</p>
               <p className="text-lg font-bold text-white">{leaderboard.length}</p>
             </div>
           )}
@@ -67,8 +69,8 @@ export function LeaderboardPage() {
           <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">
             <TrophyIcon sx={{ fontSize: 32, color: '#d97706' }} />
           </div>
-          <p className="text-lg font-semibold text-gray-700">No Group Selected</p>
-          <p className="text-sm text-gray-500">Join a group to see the leaderboard</p>
+          <p className="text-lg font-semibold text-gray-700">{t('leaderboard.noGroup.title')}</p>
+          <p className="text-sm text-gray-500">{t('leaderboard.noGroup.hint')}</p>
         </div>
       )}
 
@@ -87,8 +89,8 @@ export function LeaderboardPage() {
       {/* Error */}
       {isError && (
         <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-gray-100">
-          <p className="text-lg font-semibold text-red-600">Failed to load leaderboard</p>
-          <p className="text-sm text-gray-500">Please try again later</p>
+          <p className="text-lg font-semibold text-red-600">{t('leaderboard.error.loadFailed')}</p>
+          <p className="text-sm text-gray-500">{t('common.tryAgainLater')}</p>
         </div>
       )}
 
@@ -112,18 +114,18 @@ export function LeaderboardPage() {
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-4 border-b border-gray-100">
               <MedalIcon sx={{ fontSize: 20, color: '#10b981' }} />
-              <h2 className="text-sm font-bold text-emerald-500 uppercase tracking-wide">Full Rankings</h2>
+              <h2 className="text-sm font-bold text-emerald-500 uppercase tracking-wide">{t('leaderboard.fullRankings')}</h2>
             </div>
 
             {/* Table header */}
             <div className="hidden sm:flex items-center gap-3 px-5 py-2.5 bg-gray-50 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-              <span className="w-8 text-center">#</span>
-              <span className="flex-1">Player</span>
-              <span className="min-w-[120px] text-center">W / D / L</span>
-              <span className="min-w-[70px] text-center">Rate</span>
-              <span className="min-w-[70px] text-right">Penalty</span>
+              <span className="w-8 text-center">{t('leaderboard.table.rank')}</span>
+              <span className="flex-1">{t('leaderboard.table.player')}</span>
+              <span className="min-w-[120px] text-center">{t('leaderboard.table.wdl')}</span>
+              <span className="min-w-[70px] text-center">{t('leaderboard.table.rate')}</span>
+              <span className="min-w-[70px] text-right">{t('leaderboard.table.penalty')}</span>
               <span className="min-w-[70px] text-right">{profitLabel}</span>
-              <span className="min-w-[70px] text-right">Balance</span>
+              <span className="min-w-[70px] text-right">{t('leaderboard.table.balance')}</span>
             </div>
 
             {/* Rows */}
@@ -140,8 +142,8 @@ export function LeaderboardPage() {
       {leaderboard && leaderboard.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-gray-100">
           <TrophyIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-          <p className="text-lg font-semibold text-gray-700">No rankings yet</p>
-          <p className="text-sm text-gray-500">Place bets to appear on the leaderboard</p>
+          <p className="text-lg font-semibold text-gray-700">{t('leaderboard.empty.title')}</p>
+          <p className="text-sm text-gray-500">{t('leaderboard.empty.hint')}</p>
         </div>
       )}
 

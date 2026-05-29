@@ -6,6 +6,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { useTranslation } from 'react-i18next';
 import type { BetDto, BettingConfigDto, MatchDto, SettlementMode } from '../../types';
 import { usePlaceBetMutation, useUpdateBetMutation } from './bettingApi';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
@@ -24,6 +25,7 @@ const QUICK_AMOUNTS = [50, 100, 200, 500];
 const DIALOG_PAPER_SX = { borderRadius: 4, overflow: 'hidden', bgcolor: 'transparent', boxShadow: 'none' } as const;
 
 export function PlaceBetDialog({ open, config, match, existingBet, settlementMode, onClose }: Props) {
+  const { t } = useTranslation();
   const { formatDate } = useUserTimeZone();
   const isEditMode = !!existingBet;
   const defaultTeamId = existingBet?.selectedTeamId ?? match.homeTeam.id;
@@ -90,7 +92,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
 
           <div className="flex items-center gap-2 mb-4">
             <SportsSoccerIcon sx={{ fontSize: 18, color: '#34d399' }} />
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{isEditMode ? 'Edit Your Bet' : 'Place Your Bet'}</span>
+            <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">{isEditMode ? t('betting.place.editTitle') : t('betting.place.title')}</span>
           </div>
 
           {/* Teams display */}
@@ -138,18 +140,18 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
               <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mb-4">
                 <CheckCircleOutlineIcon sx={{ fontSize: 36, color: '#10b981' }} />
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-1">{isEditMode ? 'Bet Updated!' : 'Bet Placed!'}</h3>
+              <h3 className="text-lg font-bold text-gray-800 mb-1">{isEditMode ? t('betting.place.updatedSuccess') : t('betting.place.placedSuccess')}</h3>
               <p className="text-sm text-slate-500 mb-1">
-                You picked <span className="font-semibold text-gray-700">{selectedTeam.name}</span>
+                {t('betting.place.youPicked')}<span className="font-semibold text-gray-700">{selectedTeam.name}</span>
               </p>
               <p className="text-sm text-slate-500">
-                Potential win: <span className="font-bold text-emerald-600">+{potentialWin.toLocaleString()}</span>
+                {t('betting.place.potentialWin')}<span className="font-bold text-emerald-600">+{potentialWin.toLocaleString()}</span>
               </p>
               <button
                 onClick={handleClose}
                 className="mt-6 px-8 py-2.5 text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors"
               >
-                Done
+                {t('common.done')}
               </button>
             </div>
           ) : (
@@ -157,7 +159,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
               {error && (
                 <div className="mb-4 px-4 py-3 rounded-xl bg-red-50 border border-red-100">
                   <p className="text-sm text-red-700 font-medium">
-                    {'data' in error ? (error.data as { error?: string })?.error : `Failed to ${isEditMode ? 'update' : 'place'} bet`}
+                    {'data' in error ? (error.data as { error?: string })?.error : t(isEditMode ? 'betting.place.error.updateFailed' : 'betting.place.error.placeFailed')}
                   </p>
                 </div>
               )}
@@ -166,10 +168,10 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
               <div className="mb-5">
                   <div className="flex items-center justify-between">
                     <label className="gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2.5 block">
-                      Pick your winner
+                      {t('betting.place.pickWinner')}
                     </label>
                     <p className="gap-2 text-xs font-semibold text-red-400 bg-red/10 px-2.5 py-1 p-4 rounded-xl border-2 mb-2.5 block border-red-350 bg-red-40/50 shadow-sm shadow-red-50">
-                      Betting closes {formatDate(config.bettingCloseTime, 'MMM dd, HH:mm')}
+                      {t('betting.place.bettingCloses')}{formatDate(config.bettingCloseTime, 'MMM dd, HH:mm')}
                     </p>
                   </div>
 
@@ -210,7 +212,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
               {/* Bet amount */}
               <div className="mb-5">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2.5 block">
-                  Bet Amount
+                  {t('betting.place.betAmount')}
                 </label>
                 {config.isFixedBet ? (
                   <div className="flex items-center justify-center py-3 px-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -249,7 +251,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                       ))}
                     </div>
                     <p className="text-[11px] text-slate-400 mt-2 text-center">
-                      Min: {config.minBetAmount.toLocaleString()} — Max: {config.maxBetAmount.toLocaleString()}
+                      {t('betting.place.min')} {config.minBetAmount.toLocaleString()} — {t('betting.place.max')} {config.maxBetAmount.toLocaleString()}
                     </p>
                   </>
                 )}
@@ -261,7 +263,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                     {settlementMode !== 'WinnerKeepsLoserPays' && (<div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100">
                         <div className="flex items-center gap-2 text-sm text-emerald-700">
                           <TrendingUpIcon sx={{ fontSize: 18 }} />
-                          <span className="font-medium">Potential Win</span>
+                          <span className="font-medium">{t('betting.place.potentialWinLabel')}</span>
                         </div>
                         <span className="text-lg font-black text-emerald-600">
                           +{potentialWin.toLocaleString()}
@@ -276,7 +278,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                   onClick={handleClose}
                   className="flex-1 py-3 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleSubmit}
@@ -289,7 +291,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
                   )}
-                  {isLoading ? 'Saving...' : isEditMode ? 'Update Bet' : 'Confirm Bet'}
+                  {isLoading ? t('common.saving') : isEditMode ? t('betting.place.updateButton') : t('betting.place.confirmButton')}
                 </button>
               </div>
             </>

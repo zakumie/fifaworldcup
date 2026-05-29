@@ -8,6 +8,7 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { useTranslation } from 'react-i18next';
 import { useGetMatchBetsQuery, useGetBettingConfigQuery } from './bettingApi';
 import { useGetGroupQuery } from '../groups/groupsApi';
 import { formatStage } from '../../utils/formatStage';
@@ -97,6 +98,7 @@ function NoBetUserCard({ user }: { user: NoBetUser }) {
 }
 
 function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }: { team: TeamDto; count: number; pool: number; color: string; border: string; hideAmount?: boolean; isWinner?: boolean }) {
+  const { t } = useTranslation();
   return (
     <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl border transition-all
       ${isWinner ? 'bg-amber-50 border-amber-300 ring-1 ring-amber-200' : `${color} ${border}`}`}>
@@ -111,7 +113,7 @@ function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }
         <p className={`text-[11px] sm:text-xs font-bold truncate ${isWinner ? 'text-amber-800' : 'text-slate-800'}`}>
           {team.name}
         </p>       
-        {!hideAmount && <p className="text-[9px] sm:text-[10px] text-slate-500">{pool.toLocaleString()} wagered</p>}
+        {!hideAmount && <p className="text-[9px] sm:text-[10px] text-slate-500">{pool.toLocaleString()} {t('betting.view.wagered')}</p>}
       </div>
       <span> <p> {isWinner && '🏆'}</p></span>
       <span className={`text-base sm:text-lg font-black ${isWinner ? 'text-amber-700' : 'text-slate-700'}`}>{count}</span>
@@ -120,6 +122,7 @@ function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }
 }
 
 export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props) {
+  const { t } = useTranslation();
   const { formatDate } = useUserTimeZone();
   const isMobile = useMediaQuery('(max-width:480px)');
   const { data: bets, isLoading } = useGetMatchBetsQuery({ groupId, matchId }, { skip: !open });
@@ -219,14 +222,14 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
         {/* Match Info Bar */}
         <div className="mt-2 sm:mt-3 flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-            <span className="text-[10px] text-white/40 uppercase">Kick-off</span>
+            <span className="text-[10px] text-white/40 uppercase">{t('betting.view.kickoff')}</span>
             <span className="text-xs font-semibold text-white/80">
               {formatDate(match.startTime, 'dd MMM - HH:mm')}
             </span>
           </div>
           {config && config.handicap !== 0 && (
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-              <span className="text-[10px] text-white/40 uppercase">Handicap</span>
+              <span className="text-[10px] text-white/40 uppercase">{t('common.handicap')}</span>
               <span className="text-xs font-semibold text-amber-300">
                 {config.favoredTeamName ?? 'Home'} {config.handicap > 0 ? '+' : ''}{config.handicap}
               </span>
@@ -234,13 +237,13 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
           )}
           {config && config.handicap === 0 && (
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-              <span className="text-[10px] text-white/40 uppercase">Handicap</span>
-              <span className="text-xs font-semibold text-white/70">Even</span>
+              <span className="text-[10px] text-white/40 uppercase">{t('common.handicap')}</span>
+              <span className="text-xs font-semibold text-white/70">{t('common.even')}</span>
             </div>
           )}
           {config && (
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-              <span className="text-[10px] text-white/40 uppercase">Bet</span>
+              <span className="text-[10px] text-white/40 uppercase">{t('betting.view.bet')}</span>
               <span className="text-xs font-semibold text-emerald-300">
                 {config.isFixedBet
                   ? `${config.defaultBetAmount?.toLocaleString() ?? config.minBetAmount.toLocaleString()}`
@@ -266,15 +269,15 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
           <div className="p-4 space-y-4">
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <SportsSoccerIcon sx={{ fontSize: 40, color: '#cbd5e1', mb: 1 }} />
-              <p className="text-sm text-slate-400">No bets placed yet</p>
-              <p className="text-xs text-slate-300 mt-0.5">Be the first to place a bet!</p>
+              <p className="text-sm text-slate-400">{t('betting.view.empty.title')}</p>
+              <p className="text-xs text-slate-300 mt-0.5">{t('betting.view.empty.hint')}</p>
             </div>
             {noBetUsers.length > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-50/60 border border-orange-200/60">
                   <WarningAmberIcon sx={{ fontSize: 16, color: '#f97316' }} />
-                  <span className="text-xs font-bold text-orange-600">No Bet</span>
-                  <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} member{noBetUsers.length > 1 ? 's' : ''}</span>
+                  <span className="text-xs font-bold text-orange-600">{t('betting.view.noBet')}</span>
+                  <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} {noBetUsers.length > 1 ? t('betting.view.members') : t('betting.view.member')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
                   {noBetUsers.map((u) => <NoBetUserCard key={u.id} user={u} />)}
@@ -303,7 +306,7 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
                     {homeBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
                   </div>
                 ) : (
-                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">No one picked {match.homeTeam.name}</p>
+                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">{t('betting.view.noOnePicked')}{match.homeTeam.name}</p>
                 )}
               </div>
 
@@ -322,7 +325,7 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
                     {awayBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
                   </div>
                 ) : (
-                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">No one picked {match.awayTeam.name}</p>
+                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">{t('betting.view.noOnePicked')}{match.awayTeam.name}</p>
                 )}
               </div>
             </div>
@@ -332,8 +335,8 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
               <div className="space-y-2">
                 <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-50/60 border border-orange-200/60">
                   <WarningAmberIcon sx={{ fontSize: 16, color: '#f97316' }} />
-                  <span className="text-xs font-bold text-orange-600">No Bet</span>
-                  <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} member{noBetUsers.length > 1 ? 's' : ''}</span>
+                  <span className="text-xs font-bold text-orange-600">{t('betting.view.noBet')}</span>
+                  <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} {noBetUsers.length > 1 ? t('betting.view.members') : t('betting.view.member')}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
                   {noBetUsers.map((u) => <NoBetUserCard key={u.id} user={u} />)}

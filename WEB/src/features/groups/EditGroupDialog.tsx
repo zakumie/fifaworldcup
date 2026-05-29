@@ -15,6 +15,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useUpdateGroupMutation } from './groupsApi';
 import {
   useGetChampionConfigQuery,
@@ -48,6 +49,7 @@ interface Props {
 }
 
 export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Props) {
+  const { t } = useTranslation();
   const [updateGroup] = useUpdateGroupMutation();
   const [error, setError] = useState('');
 
@@ -129,10 +131,10 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
         }).unwrap();
       }
 
-      onSuccess?.('Group updated successfully!');
+      onSuccess?.(t('groups.edit.success'));
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;
-      const msg = status === 403 ? 'You do not have permission to edit this group.' : 'Failed to update group';
+      const msg = status === 403 ? t('groups.edit.error.noPermission') : t('groups.edit.error.failed');
       setError(msg);
       onError?.(msg);
     }
@@ -145,9 +147,9 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
         groupId: group.id,
         body: { groupId: group.id, winnerTeamId: settleWinnerTeamId },
       }).unwrap();
-      onSuccess?.('Champion predictions settled!');
+      onSuccess?.(t('groups.edit.settleSuccess'));
     } catch {
-      setError('Failed to settle champion predictions');
+      setError(t('groups.edit.error.settleFailed'));
     }
   };
 
@@ -167,7 +169,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
               <EditIcon sx={{ color: 'white', fontSize: 22 }} />
             </div>
             <div>
-              <h2 className="text-white text-lg font-bold">Edit Group</h2>
+              <h2 className="text-white text-lg font-bold">{t('groups.edit.title')}</h2>
               <p className="text-slate-300 text-xs">{group?.name}</p>
             </div>
           </div>
@@ -177,24 +179,24 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
           {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{error}</Alert>}
 
           {/* Group Name */}
-          <TextField {...form.register('name')} label="Group Name" fullWidth size="small"
+          <TextField {...form.register('name')} label={t('groups.edit.nameLabel')} fullWidth size="small"
             error={!!form.formState.errors.name} helperText={form.formState.errors.name?.message}
             autoFocus
             InputProps={{ startAdornment: <InputAdornment position="start"><GroupsIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
             sx={[inputSx, { mt: 2 }]} />
 
           {/* Description */}
-          <TextField {...form.register('description')} label="Description" fullWidth size="small"
+          <TextField {...form.register('description')} label={t('groups.edit.descriptionLabel')} fullWidth size="small"
             multiline rows={2}
             sx={[inputSx, { mt: 2 }]} />
 
           {/* Two columns: Max Members & Default Balance */}
           <div className="grid grid-cols-2 gap-3 mt-3">
-            <TextField {...form.register('maxMembers')} label="Max Members" type="number" fullWidth size="small"
+            <TextField {...form.register('maxMembers')} label={t('groups.edit.maxMembersLabel')} type="number" fullWidth size="small"
               error={!!form.formState.errors.maxMembers} helperText={form.formState.errors.maxMembers?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><PeopleAltIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
               sx={inputSx} />
-            <TextField {...form.register('defaultBalance')} label="Default Balance" type="number" fullWidth size="small"
+            <TextField {...form.register('defaultBalance')} label={t('groups.edit.balanceLabel')} type="number" fullWidth size="small"
               error={!!form.formState.errors.defaultBalance} helperText={form.formState.errors.defaultBalance?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><AccountBalanceWalletIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
               sx={inputSx} />
@@ -203,7 +205,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
           {/* Settlement Mode - Card selector */}
           <div className="mt-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-              <GavelIcon sx={{ fontSize: 14 }} /> Settlement Mode
+              <GavelIcon sx={{ fontSize: 14 }} /> {t('groups.edit.settlementMode')}
             </p>
             <div className="grid grid-cols-2 gap-3">
               <label
@@ -220,8 +222,8 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                   }`}>
                     <AccountBalanceWalletIcon sx={{ fontSize: 18 }} />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700">Normal</span>
-                  <span className="text-[10px] text-gray-400 leading-tight">Win = bet + profit<br/>Lose = lose bet</span>
+                  <span className="text-sm font-semibold text-gray-700">{t('groups.mode.normal')}</span>
+                  <span className="text-[10px] text-gray-400 leading-tight">{t('groups.mode.normalWin')}<br/>{t('groups.mode.normalLose')}</span>
                 </div>
               </label>
               <label
@@ -238,8 +240,8 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                   }`}>
                     <EmojiEventsIcon sx={{ fontSize: 18 }} />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700">Winner Keeps</span>
-                  <span className="text-[10px] text-gray-400 leading-tight">Win = +0, Lose = -bet<br/>Skip = auto lose</span>
+                  <span className="text-sm font-semibold text-gray-700">{t('groups.mode.winnerKeeps')}</span>
+                  <span className="text-[10px] text-gray-400 leading-tight">{t('groups.mode.winnerKeepsDesc')}<br/>{t('groups.mode.skipAutoLose')}</span>
                 </div>
               </label>
             </div>
@@ -248,12 +250,12 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
           {/* Champion Prediction */}
           <div className="mt-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-              <MilitaryTechIcon sx={{ fontSize: 14 }} /> Champion Prediction
+              <MilitaryTechIcon sx={{ fontSize: 14 }} /> {t('groups.edit.championSection')}
             </p>
 
             {championConfig?.isSettled ? (
               <Alert icon={<CheckCircleIcon />} severity="success" sx={{ borderRadius: 3 }}>
-                Settled — Winner: <strong>{championConfig.winnerTeamName}</strong>
+                {t('groups.edit.settledWinner')}<strong>{championConfig.winnerTeamName}</strong>
               </Alert>
             ) : (
               <>
@@ -271,8 +273,8 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                         <EmojiEventsIcon sx={{ fontSize: 18 }} />
                       </div>
                       <div>
-                        <span className="text-sm font-semibold text-gray-700">Enable Champion Prediction</span>
-                        <p className="text-[10px] text-gray-400">Members predict the World Cup winner</p>
+                        <span className="text-sm font-semibold text-gray-700">{t('groups.edit.enableChampion')}</span>
+                        <p className="text-[10px] text-gray-400">{t('groups.edit.championDescription')}</p>
                       </div>
                     </div>
                     <div className={`w-10 h-5 rounded-full transition-colors ${championEnabled ? 'bg-amber-500' : 'bg-gray-300'} relative`}>
@@ -289,7 +291,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                         {championEnabled && (
                           <div className="grid grid-cols-2 gap-3 mt-3">
                             <TextField
-                              label="Open Time"
+                              label={t('groups.edit.openTimeLabel')}
                               type="datetime-local"
                               value={championOpenTime}
                               onChange={(e) => setChampionOpenTime(e.target.value)}
@@ -298,7 +300,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                               sx={inputSx}
                             />
                             <TextField
-                              label="Close Time"
+                              label={t('groups.edit.closeTimeLabel')}
                               type="datetime-local"
                               value={championCloseTime}
                               onChange={(e) => setChampionCloseTime(e.target.value)}
@@ -318,7 +320,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                             sx={[inputSx, { flex: 1 }]}
                             SelectProps={{ native: true }}
                           >
-                            <option value="">Select winner team...</option>
+                            <option value="">{t('groups.edit.selectWinner')}</option>
                             {teams?.map((t: TeamDto) => (
                               <option key={t.id} value={t.id}>{t.name}</option>
                             ))}
@@ -334,7 +336,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
                               background: 'linear-gradient(135deg, #d97706 0%, #ee802c 100%)'
                             }}
                           >
-                            Settle
+                            {t('groups.edit.settleButton')}
                           </Button>
                           </div>)}
                   </div>
@@ -347,9 +349,9 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
           <div className="mt-5 p-4 rounded-xl border-2 border-red-100 bg-red-50/50">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-gray-700">Group Status</p>
+                <p className="text-sm font-semibold text-gray-700">{t('groups.edit.statusSection')}</p>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  {isActive ? 'Group is active and accepting bets' : 'Group is deactivated'}
+                  {isActive ? t('groups.edit.statusActive') : t('groups.edit.statusInactive')}
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -368,7 +370,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
         <div className="px-6 pb-5 pt-2 flex justify-end gap-2 shrink-0 border-t border-gray-100">
           <Button onClick={onClose}
             sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button type="submit" variant="contained"
             sx={{
@@ -378,7 +380,7 @@ export function EditGroupDialog({ open, group, onClose, onSuccess, onError }: Pr
               '&:hover': { boxShadow: '0 6px 20px rgba(51,65,85,0.4)' },
             }}
             startIcon={<EditIcon />}>
-            Save Changes
+            {t('common.saveChanges')}
           </Button>
         </div>
       </Box>

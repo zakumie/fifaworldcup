@@ -11,6 +11,7 @@ import ScoreboardIcon from '@mui/icons-material/Scoreboard';
 import TuneIcon from '@mui/icons-material/Tune';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SaveIcon from '@mui/icons-material/Save';
+import { useTranslation } from 'react-i18next';
 import type { BettingConfigDto, MatchDto, MatchStatus } from '../../types';
 import { useUpdateScoreMutation } from './matchesApi';
 import { BettingConfigForm } from './BettingConfigForm';
@@ -39,6 +40,7 @@ const STATUSES: MatchStatus[] = ['Open', 'Upcoming', 'Live', 'Finished', 'Postpo
 const SCORE_STATUSES: MatchStatus[] = ['Live', 'Finished'];
 
 export function MatchAdminDialog({ open, match, groupId, config, onClose }: Props) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'score' | 'betting'>('betting');
   const [showBettingForm, setShowBettingForm] = useState(false);
   const { formatDate } = useUserTimeZone();
@@ -100,7 +102,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
             <SportsSoccerIcon sx={{ color: 'white', fontSize: { xs: 18, sm: 22 } }} />
           </div>
           <div>
-            <h2 className="text-white text-base sm:text-lg font-bold">Match Administration</h2>
+            <h2 className="text-white text-base sm:text-lg font-bold">{t('admin.matches.dialog.title')}</h2>
             <p className="text-sky-200 text-[10px] sm:text-xs">{formatStage(match.stage, match.group)}</p>
           </div>
         </div>
@@ -147,7 +149,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
           `}
         >
           <TuneIcon sx={{ fontSize: 18 }} />
-          Betting Config
+          {t('admin.matches.dialog.tabs.betting')}
           {!config && <span className="w-2 h-2 bg-blue-600 rounded-full" />}
         </button>
         <button
@@ -160,7 +162,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
           `}
         >
           <ScoreboardIcon sx={{ fontSize: 18 }} />
-          Status & Score
+          {t('admin.matches.dialog.tabs.statusScore')}
         </button>
       </div>
 
@@ -170,14 +172,14 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
           <div className="space-y-4">
             {error && (
               <Alert severity="error" sx={{ borderRadius: 2 }}>
-                {'data' in error ? (error.data as { error?: string })?.error : 'Failed to update match'}
+                {'data' in error ? (error.data as { error?: string })?.error : t('admin.matches.dialog.error.updateFailed')}
               </Alert>
             )}
 
             {/* Status selector */}
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 flex items-center gap-1">
-                <AccessTimeIcon sx={{ fontSize: 14 }} /> Match Status
+                <AccessTimeIcon sx={{ fontSize: 14 }} /> {t('admin.matches.dialog.matchStatus')}
               </p>
               <Controller name="status" control={control}
                 render={({ field }) => (
@@ -194,7 +196,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
             {showScores && (
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-                  <ScoreboardIcon sx={{ fontSize: 14 }} /> Score
+                  <ScoreboardIcon sx={{ fontSize: 14 }} /> {t('admin.matches.dialog.score')}
                 </p>
                 <div className="grid grid-cols-5 gap-3 items-center">
                   <div className="col-span-2">
@@ -246,26 +248,26 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                 <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-3">
                   <TuneIcon sx={{ fontSize: 24, color: '#94a3b8' }} />
                 </div>
-                <p className="text-sm text-gray-500">Select a group from the Matches page to manage betting.</p>
+                <p className="text-sm text-gray-500">{t('admin.matches.dialog.noGroup')}</p>
               </div>
             ) : (config && !showBettingForm) ? (
               <div className="space-y-4">
                 {/* Config summary cards */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-xl border border-gray-100 p-3 bg-gray-50/50">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Handicap</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">{t('common.handicap')}</p>
                     <p className="text-sm font-bold text-gray-800">
                       {config.handicap !== 0
                         ? `${config.favoredTeamName ?? 'Home'} ${config.handicap > 0 ? '+' : ''}${config.handicap}`
-                        : 'None'}
+                        : t('common.none')}
                     </p>
                   </div>
                   <div className="rounded-xl border border-gray-100 p-3 bg-gray-50/50">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Odds</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">{t('admin.matches.dialog.odds')}</p>
                     <p className="text-sm font-bold text-gray-800">×{config.odds}</p>
                   </div>
                   <div className="rounded-xl border border-gray-100 p-3 bg-gray-50/50">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Bet Amount</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">{t('admin.matches.dialog.betAmount')}</p>
                     <p className="text-sm font-bold text-gray-800">
                       {config.isFixedBet
                         ? `$${(config.defaultBetAmount ?? config.minBetAmount).toLocaleString()}`
@@ -273,19 +275,19 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                     </p>
                   </div>
                   <div className="rounded-xl border border-gray-100 p-3 bg-gray-50/50">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Status</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">{t('common.status')}</p>
                     <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
                       config.isSettled ? 'text-gray-600 bg-gray-100' : 'text-emerald-700 bg-emerald-100'
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${config.isSettled ? 'bg-gray-400' : 'bg-emerald-500'}`} />
-                      {config.isSettled ? 'Settled' : 'Active'}
+                      {config.isSettled ? t('common.filter.settled') : t('common.active')}
                     </span>
                   </div>
                 </div>
 
                 {/* Betting window */}
                 <div className="rounded-xl border border-gray-100 p-3 bg-gray-50/50">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Betting Window</p>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">{t('admin.matches.dialog.bettingWindow')}</p>
                   <p className="text-xs text-gray-600">
                     {formatDate(config.bettingOpenTime, 'MMM dd, HH:mm')} → {formatDate(config.bettingCloseTime, 'MMM dd, HH:mm')}
                   </p>
@@ -298,7 +300,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                     onClick={() => setShowBettingForm(true)}
                     sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600, borderColor: '#054696', color: '#052e96', padding: '0.45rem', float: 'right' }}
                   >
-                    Edit Config
+                    {t('admin.matches.dialog.editConfig')}
                   </Button>
                 )}
               </div>
@@ -320,7 +322,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
         <div className="px-4 sm:px-6 pb-4 sm:pb-5 pt-2 flex justify-end gap-2 border-t border-gray-100">
           <Button onClick={onClose}
             sx={{ borderRadius: 2, textTransform: 'none', px: 3, color: '#64748b' }}>
-            Close
+            {t('common.close')}
           </Button>
           <Button
             variant="contained"
@@ -334,7 +336,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
               '&:hover': { boxShadow: '0 6px 10px rgba(5, 29, 150, 0.4)' },
             }}
           >
-            Save Changes
+            {t('common.saveChanges')}
           </Button>
         </div>
       )}

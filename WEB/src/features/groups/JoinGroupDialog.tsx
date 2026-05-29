@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import LoginIcon from '@mui/icons-material/Login';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import GroupsIcon from '@mui/icons-material/Groups';
+import { useTranslation } from 'react-i18next';
 import { useJoinGroupMutation } from './groupsApi';
 import type { JoinGroupRequest } from '../../types';
 
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export function JoinGroupDialog({ open, onClose, onJoined }: Props) {
+  const { t } = useTranslation();
   const [joinGroup, { isLoading }] = useJoinGroupMutation();
   const [error, setError] = useState('');
 
@@ -45,7 +47,7 @@ export function JoinGroupDialog({ open, onClose, onJoined }: Props) {
       onJoined?.();
       onClose();
     } catch {
-      setError('Invalid invite code or group is full');
+      setError(t('groups.join.error.invalid'));
     }
   };
 
@@ -72,8 +74,8 @@ export function JoinGroupDialog({ open, onClose, onJoined }: Props) {
             <GroupsIcon sx={{ color: 'white', fontSize: 22 }} />
           </div>
           <div>
-            <h2 className="text-white text-lg font-bold">Join a Group</h2>
-            <p className="text-emerald-200 text-xs">Enter an invite code to join</p>
+            <h2 className="text-white text-lg font-bold">{t('groups.join.title')}</h2>
+            <p className="text-emerald-200 text-xs">{t('groups.join.subtitle')}</p>
           </div>
         </div>
       </div>
@@ -87,14 +89,14 @@ export function JoinGroupDialog({ open, onClose, onJoined }: Props) {
 
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-              <VpnKeyIcon sx={{ fontSize: 14 }} /> Invite Code
+              <VpnKeyIcon sx={{ fontSize: 14 }} /> {t('groups.join.codeLabel')}
             </p>
             <div className="relative">
               <input
                 {...register('inviteCode')}
                 type="text"
                 autoFocus
-                placeholder="Enter invite code..."
+                placeholder={t('groups.join.codePlaceholder')}
                 className={`w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm text-gray-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/10 transition-all ${
                   errors.inviteCode ? 'border-red-300' : 'border-slate-200'
                 }`}
@@ -115,7 +117,7 @@ export function JoinGroupDialog({ open, onClose, onJoined }: Props) {
             ) : (
               <LoginIcon sx={{ fontSize: 18 }} />
             )}
-            {isLoading ? 'Joining...' : 'Join Group'}
+            {isLoading ? t('groups.join.joiningButton') : t('groups.join.submitButton')}
           </button>
         </form>
       </DialogContent>

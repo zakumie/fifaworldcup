@@ -11,6 +11,7 @@ import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { useMusic, Song } from '../contexts/MusicContext';
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const formatTime = (seconds: number) => {
   if (!seconds || isNaN(seconds)) return '0:00';
@@ -39,6 +40,7 @@ function getCoverForSong(index: number) {
 function SongListItem({ song, index, isActive, isMobile, onClick }: {
   song: Song; index: number; isActive: boolean; isMobile: boolean; onClick: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={onClick}
@@ -87,7 +89,7 @@ function SongListItem({ song, index, isActive, isMobile, onClick }: {
         >
           {song.name}
         </p>
-        <p className={`text-blue-400/50 ${isMobile ? 'text-[10px]' : 'text-[11px]'}`}>World Cup 2026</p>
+        <p className={`text-blue-400/50 ${isMobile ? 'text-[10px]' : 'text-[11px]'}`}>{t('music.artist')}</p>
       </div>
 
       {/* Now playing badge */}
@@ -95,7 +97,7 @@ function SongListItem({ song, index, isActive, isMobile, onClick }: {
         <span className={`shrink-0 rounded-full bg-blue-500/20 text-blue-300 font-medium border border-blue-400/20
           ${isMobile ? 'text-[9px] px-1.5 py-0.5' : 'text-[10px] px-2 py-0.5'}`}
         >
-          PLAYING
+          {t('music.nowPlaying')}
         </span>
       )}
     </button>
@@ -108,6 +110,7 @@ interface MusicPlayerDialogProps {
 }
 
 export function MusicPlayerDialog({ open, onClose }: MusicPlayerDialogProps) {
+  const { t } = useTranslation();
   const {
     songs, currentSong, currentSongIndex, isPlaying,
     play, pause, nextSong, prevSong, setSongIndex,
@@ -178,8 +181,8 @@ export function MusicPlayerDialog({ open, onClose }: MusicPlayerDialogProps) {
 
           {/* Song info */}
           <div className="text-center mb-4">
-            <h3 className="text-base sm:text-lg font-bold text-white truncate">{currentSong?.name || 'No songs available'}</h3>
-            <p className="text-xs text-blue-300/70 mt-0.5">World Cup 2026</p>
+            <h3 className="text-base sm:text-lg font-bold text-white truncate">{currentSong?.name || t('music.noSongs')}</h3>
+            <p className="text-xs text-blue-300/70 mt-0.5">{t('music.artist')}</p>
           </div>
 
           {/* Progress bar */}
@@ -253,9 +256,9 @@ export function MusicPlayerDialog({ open, onClose }: MusicPlayerDialogProps) {
         <div className="flex items-center gap-2 px-2 py-2 shrink-0">
           <QueueMusicIcon sx={{ fontSize: 16, color: 'rgba(148,163,184,0.6)' }} />
           <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400/80">
-            Playlist
+            {t('music.playlist')}
           </span>
-          <span className="text-[10px] text-slate-500 ml-auto font-mono">{songs.length} songs</span>
+          <span className="text-[10px] text-slate-500 ml-auto font-mono">{songs.length} {t('music.songsCount')}</span>
         </div>
 
         {/* Divider */}

@@ -9,6 +9,7 @@ import { getTheme } from './app/theme';
 import { MusicProvider } from './contexts/MusicContext';
 import App from './App';
 import './index.css';
+import './i18n';
 import { useAppSelector } from './app/hooks';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';

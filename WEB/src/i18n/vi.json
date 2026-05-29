@@ -1,0 +1,725 @@
+﻿{
+  "common": {
+    "vs": "vs",
+    "home": "Đội nhà",
+    "cancel": "Hủy",
+    "close": "Đóng",
+    "done": "Xong",
+    "update": "Cập nhật",
+    "create": "Tạo",
+    "saving": "Đang lưu...",
+    "saveChanges": "Lưu thay đổi",
+    "viewAll": "Xem tất cả",
+    "active": "Hoạt động",
+    "inactive": "Ngừng hoạt động",
+    "unknown": "Không rõ",
+    "none": "Không",
+    "even": "Hòa",
+    "or": "hoặc",
+    "status": "Trạng thái",
+    "members": "Thành viên",
+    "handicap": "Kèo chấp",
+    "pick": "Chọn",
+    "wager": "Cược",
+    "profitLoss": "L/L",
+    "total": "Tổng:",
+    "activeLabel": "Hoạt động:",
+    "edit": "Sửa",
+    "noDescription": "Không có mô tả",
+    "tryDifferentSearch": "Thử từ khóa tìm kiếm khác",
+    "tryAgainLater": "Vui lòng thử lại sau",
+    "groupNotFound": "Không tìm thấy nhóm",
+    "error": {
+      "generic": "Đã xảy ra lỗi"
+    },
+    "brand": {
+      "worldCup": "WORLD CUP",
+      "year": "2026",
+      "full": "World Cup 2026",
+      "tagline": "Dự đoán. Cạnh tranh. Chiến thắng."
+    },
+    "filter": {
+      "all": "Tất cả",
+      "upcoming": "Sắp diễn ra",
+      "live": "Đang diễn ra",
+      "finished": "Đã kết thúc",
+      "settled": "Đã thanh toán",
+      "pending": "Đang chờ",
+      "won": "Thắng",
+      "lost": "Thua",
+      "open": "Mở",
+      "active": "Hoạt động",
+      "inactive": "Ngừng hoạt động",
+      "myBets": "Cược của tôi"
+    },
+    "pagination": {
+      "showing": "Hiển thị",
+      "of": "trên"
+    }
+  },
+  "auth": {
+    "validation": {
+      "invalidEmail": "Email không hợp lệ",
+      "emailRequired": "Email là bắt buộc",
+      "passwordRequired": "Mật khẩu là bắt buộc",
+      "min2Chars": "Tối thiểu 2 ký tự",
+      "displayNameRequired": "Tên hiển thị là bắt buộc",
+      "min6Chars": "Tối thiểu 6 ký tự",
+      "passwordsMustMatch": "Mật khẩu phải trùng khớp",
+      "confirmPasswordRequired": "Xác nhận mật khẩu là bắt buộc"
+    },
+    "login": {
+      "error": {
+        "invalidCredentials": "Email hoặc mật khẩu không đúng",
+        "googleFailed": "Đăng nhập Google thất bại"
+      },
+      "signingIn": "Đang đăng nhập...",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ban@example.com",
+      "passwordLabel": "Mật khẩu",
+      "signInButton": "Đăng nhập",
+      "noAccount": "Chưa có tài khoản?",
+      "signUpLink": "Đăng ký"
+    },
+    "register": {
+      "error": {
+        "failed": "Đăng ký thất bại. Email có thể đã được sử dụng."
+      },
+      "subtitle": "Tạo tài khoản dự đoán của bạn",
+      "displayNameLabel": "Tên hiển thị",
+      "displayNamePlaceholder": "Tên của bạn",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ban@example.com",
+      "passwordLabel": "Mật khẩu",
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "createButton": "Tạo tài khoản",
+      "hasAccount": "Đã có tài khoản?",
+      "signInLink": "Đăng nhập"
+    },
+    "changePassword": {
+      "error": {
+        "allRequired": "Tất cả các trường là bắt buộc",
+        "minLength": "Mật khẩu mới phải có ít nhất 6 ký tự",
+        "mismatch": "Mật khẩu mới không trùng khớp",
+        "samePassword": "Mật khẩu mới phải khác mật khẩu hiện tại",
+        "failed": "Đổi mật khẩu thất bại"
+      },
+      "success": "Đổi mật khẩu thành công!",
+      "title": "Đổi mật khẩu",
+      "subtitle": "Cập nhật mật khẩu tài khoản của bạn",
+      "currentLabel": "Mật khẩu hiện tại",
+      "newLabel": "Mật khẩu mới",
+      "confirmLabel": "Xác nhận mật khẩu mới",
+      "hint": {
+        "minChars": "Phải có ít nhất 6 ký tự",
+        "mismatch": "Mật khẩu không trùng khớp"
+      },
+      "changedButton": "Đã đổi mật khẩu!",
+      "submitButton": "Đổi mật khẩu"
+    }
+  },
+  "nav": {
+    "dashboard": "Trang chủ",
+    "groups": "Nhóm",
+    "matches": "Trận đấu",
+    "myBets": "Cược của tôi",
+    "leaderboard": "Bảng xếp hạng",
+    "admin": {
+      "matches": "Quản lý trận đấu",
+      "groups": "Quản lý nhóm",
+      "users": "Quản lý người dùng"
+    },
+    "brand": {
+      "title": "WC 2026",
+      "subtitle": "Dự đoán"
+    },
+    "section": {
+      "menu": "Menu",
+      "admin": "Quản trị"
+    },
+    "help": "Hướng dẫn",
+    "playMusic": "Phát nhạc",
+    "lightMode": "Chế độ sáng",
+    "darkMode": "Chế độ tối",
+    "settings": "Cài đặt",
+    "menu": {
+      "profile": "Hồ sơ",
+      "changePassword": "Đổi mật khẩu",
+      "logout": "Đăng xuất",
+      "language": "Ngôn ngữ"
+    },
+    "adminBadge": "Admin"
+  },
+  "dashboard": {
+    "title": "TRANG CHỦ",
+    "welcomeBack": "Xin chào, ",
+    "stats": {
+      "myGroups": "Nhóm của tôi",
+      "upcoming": "Sắp diễn ra",
+      "winRate": "Tỷ lệ thắng",
+      "netProfit": "Lợi nhuận",
+      "netLoss": "Thua lỗ"
+    },
+    "sections": {
+      "upcomingMatches": "Trận đấu sắp tới",
+      "recentBets": "Cược gần đây"
+    },
+    "empty": {
+      "noUpcoming": "Không có trận đấu sắp tới",
+      "noBets": "Chưa có cược nào",
+      "noBetsHint": "Đặt cược đầu tiên từ trang Trận đấu"
+    }
+  },
+  "groups": {
+    "list": {
+      "title": "NHÓM CỦA TÔI",
+      "subtitle": "Tham gia nhóm · Cạnh tranh với bạn bè · Leo bảng xếp hạng",
+      "joinButton": "Tham gia nhóm",
+      "searchPlaceholder": "Tìm kiếm nhóm...",
+      "empty": {
+        "notFound": "Không tìm thấy nhóm",
+        "noGroups": "Chưa có nhóm nào",
+        "hint": "Tham gia nhóm có sẵn hoặc yêu cầu admin tạo nhóm"
+      }
+    },
+    "card": {
+      "defaultBalance": "Số dư mặc định",
+      "inviteCode": "Mã mời",
+      "created": "Tạo lúc ",
+      "copyInviteCode": "Sao chép mã mời"
+    },
+    "detail": {
+      "notFound": "Không tìm thấy nhóm",
+      "championPrediction": "Dự đoán vô địch",
+      "prediction": "Dự đoán",
+      "code": "Mã:",
+      "copyCode": "Sao chép mã mời",
+      "stats": {
+        "members": "Thành viên",
+        "balance": "Số dư",
+        "created": "Ngày tạo",
+        "status": "Trạng thái"
+      },
+      "capacity": "sức chứa",
+      "joined": "Tham gia "
+    },
+    "mode": {
+      "winnerKeeps": "Người thắng giữ",
+      "normal": "Bình thường",
+      "normalWin": "Thắng = cược + lợi nhuận",
+      "normalLose": "Thua = mất cược",
+      "winnerKeepsDesc": "Thắng = +0, Thua = -cược",
+      "skipAutoLose": "Bỏ qua = tự động thua"
+    },
+    "join": {
+      "validation": {
+        "required": "Mã mời là bắt buộc"
+      },
+      "error": {
+        "invalid": "Mã mời không hợp lệ hoặc nhóm đã đầy"
+      },
+      "title": "Tham gia nhóm",
+      "subtitle": "Nhập mã mời để tham gia",
+      "codeLabel": "Mã mời",
+      "codePlaceholder": "Nhập mã mời...",
+      "joiningButton": "Đang tham gia...",
+      "submitButton": "Tham gia nhóm"
+    },
+    "create": {
+      "validation": {
+        "nameRequired": "Tên là bắt buộc"
+      },
+      "error": {
+        "noPermission": "Bạn không có quyền tạo nhóm.",
+        "failed": "Tạo nhóm thất bại"
+      },
+      "title": "Tạo nhóm mới",
+      "subtitle": "Thiết lập nhóm cá cược mới cho thành viên",
+      "nameLabel": "Tên nhóm",
+      "namePlaceholder": "vd: Huyền thoại World Cup",
+      "descriptionLabel": "Mô tả (tùy chọn)",
+      "descriptionPlaceholder": "Nhóm này về gì?",
+      "maxMembersLabel": "Số thành viên tối đa",
+      "balanceLabel": "Số dư khởi đầu",
+      "settlementMode": "Chế độ thanh toán",
+      "championSection": "Dự đoán vô địch",
+      "enableChampion": "Bật dự đoán vô địch",
+      "championDescription": "Thành viên dự đoán đội vô địch World Cup",
+      "openTimeLabel": "Thời gian mở",
+      "closeTimeLabel": "Thời gian đóng",
+      "submitButton": "Tạo nhóm"
+    },
+    "edit": {
+      "validation": {
+        "nameRequired": "Tên là bắt buộc"
+      },
+      "success": "Cập nhật nhóm thành công!",
+      "error": {
+        "noPermission": "Bạn không có quyền chỉnh sửa nhóm này.",
+        "failed": "Cập nhật nhóm thất bại",
+        "settleFailed": "Thanh toán dự đoán vô địch thất bại"
+      },
+      "settleSuccess": "Đã thanh toán dự đoán vô địch!",
+      "title": "Chỉnh sửa nhóm",
+      "nameLabel": "Tên nhóm",
+      "descriptionLabel": "Mô tả",
+      "maxMembersLabel": "Số thành viên tối đa",
+      "balanceLabel": "Số dư mặc định",
+      "settlementMode": "Chế độ thanh toán",
+      "championSection": "Dự đoán vô địch",
+      "settledWinner": "Đã thanh toán — Đội thắng: ",
+      "enableChampion": "Bật dự đoán vô địch",
+      "championDescription": "Thành viên dự đoán đội vô địch World Cup",
+      "openTimeLabel": "Thời gian mở",
+      "closeTimeLabel": "Thời gian đóng",
+      "selectWinner": "Chọn đội thắng...",
+      "settleButton": "Thanh toán",
+      "statusSection": "Trạng thái nhóm",
+      "statusActive": "Nhóm đang hoạt động và nhận cược",
+      "statusInactive": "Nhóm đã ngừng hoạt động"
+    }
+  },
+  "matches": {
+    "status": {
+      "live": "● Đang diễn ra",
+      "finished": "Đã kết thúc",
+      "upcoming": "Sắp diễn ra",
+      "open": "Mở cược",
+      "settled": "Đã thanh toán",
+      "postponed": "Hoãn",
+      "cancelled": "Hủy"
+    },
+    "list": {
+      "title": "TRUNG TÂM TRẬN ĐẤU",
+      "titleMatch": "TRẬN",
+      "titleCenter": "ĐẤU",
+      "subtitle": "Dự đoán kết quả · Đặt cược · Thắng lớn",
+      "searchPlaceholder": "Tìm kiếm đội...",
+      "empty": {
+        "notFound": "Không tìm thấy trận đấu",
+        "filterHint": "Thử chọn bộ lọc khác"
+      }
+    },
+    "card": {
+      "handicap": "Kèo chấp:",
+      "yourBet": "Cược của bạn:",
+      "viewButton": "Xem",
+      "betNow": "Đặt cược",
+      "updateBet": "Sửa cược"
+    }
+  },
+  "betting": {
+    "place": {
+      "editTitle": "Sửa cược của bạn",
+      "title": "Đặt cược",
+      "updatedSuccess": "Đã cập nhật cược!",
+      "placedSuccess": "Đã đặt cược!",
+      "youPicked": "Bạn đã chọn ",
+      "potentialWin": "Tiền thắng tiềm năng: ",
+      "error": {
+        "updateFailed": "Cập nhật cược thất bại",
+        "placeFailed": "Đặt cược thất bại"
+      },
+      "pickWinner": "Chọn đội thắng",
+      "bettingCloses": "Đóng cược lúc ",
+      "betAmount": "Số tiền cược",
+      "min": "Tối thiểu:",
+      "max": "Tối đa:",
+      "potentialWinLabel": "Tiền thắng tiềm năng",
+      "updateButton": "Cập nhật cược",
+      "confirmButton": "Xác nhận cược"
+    },
+    "view": {
+      "wagered": "đã cược",
+      "kickoff": "Giờ khai cuộc",
+      "bet": "Cược",
+      "empty": {
+        "title": "Chưa có ai đặt cược",
+        "hint": "Hãy là người đầu tiên đặt cược!"
+      },
+      "noBet": "Chưa cược",
+      "member": "thành viên",
+      "members": "thành viên",
+      "noOnePicked": "Không ai chọn "
+    },
+    "config": {
+      "editTitle": "Sửa cấu hình cược",
+      "createTitle": "Thiết lập cược",
+      "handicapLabel": "Kèo chấp",
+      "favoredTeamLabel": "Đội được chấp",
+      "home": "(Chủ nhà)",
+      "away": "(Khách)",
+      "oddsLabel": "Tỷ lệ (hệ số)",
+      "minBetLabel": "Cược tối thiểu",
+      "maxBetLabel": "Cược tối đa",
+      "fixedBetToggle": "Số tiền cược cố định",
+      "fixedAmountLabel": "Số tiền cố định",
+      "opensLabel": "Mở cược",
+      "closesLabel": "Đóng cược"
+    }
+  },
+  "bets": {
+    "title": "CƯỢC CỦA TÔI",
+    "titleMy": "CƯỢC",
+    "titleBets": "CỦA TÔI",
+    "subtitle": "Theo dõi dự đoán · Phân tích hiệu suất",
+    "searchPlaceholder": "Tìm kiếm đội...",
+    "noGroup": {
+      "title": "Chưa chọn nhóm",
+      "hint": "Tham gia nhóm để theo dõi cược của bạn"
+    },
+    "stats": {
+      "totalBets": "Tổng cược",
+      "winRate": "Tỷ lệ thắng",
+      "netProfit": "Lợi nhuận",
+      "netLoss": "Thua lỗ",
+      "totalWagered": "Tổng đã cược"
+    },
+    "row": {
+      "profit": "Lời",
+      "loss": "Lỗ"
+    },
+    "status": {
+      "won": "Thắng",
+      "halfwon": "Thắng nửa",
+      "lost": "Thua",
+      "halflost": "Thua nửa",
+      "push": "Hòa",
+      "pending": "Chờ",
+      "cancelled": "Đã hủy"
+    },
+    "empty": {
+      "noMatch": "Không có cược nào phù hợp",
+      "noMatchHint": "Thử từ khóa hoặc bộ lọc khác",
+      "noBets": "Chưa có cược nào",
+      "noBetsHint": "Đặt cược đầu tiên từ trang Trận đấu"
+    },
+    "pagination": {
+      "bets": "cược"
+    }
+  },
+  "leaderboard": {
+    "title": "BẢNG XẾP HẠNG",
+    "subtitle": "Người chơi hàng đầu · Tỷ lệ thắng · Xếp hạng",
+    "totalPlayers": "Tổng người chơi",
+    "noGroup": {
+      "title": "Chưa chọn nhóm",
+      "hint": "Tham gia nhóm để xem bảng xếp hạng"
+    },
+    "error": {
+      "loadFailed": "Tải bảng xếp hạng thất bại"
+    },
+    "fullRankings": "Xếp hạng đầy đủ",
+    "table": {
+      "rank": "#",
+      "player": "Người chơi",
+      "wdl": "T / H / B",
+      "rate": "Tỷ lệ",
+      "penalty": "Phạt",
+      "profit": "Lợi nhuận",
+      "loss": "Thua lỗ",
+      "balance": "Số dư"
+    },
+    "empty": {
+      "title": "Chưa có xếp hạng",
+      "hint": "Đặt cược để xuất hiện trên bảng xếp hạng"
+    }
+  },
+  "predictions": {
+    "champion": {
+      "title": "Dự đoán vô địch",
+      "subtitle": "Chọn đội vô địch World Cup 2026",
+      "groupNotFound": "Không tìm thấy nhóm",
+      "noConfig": "Chưa có cấu hình dự đoán vô địch",
+      "settled": "Đã kết thúc dự đoán",
+      "yourPrediction": "Dự đoán của bạn",
+      "youWin": "Bạn thắng",
+      "youLost": "Bạn thua",
+      "tabs": {
+        "select": "Chọn nhà vô địch",
+        "group": "Dự đoán nhóm"
+      },
+      "windowClosed": "Thời gian dự đoán đã hết. Bạn không thể thay đổi dự đoán.",
+      "updated": "Đã cập nhật dự đoán!",
+      "placed": "Đã đặt dự đoán!",
+      "error": {
+        "failed": "Đặt dự đoán thất bại"
+      },
+      "dialog": {
+        "changeTo": "Đổi dự đoán vô địch sang",
+        "pickAs": "Chọn làm dự đoán vô địch?",
+        "changeFrom": "Bạn sẽ đổi từ {{from}} sang {{to}}",
+        "changeFromPart1": "Bạn sẽ đổi từ",
+        "changeFromPart2": "sang",
+        "aboutToPredict": "Bạn sắp dự đoán {{team}} là nhà vô địch World Cup 2026",
+        "aboutToPredictPart1": "Bạn sắp dự đoán",
+        "aboutToPredictPart2": "là nhà vô địch World Cup 2026",
+        "confirming": "Đang xác nhận...",
+        "confirmPick": "Xác nhận"
+      }
+    }
+  },
+  "admin": {
+    "groups": {
+      "title": "QUẢN LÝ NHÓM",
+      "subtitle": "Tạo, chỉnh sửa và quản lý tất cả nhóm cá cược",
+      "newButton": "Nhóm mới",
+      "searchPlaceholder": "Tìm kiếm nhóm theo tên...",
+      "table": {
+        "group": "Nhóm",
+        "members": "Thành viên",
+        "balance": "Số dư",
+        "mode": "Chế độ",
+        "actions": "Hành động"
+      },
+      "viewGroup": "Xem nhóm",
+      "editGroup": "Sửa nhóm",
+      "empty": {
+        "notFound": "Không tìm thấy nhóm",
+        "noGroups": "Chưa có nhóm nào",
+        "hint": "Tạo nhóm đầu tiên để bắt đầu"
+      },
+      "createFirst": "Tạo nhóm đầu tiên",
+      "createSuccess": "Tạo nhóm thành công!"
+    },
+    "matches": {
+      "title": "QUẢN LÝ TRẬN ĐẤU",
+      "subtitle": "Cấu hình trạng thái trận đấu, tỷ số và cược",
+      "searchPlaceholder": "Tìm trận đấu theo tên đội...",
+      "configured": "Đã cấu hình:",
+      "pending": "Đang chờ:",
+      "live": "Đang diễn ra:",
+      "table": {
+        "match": "Trận đấu",
+        "stage": "Vòng",
+        "score": "Tỷ số",
+        "status": "Trạng thái",
+        "date": "Ngày",
+        "action": "Hành động"
+      },
+      "manage": "Quản lý trận đấu",
+      "empty": {
+        "notFound": "Không tìm thấy trận đấu",
+        "noMatches": "Chưa có trận đấu nào",
+        "filterHint": "Thử chọn bộ lọc khác"
+      },
+      "dialog": {
+        "title": "Quản trị trận đấu",
+        "tabs": {
+          "betting": "Cấu hình cược",
+          "statusScore": "Trạng thái & Tỷ số"
+        },
+        "error": {
+          "updateFailed": "Cập nhật trận đấu thất bại"
+        },
+        "matchStatus": "Trạng thái trận đấu",
+        "score": "Tỷ số",
+        "noGroup": "Chọn nhóm từ trang Trận đấu để quản lý cược.",
+        "odds": "Tỷ lệ",
+        "betAmount": "Số tiền cược",
+        "bettingWindow": "Khung thời gian cược",
+        "editConfig": "Sửa cấu hình"
+      }
+    },
+    "users": {
+      "title": "QUẢN LÝ NGƯỜI DÙNG",
+      "subtitle": "Quản lý vai trò và trạng thái tài khoản",
+      "searchPlaceholder": "Tìm người dùng theo tên hoặc email...",
+      "stats": {
+        "total": "Tổng",
+        "active": "Hoạt động",
+        "admins": "Admin"
+      },
+      "tabs": {
+        "all": "Tất cả",
+        "active": "Hoạt động",
+        "inactive": "Ngừng hoạt động"
+      },
+      "columns": {
+        "user": "Người dùng",
+        "role": "Vai trò",
+        "provider": "Nhà cung cấp",
+        "status": "Trạng thái",
+        "actions": "Hành động"
+      },
+      "role": {
+        "admin": "Admin",
+        "user": "Người dùng"
+      },
+      "actions": {
+        "resetPassword": "Đặt lại mật khẩu",
+        "changeRole": "Đổi vai trò",
+        "deactivate": "Vô hiệu hóa",
+        "activate": "Kích hoạt"
+      },
+      "deactivated": "{{name}} đã bị vô hiệu hóa. Các cược đang chờ đã bị hủy.",
+      "reactivated": "{{name}} đã được kích hoạt lại.",
+      "failedUpdateStatus": "Cập nhật trạng thái người dùng thất bại.",
+      "noResults": "Không tìm thấy người dùng",
+      "empty": "Chưa có người dùng",
+      "emptyHint": "Người dùng sẽ xuất hiện sau khi đăng ký",
+      "tryDifferentSearch": "Thử tìm kiếm từ khóa khác",
+      "roleUpdated": "Vai trò của {{name}} đã được cập nhật thành {{role}}.",
+      "failedUpdateRole": "Cập nhật vai trò thất bại.",
+      "passwordResetSuccess": "Mật khẩu của {{name}} đã được đặt lại về mặc định.",
+      "failedResetPassword": "Đặt lại mật khẩu thất bại.",
+      "editRoleDialog": {
+        "title": "Sửa vai trò",
+        "systemRole": "Vai trò hệ thống",
+        "hint": "Admin có thể quản lý trận đấu, nhóm và người dùng khác.",
+        "save": "Lưu vai trò"
+      },
+      "resetDialog": {
+        "title": "Đặt lại mật khẩu",
+        "confirm": "Bạn có chắc muốn đặt lại mật khẩu cho {{name}} về mặc định?",
+        "hint": "Người dùng sẽ cần đổi mật khẩu sau khi đăng nhập."
+      }
+    },
+    "predictions": {
+      "title": "Quản lý dự đoán vô địch",
+      "settings": "Cài đặt dự đoán",
+      "settledAlert": "Dự đoán đã được thanh toán cho nhóm này",
+      "enableToggle": "Bật dự đoán vô địch",
+      "openTime": "Thời gian mở dự đoán",
+      "closeTime": "Thời gian đóng dự đoán",
+      "updateButton": "Cập nhật cấu hình",
+      "createButton": "Tạo cấu hình",
+      "createSuccess": "Tạo cấu hình thành công",
+      "updateSuccess": "Cập nhật cấu hình thành công",
+      "error": {
+        "saveFailed": "Lưu cấu hình thất bại",
+        "selectTeam": "Vui lòng chọn đội thắng",
+        "settleFailed": "Thanh toán dự đoán thất bại"
+      },
+      "settleTitle": "Thanh toán dự đoán",
+      "settleDescription": "Sau khi thanh toán, thành viên sẽ biết dự đoán của mình đúng hay sai.",
+      "settleButton": "Thanh toán dự đoán",
+      "settling": "Đang thanh toán...",
+      "settleDialog": {
+        "title": "Thanh toán dự đoán vô địch",
+        "description": "Chọn đội thắng để thanh toán tất cả dự đoán",
+        "selectWinner": "Chọn đội thắng",
+        "chooseTeam": "-- Chọn đội --",
+        "confirm": "Xác nhận thanh toán"
+      },
+      "settleSuccess": "Thanh toán dự đoán thành công"
+    }
+  },
+  "profile": {
+    "title": "HỒ SƠ CỦA TÔI",
+    "subtitle": "Quản lý cài đặt tài khoản",
+    "notFound": "Không tìm thấy hồ sơ",
+    "info": {
+      "email": "Email",
+      "authProvider": "Nhà cung cấp xác thực",
+      "memberSince": "Thành viên từ"
+    },
+    "form": {
+      "displayName": "Tên hiển thị",
+      "timezone": "Múi giờ",
+      "timezoneHint": "Tất cả thời gian sẽ hiển thị theo múi giờ này",
+      "language": "Ngôn ngữ",
+      "languageHint": "Chọn ngôn ngữ ưa thích của bạn",
+      "chooseAvatar": "Chọn ảnh đại diện",
+      "avatarUrlPlaceholder": "Hoặc dán URL hình ảnh...",
+      "applyButton": "Áp dụng",
+      "removeAvatar": "Xóa ảnh đại diện",
+      "error": {
+        "nameRequired": "Tên hiển thị là bắt buộc",
+        "updateFailed": "Cập nhật hồ sơ thất bại"
+      },
+      "savedButton": "Đã lưu!",
+      "saveButton": "Lưu thay đổi"
+    }
+  },
+  "help": {
+    "title": "Cách chơi",
+    "subtitle": "Hướng dẫn World Cup 2026 Predictions",
+    "stepsLabel": "Các bước",
+    "navigation": {
+      "previous": "Trước",
+      "next": "Tiếp",
+      "gotIt": "Đã hiểu!"
+    },
+    "steps": {
+      "joinGroup": {
+        "title": "Tham gia nhóm",
+        "description": "Bắt đầu bằng cách tham gia nhóm cá cược bằng mã mời từ bạn bè hoặc tạo nhóm riêng.",
+        "step1": "Vào trang Nhóm từ menu bên",
+        "step2": "Nhấn nút \"Tham gia nhóm\" ở trên cùng",
+        "step3": "Nhập mã mời được admin nhóm chia sẻ",
+        "step4": "Sau khi tham gia, bạn sẽ thấy nhóm trong danh sách với số thành viên và số dư mặc định"
+      },
+      "placeBet": {
+        "title": "Đặt cược",
+        "description": "Duyệt các trận đấu sắp tới và đặt dự đoán bằng tiền ảo.",
+        "step1": "Vào Trung tâm trận đấu từ menu bên",
+        "step2": "Tìm trận đấu sắp tới có nút \"Đặt cược\"",
+        "step3": "Nhấn \"Đặt cược\" để mở hộp thoại cược",
+        "step4": "Chọn đội bạn nghĩ sẽ thắng (xem xét kèo chấp)",
+        "step5": "Nhập số tiền cược trong phạm vi cho phép",
+        "step6": "Xác nhận cược trước khi hết thời gian"
+      },
+      "viewBets": {
+        "title": "Xem cược trận đấu",
+        "description": "Sau khi trận đấu bắt đầu hoặc kết thúc, xem các thành viên khác đã cược như thế nào.",
+        "step1": "Trên thẻ trận đấu Đang diễn ra hoặc Đã kết thúc, nhấn nút \"Xem\"",
+        "step2": "Xem cược của tất cả thành viên với ảnh đại diện và đội đã chọn",
+        "step3": "Cột đội thắng được tô sáng sau khi thanh toán",
+        "step4": "Theo dõi ai thắng ai thua trong mỗi trận"
+      },
+      "myBets": {
+        "title": "Cược của tôi",
+        "description": "Theo dõi lịch sử cược — xem cược đang chờ, thắng và thua ở một nơi.",
+        "step1": "Nhấn \"Cược của tôi\" trong menu bên",
+        "step2": "Xem tất cả cược được sắp xếp theo trận đấu",
+        "step3": "Lọc theo trạng thái: Đang chờ, Thắng, Thua hoặc Tất cả",
+        "step4": "Xem lợi nhuận/thua lỗ cho mỗi cược",
+        "step5": "Cũng có thể truy cập từ Trung tâm trận đấu → tab \"Cược của tôi\""
+      },
+      "leaderboard": {
+        "title": "Bảng xếp hạng",
+        "description": "Xem thứ hạng nhóm — ai dẫn đầu về lợi nhuận, tỷ lệ thắng và tổng cược.",
+        "step1": "Vào trang Bảng xếp hạng từ menu bên",
+        "step2": "Xem tất cả thành viên được xếp hạng theo hiệu suất",
+        "step3": "Theo dõi thống kê: Số dư, Lợi nhuận, Tỷ lệ thắng, Tổng cược",
+        "step4": "Top 3 người chơi được gắn huy chương",
+        "step5": "So sánh hiệu suất của bạn với thành viên khác"
+      },
+      "champion": {
+        "title": "Dự đoán vô địch",
+        "description": "Mini game! Dự đoán đội nào sẽ vô địch World Cup 2026 để nhận phần thưởng.",
+        "step1": "Từ trang Nhóm, tìm nút \"Dự đoán vô địch\" trên thẻ nhóm",
+        "step2": "Duyệt 48 đội tham dự được sắp xếp theo bảng",
+        "step3": "Chọn đội bạn tin sẽ vô địch World Cup",
+        "step4": "Gửi dự đoán trước thời hạn",
+        "step5": "Nếu đội bạn vô địch, bạn nhận điểm thưởng!"
+      }
+    }
+  },
+  "music": {
+    "artist": "World Cup 2026",
+    "noSongs": "Không có bài hát",
+    "playlist": "Danh sách phát",
+    "songsCount": "bài hát",
+    "nowPlaying": "ĐANG PHÁT"
+  },
+  "members": {
+    "stats": {
+      "netLoss": "Thua lỗ",
+      "netProfit": "Lợi nhuận",
+      "totalBets": "Tổng cược",
+      "winRate": "Tỷ lệ thắng",
+      "wins": "Thắng",
+      "draws": "Hòa",
+      "losses": "Thua",
+      "penalty": "Phạt",
+      "balance": "Số dư"
+    },
+    "joined": "Tham gia "
+  },
+  "language": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

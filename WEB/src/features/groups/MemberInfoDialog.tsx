@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, IconButton, ThemeProvider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import type { GroupMemberDto, LeaderboardEntryDto, SettlementMode } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 import { getTheme } from '../../app/theme';
@@ -14,8 +15,9 @@ export interface MemberInfoDialogProps {
 }
 
 export function MemberInfoDialog({ member, stats, settlementMode, onClose }: MemberInfoDialogProps) {
+  const { t } = useTranslation();
   const { formatDate } = useUserTimeZone();
-  const profitLabel = settlementMode === 'WinnerKeepsLoserPays' ? 'Net Loss' : 'Net Profit';
+  const profitLabel = settlementMode === 'WinnerKeepsLoserPays' ? t('members.stats.netLoss') : t('members.stats.netProfit');
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -47,7 +49,7 @@ export function MemberInfoDialog({ member, stats, settlementMode, onClose }: Mem
                 </div>
                 <div>
                   <p className="text-lg font-bold text-white">{member.displayName ?? 'Unknown'}</p>
-                  <p className="text-xs text-emerald-200">Joined {formatDate(member.joinedAt, 'MMM dd, yyyy')}</p>
+                  <p className="text-xs text-emerald-200">{t('members.joined')}{formatDate(member.joinedAt, 'MMM dd, yyyy')}</p>
                 </div>
               </div>
             </div>
@@ -55,23 +57,23 @@ export function MemberInfoDialog({ member, stats, settlementMode, onClose }: Mem
             {/* Stats Grid */}
             <div className="p-5 grid grid-cols-2 gap-3">
               <div className="bg-slate-50 rounded-xl p-3 text-center">
-                <p className="text-[11px] font-semibold text-slate-500 uppercase">Total Bets</p>
+                <p className="text-[11px] font-semibold text-slate-500 uppercase">{t('members.stats.totalBets')}</p>
                 <p className="text-xl font-bold text-gray-800">{stats?.totalBets ?? 0}</p>
               </div>
               <div className="bg-slate-50 rounded-xl p-3 text-center">
-                <p className="text-[11px] font-semibold text-slate-500 uppercase">Win Rate</p>
+                <p className="text-[11px] font-semibold text-slate-500 uppercase">{t('members.stats.winRate')}</p>
                 <p className="text-xl font-bold text-emerald-600">{stats ? `${stats.winRate.toFixed(1)}%` : '0%'}</p>
               </div>
               <div className="bg-emerald-50 rounded-xl p-3 text-center">
-                <p className="text-[11px] font-semibold text-emerald-600 uppercase">Wins</p>
+                <p className="text-[11px] font-semibold text-emerald-600 uppercase">{t('members.stats.wins')}</p>
                 <p className="text-xl font-bold text-emerald-700">{stats?.wins ?? 0}</p>
               </div>
               <div className="bg-amber-50 rounded-xl p-3 text-center">
-                <p className="text-[11px] font-semibold text-amber-600 uppercase">Draws</p>
+                <p className="text-[11px] font-semibold text-amber-600 uppercase">{t('members.stats.draws')}</p>
                 <p className="text-xl font-bold text-amber-700">{stats?.draws ?? 0}</p>
               </div>
               <div className="bg-red-50 rounded-xl p-3 text-center">
-                <p className="text-[11px] font-semibold text-red-500 uppercase">Losses</p>
+                <p className="text-[11px] font-semibold text-red-500 uppercase">{t('members.stats.losses')}</p>
                 <p className="text-xl font-bold text-red-600">{stats?.losses ?? 0}</p>
               </div>
               <div className="bg-slate-50 rounded-xl p-3 text-center">
@@ -81,13 +83,13 @@ export function MemberInfoDialog({ member, stats, settlementMode, onClose }: Mem
                 </p>
               </div>
               <div className={`rounded-xl p-3 text-center ${member.penaltyAmount > 0 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                <p className={`text-[11px] font-semibold uppercase ${member.penaltyAmount > 0 ? 'text-red-500' : 'text-slate-500'}`}>Penalty</p>
+                <p className={`text-[11px] font-semibold uppercase ${member.penaltyAmount > 0 ? 'text-red-500' : 'text-slate-500'}`}>{t('members.stats.penalty')}</p>
                 <p className={`text-xl font-bold ${member.penaltyAmount > 0 ? 'text-red-600' : 'text-gray-500'}`}>
                   {member.penaltyAmount > 0 ? `-${member.penaltyAmount.toLocaleString()}` : '0'}
                 </p>
               </div>
               <div className="bg-slate-50 rounded-xl p-3 text-center">
-                <p className="text-[11px] font-semibold text-slate-500 uppercase">Balance</p>
+                <p className="text-[11px] font-semibold text-slate-500 uppercase">{t('members.stats.balance')}</p>
                 <p className="text-xl font-bold text-green-800">{member.balance.toLocaleString()}</p>
               </div>
             </div>

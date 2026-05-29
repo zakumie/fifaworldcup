@@ -14,6 +14,7 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import { useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { useCreateGroupMutation } from './groupsApi';
 import { useCreateChampionConfigMutation } from '../predictions/championApi';
 import type { CreateGroupRequest } from '../../types';
@@ -38,6 +39,7 @@ interface Props {
 }
 
 export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) {
+  const { t } = useTranslation();
   const [createGroup] = useCreateGroupMutation();
   const [createChampionConfig] = useCreateChampionConfigMutation();
   const [error, setError] = useState('');
@@ -77,7 +79,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
       onCreated(result.id);
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;
-      const msg = status === 403 ? 'You do not have permission to create groups.' : 'Failed to create group';
+      const msg = status === 403 ? t('groups.create.error.noPermission') : t('groups.create.error.failed');
       setError(msg);
       onError?.(msg);
     }
@@ -108,8 +110,8 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
               <GroupsIcon sx={{ color: 'white', fontSize: 22 }} />
             </div>
             <div>
-              <h2 className="text-white text-lg font-bold">Create New Group</h2>
-              <p className="text-blue-100 text-xs">Set up a new betting group for members</p>
+            <h2 className="text-white text-lg font-bold">{t('groups.create.title')}</h2>
+            <p className="text-blue-100 text-xs">{t('groups.create.subtitle')}</p>
             </div>
           </div>
         </div>
@@ -118,26 +120,26 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
           {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{error}</Alert>}
 
           {/* Group Name */}
-          <TextField {...form.register('name')} label="Group Name" fullWidth size="small"
-            placeholder="e.g. World Cup Legends"
+          <TextField {...form.register('name')} label={t('groups.create.nameLabel')} fullWidth size="small"
+            placeholder={t('groups.create.namePlaceholder')}
             error={!!form.formState.errors.name} helperText={form.formState.errors.name?.message}
             autoFocus
             InputProps={{ startAdornment: <InputAdornment position="start"><GroupsIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
             sx={[inputSx, { mt: 2 }]} />
 
           {/* Description */}
-          <TextField {...form.register('description')} label="Description (optional)" fullWidth size="small"
-            placeholder="What's this group about?"
+          <TextField {...form.register('description')} label={t('groups.create.descriptionLabel')} fullWidth size="small"
+            placeholder={t('groups.create.descriptionPlaceholder')}
             multiline rows={2}
             sx={[inputSx, { mt: 2 }]} />
 
           {/* Two columns: Max Members & Default Balance */}
           <div className="grid grid-cols-2 gap-3 mt-3">
-            <TextField {...form.register('maxMembers')} label="Max Members" type="number" fullWidth size="small"
+            <TextField {...form.register('maxMembers')} label={t('groups.create.maxMembersLabel')} type="number" fullWidth size="small"
               error={!!form.formState.errors.maxMembers} helperText={form.formState.errors.maxMembers?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><PeopleAltIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
               sx={inputSx} />
-            <TextField {...form.register('defaultBalance')} label="Starting Balance" type="number" fullWidth size="small"
+            <TextField {...form.register('defaultBalance')} label={t('groups.create.balanceLabel')} type="number" fullWidth size="small"
               error={!!form.formState.errors.defaultBalance} helperText={form.formState.errors.defaultBalance?.message}
               InputProps={{ startAdornment: <InputAdornment position="start"><AccountBalanceWalletIcon sx={{ fontSize: 18, color: '#64748b' }} /></InputAdornment> }}
               sx={inputSx} />
@@ -146,7 +148,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
           {/* Settlement Mode - Card selector */}
           <div className="mt-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-              <GavelIcon sx={{ fontSize: 14 }} /> Settlement Mode
+              <GavelIcon sx={{ fontSize: 14 }} /> {t('groups.create.settlementMode')}
             </p>
             <div className="grid grid-cols-2 gap-3">
               <label
@@ -163,8 +165,8 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   }`}>
                     <AccountBalanceWalletIcon sx={{ fontSize: 18 }} />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700">Normal</span>
-                  <span className="text-[10px] text-gray-400 leading-tight">Win = bet + profit<br/>Lose = lose bet</span>
+                  <span className="text-sm font-semibold text-gray-700">{t('groups.mode.normal')}</span>
+                  <span className="text-[10px] text-gray-400 leading-tight">{t('groups.mode.normalWin')}<br/>{t('groups.mode.normalLose')}</span>
                 </div>
               </label>
               <label
@@ -181,8 +183,8 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   }`}>
                     <EmojiEventsIcon sx={{ fontSize: 18 }} />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700">Winner Keeps</span>
-                  <span className="text-[10px] text-gray-400 leading-tight">Win = +0, Lose = -bet<br/>Skip = auto lose</span>
+                  <span className="text-sm font-semibold text-gray-700">{t('groups.mode.winnerKeeps')}</span>
+                  <span className="text-[10px] text-gray-400 leading-tight">{t('groups.mode.winnerKeepsDesc')}<br/>{t('groups.mode.skipAutoLose')}</span>
                 </div>
               </label>
             </div>
@@ -191,7 +193,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
           {/* Champion Prediction */}
           <div className="mt-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
-              <MilitaryTechIcon sx={{ fontSize: 14 }} /> Champion Prediction
+              <MilitaryTechIcon sx={{ fontSize: 14 }} /> {t('groups.create.championSection')}
             </p>
             <div
               onClick={() => setChampionEnabled(!championEnabled)}
@@ -207,8 +209,8 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                     <EmojiEventsIcon sx={{ fontSize: 18 }} />
                   </div>
                   <div>
-                    <span className="text-sm font-semibold text-gray-700">Enable Champion Prediction</span>
-                    <p className="text-[10px] text-gray-400">Members predict the World Cup winner</p>
+                    <span className="text-sm font-semibold text-gray-700">{t('groups.create.enableChampion')}</span>
+                    <p className="text-[10px] text-gray-400">{t('groups.create.championDescription')}</p>
                   </div>
                 </div>
                 <div className={`w-10 h-5 rounded-full transition-colors ${championEnabled ? 'bg-amber-500' : 'bg-gray-300'} relative`}>
@@ -220,7 +222,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
             {championEnabled && (
               <div className="grid grid-cols-2 gap-3 mt-3">
                 <TextField
-                  label="Open Time"
+                  label={t('groups.create.openTimeLabel')}
                   type="datetime-local"
                   value={championOpenTime}
                   onChange={(e) => setChampionOpenTime(e.target.value)}
@@ -229,7 +231,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
                   sx={inputSx}
                 />
                 <TextField
-                  label="Close Time"
+                  label={t('groups.create.closeTimeLabel')}
                   type="datetime-local"
                   value={championCloseTime}
                   onChange={(e) => setChampionCloseTime(e.target.value)}
@@ -246,7 +248,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
         <div className="px-6 pb-5 pt-2 flex justify-end gap-2 shrink-0 border-t border-gray-100">
           <Button onClick={handleClose}
             sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button type="submit" variant="contained"
             sx={{
@@ -256,7 +258,7 @@ export function CreateGroupDialog({ open, onClose, onCreated, onError }: Props) 
               '&:hover': { boxShadow: '0 6px 20px rgba(37,99,235,0.4)' },
             }}
             startIcon={<AddIcon />}>
-            Create Group
+            {t('groups.create.submitButton')}
           </Button>
         </div>
       </Box>

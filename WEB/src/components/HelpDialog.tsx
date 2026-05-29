@@ -9,90 +9,50 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const STEPS = [
+const STEPS_CONFIG = [
   {
+    key: 'joinGroup',
     icon: <GroupIcon sx={{ fontSize: 28 }} />,
     color: 'from-blue-500 to-blue-600',
-    title: 'Join a Group',
-    description: 'Start by joining a betting group using an invite code from your friends or create your own group.',
-    instructions: [
-      'Go to the Groups page from the sidebar menu',
-      'Click the "Join Group" button at the top',
-      'Enter the invite code shared by your group admin',
-      'Once joined, you\'ll see the group in your list with members count and default balance',
-    ],
     image: '/help/join-group.png',
+    stepCount: 4,
   },
   {
+    key: 'placeBet',
     icon: <SportsSoccerIcon sx={{ fontSize: 28 }} />,
     color: 'from-emerald-500 to-emerald-600',
-    title: 'Place a Bet',
-    description: 'Browse upcoming World Cup matches and place your predictions with virtual currency.',
-    instructions: [
-      'Navigate to the Match Center from the sidebar',
-      'Find an upcoming match with a "Bet Now" button',
-      'Click "Bet Now" to open the betting dialog',
-      'Select which team you think will win (considering the handicap)',
-      'Enter your bet amount within the allowed range',
-      'Confirm your bet before the betting window closes',
-    ],
     image: '/help/place-bet.png',
+    stepCount: 6,
   },
   {
+    key: 'viewBets',
     icon: <VisibilityIcon sx={{ fontSize: 28 }} />,
     color: 'from-purple-500 to-purple-600',
-    title: 'View Match Bets',
-    description: 'After a match starts or finishes, see how other members in your group have bet.',
-    instructions: [
-      'On a Live or Finished match card, click the "View" button',
-      'See all group members\' bets with their avatars and chosen teams',
-      'The winning team column is highlighted after settlement',
-      'Track who won and who lost in each match',
-    ],
     image: '/help/view-match.png',
+    stepCount: 4,
   },
   {
+    key: 'myBets',
     icon: <FavoriteBorderIcon sx={{ fontSize: 28 }} />,
     color: 'from-pink-500 to-pink-600',
-    title: 'My Bets',
-    description: 'Track all your betting history — see your pending, won, and lost bets in one place.',
-    instructions: [
-      'Click "My Bets" in the sidebar menu',
-      'View all your bets organized by match',
-      'Filter by status: Pending, Won, Lost, or All',
-      'See your profit/loss for each individual bet',
-      'Also accessible from Match Center → "My Bets" tab',
-    ],
     image: '/help/my-bets.png',
+    stepCount: 5,
   },
   {
+    key: 'leaderboard',
     icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />,
     color: 'from-amber-500 to-amber-600',
-    title: 'Leaderboard',
-    description: 'Check the group rankings — see who\'s leading in profit, win rate, and total bets.',
-    instructions: [
-      'Go to the Leaderboard page from the sidebar',
-      'See all members ranked by their performance',
-      'Track stats: Balance, Profit, Win Rate, Total Bets',
-      'The top 3 players are highlighted with medals 🥇🥈🥉',
-      'Compare your performance against other group members',
-    ],
     image: '/help/leaderboard.png',
+    stepCount: 5,
   },
   {
+    key: 'champion',
     icon: <MilitaryTechIcon sx={{ fontSize: 28 }} />,
     color: 'from-indigo-500 to-indigo-600',
-    title: 'Champion Prediction',
-    description: 'The mini game! Predict which team will win the World Cup 2026 for bonus rewards.',
-    instructions: [
-      'From the Groups page, look for the "Predict Champion" button on your group card',
-      'Browse all 48 participating teams organized by group',
-      'Select the team you believe will win the World Cup',
-      'Submit your prediction before the deadline',
-      'If your team wins the tournament, you earn bonus points!',
-    ],
     image: '/help/champion.png',
+    stepCount: 5,
   },
 ];
 
@@ -102,10 +62,12 @@ interface HelpDialogProps {
 }
 
 export function HelpDialog({ open, onClose }: HelpDialogProps) {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [activeStep, setActiveStep] = useState(0);
-  const step = STEPS[activeStep];
+  const step = STEPS_CONFIG[activeStep];
+  const instructions = Array.from({ length: step.stepCount }, (_, i) => t(`help.steps.${step.key}.step${i + 1}`));
 
   return (
     <Dialog
@@ -135,13 +97,13 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
           <CloseIcon fontSize="small" />
         </IconButton>
         <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-                <HelpOutlineOutlinedIcon fontSize="medium" /> How to Play
+                <HelpOutlineOutlinedIcon fontSize="medium" /> {t('help.title')}
         </h2>
-        <p className="text-sm text-slate-400 mt-1">Your guide to World Cup 2026 Predictions</p>
+        <p className="text-sm text-slate-400 mt-1">{t('help.subtitle')}</p>
 
         {/* Step indicators */}
         <div className="flex items-center gap-1.5 mt-4 overflow-x-auto scrollbar-hide pb-1">
-          {STEPS.map((s, i) => (
+          {STEPS_CONFIG.map((s, i) => (
             <button
               key={i}
               onClick={() => setActiveStep(i)}
@@ -156,7 +118,7 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
               >
                 {i + 1}
               </span>
-              {(!isMobile || activeStep === i) && s.title}
+              {(!isMobile || activeStep === i) && t(`help.steps.${s.key}.title`)}
             </button>
           ))}
         </div>
@@ -170,8 +132,8 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
             {step.icon}
           </div>
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900">{step.title}</h3>
-            <p className="text-sm text-slate-500 mt-0.5">{step.description}</p>
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900">{t(`help.steps.${step.key}.title`)}</h3>
+            <p className="text-sm text-slate-500 mt-0.5">{t(`help.steps.${step.key}.description`)}</p>
           </div>
         </div>
 
@@ -179,7 +141,7 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
         <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-lg mb-6">
           <img
             src={step.image}
-            alt={step.title}
+            alt={t(`help.steps.${step.key}.title`)}
             className="w-full h-auto"
             loading="lazy"
           />
@@ -187,9 +149,9 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
 
         {/* Instructions */}
         <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Steps</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{t('help.stepsLabel')}</p>
           <ol className="space-y-2.5">
-            {step.instructions.map((instruction, i) => (
+            {instructions.map((instruction, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span className="shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 mt-0.5">
                   {i + 1}
@@ -208,17 +170,17 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
           disabled={activeStep === 0}
           className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          Previous
+          {t('help.navigation.previous')}
         </button>
         <span className="text-xs text-slate-400 font-medium">
-          {activeStep + 1} / {STEPS.length}
+          {activeStep + 1} / {STEPS_CONFIG.length}
         </span>
-        {activeStep < STEPS.length - 1 ? (
+        {activeStep < STEPS_CONFIG.length - 1 ? (
           <button
             onClick={() => setActiveStep(activeStep + 1)}
             className="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-sm transition-all active:scale-95"
           >
-            Next
+            {t('help.navigation.next')}
             <ArrowForwardIcon sx={{ fontSize: 16 }} />
           </button>
         ) : (
@@ -226,7 +188,7 @@ export function HelpDialog({ open, onClose }: HelpDialogProps) {
             onClick={onClose}
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-sm transition-all active:scale-95"
           >
-            Got it!
+            {t('help.navigation.gotIt')}
           </button>
         )}
       </div>

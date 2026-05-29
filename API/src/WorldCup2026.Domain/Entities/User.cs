@@ -16,6 +16,7 @@ public class User : BaseEntity
     public SystemRole Role { get; set; } = SystemRole.User;
     public bool IsActive { get; set; } = true;
     public string TimeZone { get; set; } = "Asia/Ho_Chi_Minh";
+    public string Language { get; set; } = "en";
 
     public ICollection<GroupMember> GroupMemberships { get; set; } = new List<GroupMember>();
     public ICollection<Group> CreatedGroups { get; set; } = new List<Group>();

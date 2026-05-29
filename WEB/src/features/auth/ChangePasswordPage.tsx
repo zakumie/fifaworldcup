@@ -8,8 +8,10 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useChangePasswordMutation } from './authApi';
 import { useAlert } from '../../components/AlertSnackbar';
+import { useTranslation } from 'react-i18next';
 
 export function ChangePasswordPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { showAlert } = useAlert();
   const [changePassword, { isLoading }] = useChangePasswordMutation();
@@ -28,33 +30,33 @@ export function ChangePasswordPage() {
     setError('');
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setError('All fields are required');
+      setError(t('auth.changePassword.error.allRequired'));
       return;
     }
     if (newPassword.length < 6) {
-      setError('New password must be at least 6 characters');
+      setError(t('auth.changePassword.error.minLength'));
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      setError(t('auth.changePassword.error.mismatch'));
       return;
     }
     if (currentPassword === newPassword) {
-      setError('New password must be different from current password');
+      setError(t('auth.changePassword.error.samePassword'));
       return;
     }
 
     try {
       await changePassword({ currentPassword, newPassword }).unwrap();
       setSaved(true);
-      showAlert('Password changed successfully!', 'success');
+      showAlert(t('auth.changePassword.success'), 'success');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       const apiErr = err as { data?: { error?: string } };
-      setError(apiErr.data?.error ?? 'Failed to change password');
+      setError(apiErr.data?.error ?? t('auth.changePassword.error.failed'));
     }
   };
 
@@ -73,8 +75,8 @@ export function ChangePasswordPage() {
           </button>
           <LockOutlinedIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-white">Change Password</h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">Update your account password</p>
+            <h1 className="text-xl sm:text-2xl font-black text-white">{t('auth.changePassword.title')}</h1>
+            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">{t('auth.changePassword.subtitle')}</p>
           </div>
         </div>
       </div>
@@ -85,7 +87,7 @@ export function ChangePasswordPage() {
           {/* Current Password */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-              Current Password
+              {t('auth.changePassword.currentLabel')}
             </label>
             <div className="relative">
               <input
@@ -108,7 +110,7 @@ export function ChangePasswordPage() {
           {/* New Password */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-              New Password
+              {t('auth.changePassword.newLabel')}
             </label>
             <div className="relative">
               <input
@@ -127,14 +129,14 @@ export function ChangePasswordPage() {
               </button>
             </div>
             {newPassword && newPassword.length < 6 && (
-              <p className="text-[11px] text-red-500 mt-1">Must be at least 6 characters</p>
+              <p className="text-[11px] text-red-500 mt-1">{t('auth.changePassword.hint.minChars')}</p>
             )}
           </div>
 
           {/* Confirm New Password */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-              Confirm New Password
+              {t('auth.changePassword.confirmLabel')}
             </label>
             <div className="relative">
               <input
@@ -153,7 +155,7 @@ export function ChangePasswordPage() {
               </button>
             </div>
             {confirmPassword && newPassword !== confirmPassword && (
-              <p className="text-[11px] text-red-500 mt-1">Passwords do not match</p>
+              <p className="text-[11px] text-red-500 mt-1">{t('auth.changePassword.hint.mismatch')}</p>
             )}
           </div>
 
@@ -181,12 +183,12 @@ export function ChangePasswordPage() {
             ) : saved ? (
               <>
                 <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
-                Password Changed!
+                {t('auth.changePassword.changedButton')}
               </>
             ) : (
               <>
                 <LockOutlinedIcon sx={{ fontSize: 18 }} />
-                Change Password
+                {t('auth.changePassword.submitButton')}
               </>
             )}
           </button>

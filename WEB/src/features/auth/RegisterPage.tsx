@@ -11,6 +11,7 @@ import {
   Lock as LockIcon,
   HowToReg as RegisterIcon,
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { useRegisterMutation } from './authApi';
 import { setCredentials } from './authSlice';
 import { useAppDispatch } from '../../app/hooks';
@@ -31,6 +32,7 @@ interface RegisterForm extends RegisterRequest {
 }
 
 export function RegisterPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [registerUser, { isLoading }] = useRegisterMutation();
@@ -49,7 +51,7 @@ export function RegisterPage() {
       dispatch(setCredentials(result));
       navigate('/dashboard');
     } catch {
-      setError('Registration failed. Email may already be in use.');
+      setError(t('auth.register.error.failed'));
     }
   };
 
@@ -76,9 +78,9 @@ export function RegisterPage() {
             <BallIcon sx={{ fontSize: 40, color: 'white' }} />
           </div>
           <h1 className="text-3xl font-black text-white tracking-tight">
-            WORLD CUP <span className="text-emerald-400">2026</span>
+            {t('common.brand.worldCup')} <span className="text-emerald-400">{t('common.brand.year')}</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-2">Create your prediction account</p>
+          <p className="text-sm text-slate-400 mt-2">{t('auth.register.subtitle')}</p>
         </div>
 
         {/* Card */}
@@ -93,7 +95,7 @@ export function RegisterPage() {
             {/* Display Name */}
             <div className="mb-4">
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                Display Name
+                {t('auth.register.displayNameLabel')}
               </label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -115,7 +117,7 @@ export function RegisterPage() {
             {/* Email */}
             <div className="mb-4">
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                Email
+                {t('auth.register.emailLabel')}
               </label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -136,7 +138,7 @@ export function RegisterPage() {
             {/* Password */}
             <div className="mb-4">
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                Password
+                {t('auth.register.passwordLabel')}
               </label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -157,7 +159,7 @@ export function RegisterPage() {
             {/* Confirm Password */}
             <div className="mb-6">
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                Confirm Password
+                {t('auth.register.confirmPasswordLabel')}
               </label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -186,7 +188,7 @@ export function RegisterPage() {
               ) : (
                 <>
                   <RegisterIcon sx={{ fontSize: 18 }} />
-                  Create Account
+                  {t('auth.register.createButton')}
                 </>
               )}
             </button>
@@ -194,9 +196,9 @@ export function RegisterPage() {
 
           {/* Login link */}
           <p className="text-center text-sm text-slate-500 mt-6">
-            Already have an account?{' '}
+            {t('auth.register.hasAccount')}{' '}
             <RouterLink to="/login" className="text-emerald-600 font-semibold hover:text-emerald-500 transition-colors">
-              Sign in
+              {t('auth.register.signInLink')}
             </RouterLink>
           </p>
         </div>

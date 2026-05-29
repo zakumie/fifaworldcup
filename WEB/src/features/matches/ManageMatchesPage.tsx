@@ -1,4 +1,5 @@
 import { useState, useMemo, memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box, Tabs, Tab, Skeleton, IconButton, TablePagination,
 } from '@mui/material';
@@ -23,7 +24,7 @@ import type { BettingConfigDto, MatchDto } from '../../types';
 import { formatStage } from '../../utils/formatStage';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 
-const STATUS_TABS = ['All', 'Open', 'Upcoming', 'Live', 'Finished', 'Settled'];
+const STATUS_TABS = ['All', 'Open', 'Upcoming', 'Live', 'Finished', 'Settled'] as const;
 
 interface MatchRowProps {
   match: MatchDto;
@@ -34,6 +35,7 @@ interface MatchRowProps {
 const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProps) {
   const [adminDialogOpen, setAdminDialogOpen] = useState(false);
   const { formatDate } = useUserTimeZone();
+  const { t } = useTranslation();
 
   const isLive = match.status === 'Live';
   const isFinished = match.status === 'Finished';
@@ -45,24 +47,24 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
   let iconStyle: string;
 
   if (isLive) {
-    statusLabel = '● Live';
+    statusLabel = `● ${t('common.filter.live')}`;
     statusStyle = 'text-white bg-red-500 animate-pulse';
     iconStyle = 'bg-gradient-to-br from-pink-600 to-red-700';
 
   } else if (isSettled) {
-    statusLabel = 'Settled';
+    statusLabel = t('common.filter.settled');
     statusStyle = 'text-purple-700 bg-purple-100';
     iconStyle = 'bg-gradient-to-br from-purple-600 to-fuchsia-700';
   } else if (isFinished && !isSettled) {
-    statusLabel = 'Finished';
+    statusLabel = t('common.filter.finished');
     statusStyle = 'text-green-700 bg-green-100';
     iconStyle = 'bg-gradient-to-br from-green-600 to-emerald-700';
   } else if (hasConfig) {
-    statusLabel = 'Upcoming';
+    statusLabel = t('common.filter.upcoming');
     statusStyle = 'text-amber-600 bg-amber-50';
     iconStyle = 'bg-gradient-to-br from-amber-500 to-yellow-600';
   } else {
-    statusLabel = 'Open';
+    statusLabel = t('common.filter.open');
     statusStyle = 'text-blue-700 bg-sky-100';
     iconStyle = 'bg-gradient-to-br from-sky-600 to-blue-700';
   }
@@ -85,7 +87,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
                   <img src={match.homeTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
                 )}
                 <span className="text-sm font-bold text-gray-800">{match.homeTeam.code}</span>
-                <span className="text-[10px] text-slate-400">vs</span>
+                <span className="text-[10px] text-slate-400">{t('common.vs')}</span>
                 {match.awayTeam.flagUrl && (
                   <img src={match.awayTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
                 )}
@@ -125,7 +127,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
                   <img src={match.homeTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
                 )}
                 <span className="text-sm font-bold text-gray-800 truncate">{match.homeTeam.code}</span>
-                <span className="text-xs text-slate-400">vs</span>
+                <span className="text-xs text-slate-400">{t('common.vs')}</span>
                 {match.awayTeam.flagUrl && (
                   <img src={match.awayTeam.flagUrl} alt="" className="w-4 h-4 rounded-full object-cover" />
                 )}
@@ -165,7 +167,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
 
           {/* Action */}
           <div className="col-span-1 flex items-center justify-end">
-            <IconButton size="small" title="Manage match">
+            <IconButton size="small" title={t('admin.matches.manage')}>
               <TuneIcon fontSize="small" sx={{ color: '#64748b' }} />
             </IconButton>
           </div>
@@ -194,6 +196,7 @@ export function ManageMatchesPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const selectedTab = STATUS_TABS[tab];
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const { data, isLoading } = useGetMatchesQuery({ pageSize: 100 });
   const { groupId, groups } = useGroupId();
@@ -308,9 +311,9 @@ export function ManageMatchesPage() {
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
               <SettingsIcon sx={{ fontSize: { xs: 24, sm: 28 }, color: '#94a3b8' }} />
-              <span>MANAGE <span className="text-emerald-400">MATCHES</span></span>
+              <span>{t('admin.matches.title')}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Configure match status, scores and betting</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('admin.matches.subtitle')}</p>
           </div>
           {groups.length > 1 && (
             <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-slate-800/60 border border-slate-700">
@@ -335,7 +338,7 @@ export function ManageMatchesPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search matches by team name..."
+            placeholder={t('admin.matches.searchPlaceholder')}
             className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
           />
         </div>
@@ -344,23 +347,23 @@ export function ManageMatchesPage() {
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4">
           <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <SportsSoccerIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-[10px] sm:text-xs text-slate-400">Total:</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">{t('common.total')}</span>
             <span className="text-[10px] sm:text-xs font-bold text-white">{totalMatches}</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <TuneIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-[10px] sm:text-xs text-slate-400">Configured:</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">{t('admin.matches.configured')}</span>
             <span className="text-[10px] sm:text-xs font-bold text-emerald-400">{configuredCount}</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <span className="w-2 h-2 bg-amber-400 rounded-full" />
-            <span className="text-[10px] sm:text-xs text-slate-400">Pending:</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">{t('admin.matches.pending')}</span>
             <span className="text-[10px] sm:text-xs font-bold text-amber-400">{totalMatches - configuredCount}</span>
           </div>
           {liveCount > 0 && (
             <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-[10px] sm:text-xs text-red-300">Live:</span>
+              <span className="text-[10px] sm:text-xs text-red-300">{t('admin.matches.live')}</span>
               <span className="text-[10px] sm:text-xs font-bold text-red-400">{liveCount}</span>
             </div>
           )}
@@ -377,7 +380,7 @@ export function ManageMatchesPage() {
         '& .MuiTabs-indicator': { backgroundColor: '#059669' },
       }}>
         <Tabs value={tab} onChange={(_, v) => setTab(v)}>
-          {STATUS_TABS.map((t) => <Tab key={t} label={t} />)}
+          {STATUS_TABS.map((tab) => <Tab key={tab} label={t(`common.filter.${tab.toLowerCase()}`)} />)}
         </Tabs>
       </Box>
 
@@ -399,23 +402,23 @@ export function ManageMatchesPage() {
               className="col-span-3 flex items-center cursor-pointer hover:text-slate-700 select-none"
               onClick={() => handleSort('match')}
             >
-              Match <SortIcon field="match" />
+              {t('admin.matches.table.match')} <SortIcon field="match" />
             </div>
-            <div className="col-span-2 text-center">Stage</div>
-            <div className="col-span-1 text-center">Score</div>
+            <div className="col-span-2 text-center">{t('admin.matches.table.stage')}</div>
+            <div className="col-span-1 text-center">{t('admin.matches.table.score')}</div>
             <div
               className="col-span-2 text-center flex items-center justify-center cursor-pointer hover:text-slate-700 select-none"
               onClick={() => handleSort('status')}
             >
-              Status <SortIcon field="status" />
+              {t('admin.matches.table.status')} <SortIcon field="status" />
             </div>
             <div
               className="col-span-3 text-center flex items-center justify-center cursor-pointer hover:text-slate-700 select-none"
               onClick={() => handleSort('startTime')}
             >
-              Date <SortIcon field="startTime" />
+              {t('admin.matches.table.date')} <SortIcon field="startTime" />
             </div>
-            <div className="col-span-1 text-right">Action</div>
+            <div className="col-span-1 text-right">{t('admin.matches.table.action')}</div>
           </div>
 
           {/* Table rows */}
@@ -451,8 +454,8 @@ export function ManageMatchesPage() {
       {!isLoading && sortedMatches.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-slate-400">
           <SportsSoccerIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-          <p className="text-lg font-medium">{search ? 'No matches found' : 'No matches available'}</p>
-          <p className="text-sm mt-1">{search ? 'Try a different search term' : 'Try selecting a different filter'}</p>
+          <p className="text-lg font-medium">{search ? t('admin.matches.empty.notFound') : t('admin.matches.empty.noMatches')}</p>
+          <p className="text-sm mt-1">{search ? t('common.tryDifferentSearch') : t('admin.matches.empty.filterHint')}</p>
         </div>
       )}
     </div>

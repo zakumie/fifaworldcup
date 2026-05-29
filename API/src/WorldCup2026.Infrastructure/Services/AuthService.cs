@@ -35,7 +35,8 @@ public class AuthService : IAuthService
             DisplayName = request.DisplayName,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             AuthProvider = AuthProvider.Local,
-            TimeZone = NormalizeTimeZone(request.TimeZone)
+            TimeZone = NormalizeTimeZone(request.TimeZone),
+            Language = NormalizeLanguage(request.Language)
         };
 
         _db.Users.Add(user);
@@ -145,7 +146,7 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await _db.SaveChangesAsync();
 
-        var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString(), user.TimeZone, user.AuthProvider.ToString());
+        var userInfo = new UserInfo(user.Id, user.Email, user.DisplayName, user.AvatarUrl, user.Role.ToString(), user.TimeZone, user.Language, user.AuthProvider.ToString());
         return Result<AuthResponse>.Success(new AuthResponse(accessToken, refreshToken, userInfo));
     }
 
@@ -178,5 +179,16 @@ public class AuthService : IAuthService
         return AllowedTimeZones.Contains(timeZone, StringComparer.OrdinalIgnoreCase)
             ? timeZone
             : "Asia/Ho_Chi_Minh";
+    }
+
+    private static readonly string[] AllowedLanguages = { "en", "vi" };
+
+    private static string NormalizeLanguage(string? language)
+    {
+        if (string.IsNullOrEmpty(language))
+            return "en";
+        return AllowedLanguages.Contains(language, StringComparer.OrdinalIgnoreCase)
+            ? language.ToLowerInvariant()
+            : "en";
     }
 }

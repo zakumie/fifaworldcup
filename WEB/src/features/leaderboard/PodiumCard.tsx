@@ -2,6 +2,7 @@ import {
   Speed as WinRateIcon,
   MilitaryTech as RankBadgeIcon,
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import type { LeaderboardEntryDto } from '../../types';
 
 export const PODIUM_STYLES = [
@@ -11,6 +12,7 @@ export const PODIUM_STYLES = [
 ];
 
 export function PodiumCard({ entry, style, profitLabel = 'Profit' }: { entry: LeaderboardEntryDto; style: typeof PODIUM_STYLES[0]; profitLabel?: string }) {
+  const { t } = useTranslation();
   return (
     <div className={`relative rounded-xl ${style.cardBg} border ${style.border} hover:shadow-lg hover:shadow-black/20 transition-all duration-300 overflow-hidden`}>
      
@@ -43,7 +45,7 @@ export function PodiumCard({ entry, style, profitLabel = 'Profit' }: { entry: Le
       {/* Stats row */}
       <div className="flex items-center divide-x divide-black/10 bg-black/10 px-1 py-1.5">
         <div className="flex-1 text-center px-1">
-          <p className={`text-[8px] font-semibold ${style.statLabel} uppercase opacity-70`}>W / D / L</p>
+          <p className={`text-[8px] font-semibold ${style.statLabel} uppercase opacity-70`}>{t('leaderboard.table.wdl')}</p>
           <p className={`text-[11px] font-bold ${style.statLabel} leading-tight`}>{entry.wins}/{entry.draws}/{entry.losses}</p>
         </div>
         <div className="flex-1 text-center px-1">
@@ -53,7 +55,7 @@ export function PodiumCard({ entry, style, profitLabel = 'Profit' }: { entry: Le
           </p>
         </div>
         <div className="flex-1 text-center px-1">
-          <p className={`text-[8px] font-semibold ${style.statLabel} uppercase opacity-70`}>Balance</p>
+          <p className={`text-[8px] font-semibold ${style.statLabel} uppercase opacity-70`}>{t('leaderboard.table.balance')}</p>
           <p className={`text-[11px] font-bold ${style.statLabel} leading-tight`}>{entry.balance.toLocaleString()}</p>
         </div>
       </div>

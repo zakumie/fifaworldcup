@@ -5,6 +5,7 @@ import {
   Button, Grid, TextField, FormControlLabel, Switch,
   MenuItem, Typography, CircularProgress, Alert, ThemeProvider,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import type { BettingConfigDto, CreateBettingConfigRequest, MatchDto } from '../../types';
 import { useCreateBettingConfigMutation, useUpdateBettingConfigMutation } from './bettingApi';
 import { toLocalDatetimeInput } from '../../utils/timezone';
@@ -34,6 +35,7 @@ interface FormValues {
 }
 
 export function BettingConfigDialog({ open, match, groupId, existingConfig, onClose }: Props) {
+  const { t } = useTranslation();
   const isEdit = !!existingConfig;
   const [createConfig, { isLoading: isCreating, error: createError }] = useCreateBettingConfigMutation();
   const [updateConfig, { isLoading: isUpdating, error: updateError }] = useUpdateBettingConfigMutation();
@@ -99,8 +101,8 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
   };
 
   const teamOptions = [
-    { id: match.homeTeam.id, label: `${match.homeTeam.name} (Home)` },
-    { id: match.awayTeam.id, label: `${match.awayTeam.name} (Away)` },
+    { id: match.homeTeam.id, label: `${match.homeTeam.name} ${t('betting.config.home')}` },
+    { id: match.awayTeam.id, label: `${match.awayTeam.name} ${t('betting.config.away')}` },
   ];
 
   return (
@@ -108,7 +110,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
       PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
       <DialogTitle>
-        {isEdit ? 'Edit Betting Config' : 'Setup Betting'}
+        {isEdit ? t('betting.config.editTitle') : t('betting.config.createTitle')}
         <Typography variant="body2" color="text.secondary">
           {match.homeTeam.name} vs {match.awayTeam.name}
         </Typography>
@@ -117,7 +119,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
       <DialogContent dividers>
         {apiError && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            {'data' in apiError ? (apiError.data as { error?: string })?.error : 'An error occurred'}
+            {'data' in apiError ? (apiError.data as { error?: string })?.error : t('common.error.generic')}
           </Alert>
         )}
 
@@ -125,15 +127,15 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
           <Grid item xs={6}>
             <Controller name="handicap" control={control}
               render={({ field }) => (
-                <TextField {...field} label="Handicap" type="number" fullWidth size="small"
+                <TextField {...field} label={t('betting.config.handicapLabel')} type="number" fullWidth size="small"
                   inputProps={{ step: 0.25 }} />
               )} />
           </Grid>
           <Grid item xs={6}>
             <Controller name="favoredTeamId" control={control}
               render={({ field }) => (
-                <TextField {...field} select label="Favored Team" fullWidth size="small">
-                  <MenuItem value="">None</MenuItem>
+                <TextField {...field} select label={t('betting.config.favoredTeamLabel')} fullWidth size="small">
+                  <MenuItem value="">{t('common.none')}</MenuItem>
                   {teamOptions.map((t) => (
                     <MenuItem key={t.id} value={t.id}>{t.label}</MenuItem>
                   ))}
@@ -144,7 +146,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
           <Grid item xs={12}>
             <Controller name="odds" control={control}
               render={({ field }) => (
-                <TextField {...field} label="Odds (multiplier)" type="number" fullWidth size="small"
+                <TextField {...field} label={t('betting.config.oddsLabel')} type="number" fullWidth size="small"
                   inputProps={{ step: 0.05, min: 1 }} />
               )} />
           </Grid>
@@ -152,13 +154,13 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
           <Grid item xs={6}>
             <Controller name="minBetAmount" control={control}
               render={({ field }) => (
-                <TextField {...field} label="Min Bet" type="number" fullWidth size="small" inputProps={{ min: 0 }} />
+                <TextField {...field} label={t('betting.config.minBetLabel')} type="number" fullWidth size="small" inputProps={{ min: 0 }} />
               )} />
           </Grid>
           <Grid item xs={6}>
             <Controller name="maxBetAmount" control={control}
               render={({ field }) => (
-                <TextField {...field} label="Max Bet" type="number" fullWidth size="small" inputProps={{ min: 0 }} />
+                <TextField {...field} label={t('betting.config.maxBetLabel')} type="number" fullWidth size="small" inputProps={{ min: 0 }} />
               )} />
           </Grid>
 
@@ -167,14 +169,14 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
               render={({ field }) => (
                 <FormControlLabel
                   control={<Switch checked={field.value} onChange={field.onChange} />}
-                  label="Fixed Bet Amount" />
+                  label={t('betting.config.fixedBetToggle')} />
               )} />
           </Grid>
           {isFixedBet && (
             <Grid item xs={6}>
               <Controller name="defaultBetAmount" control={control}
                 render={({ field }) => (
-                  <TextField {...field} label="Fixed Amount" type="number" fullWidth size="small"
+                  <TextField {...field} label={t('betting.config.fixedAmountLabel')} type="number" fullWidth size="small"
                     inputProps={{ min: 0 }}
                     value={field.value === '' ? '' : field.value} />
                 )} />
@@ -184,14 +186,14 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
           <Grid item xs={6}>
             <Controller name="bettingOpenTime" control={control}
               render={({ field }) => (
-                <TextField {...field} label="Betting Opens" type="datetime-local" fullWidth size="small"
+                <TextField {...field} label={t('betting.config.opensLabel')} type="datetime-local" fullWidth size="small"
                   InputLabelProps={{ shrink: true }} />
               )} />
           </Grid>
           <Grid item xs={6}>
             <Controller name="bettingCloseTime" control={control}
               render={({ field }) => (
-                <TextField {...field} label="Betting Closes" type="datetime-local" fullWidth size="small"
+                <TextField {...field} label={t('betting.config.closesLabel')} type="datetime-local" fullWidth size="small"
                   InputLabelProps={{ shrink: true }} />
               )} />
           </Grid>
@@ -199,10 +201,10 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} disabled={isLoading}>Cancel</Button>
+        <Button onClick={onClose} disabled={isLoading}>{t('common.cancel')}</Button>
         <Button variant="contained" onClick={handleSubmit(onSubmit)} disabled={isLoading}
           startIcon={isLoading ? <CircularProgress size={16} /> : undefined}>
-          {isEdit ? 'Update' : 'Create'}
+          {isEdit ? t('common.update') : t('common.create')}
         </Button>
       </DialogActions>
     </Dialog>

@@ -20,7 +20,7 @@ public class UserService : IUserService
 
         return Result<UserProfileDto>.Success(new UserProfileDto(
             user.Id, user.Email, user.DisplayName,
-            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone));
+            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone, user.Language));
     }
 
     public async Task<Result<UserProfileDto>> UpdateProfileAsync(Guid userId, UpdateProfileRequest request)
@@ -37,11 +37,18 @@ public class UserService : IUserService
                 return Result<UserProfileDto>.Failure($"Invalid timezone: '{request.TimeZone}'. Allowed: {string.Join(", ", allowed)}");
             user.TimeZone = request.TimeZone;
         }
+        if (!string.IsNullOrEmpty(request.Language))
+        {
+            var allowedLangs = new[] { "en", "vi" };
+            if (!allowedLangs.Contains(request.Language, StringComparer.OrdinalIgnoreCase))
+                return Result<UserProfileDto>.Failure($"Invalid language: '{request.Language}'. Allowed: {string.Join(", ", allowedLangs)}");
+            user.Language = request.Language.ToLowerInvariant();
+        }
         await _db.SaveChangesAsync();
 
         return Result<UserProfileDto>.Success(new UserProfileDto(
             user.Id, user.Email, user.DisplayName,
-            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone));
+            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone, user.Language));
     }
 
     public async Task<Result<List<AdminUserDto>>> GetAllUsersAsync()

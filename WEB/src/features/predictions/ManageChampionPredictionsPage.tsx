@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Card,
@@ -30,8 +31,9 @@ import type { TeamDto } from '../../types';
 export default function ManageChampionPredictionsPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const { showAlert } = useAlert();
+  const { t } = useTranslation();
 
-  if (!groupId) return <Typography>Group not found</Typography>;
+  if (!groupId) return <Typography>{t('common.groupNotFound')}</Typography>;
 
   const { data: config, isLoading: configLoading } = useGetChampionConfigQuery({ groupId });
   const { data: teams } = useGetTeamsQuery();
@@ -65,7 +67,7 @@ export default function ManageChampionPredictionsPage() {
           predictionOpenTime: isoOpenTime,
           predictionCloseTime: isoCloseTime,
         }).unwrap();
-        showAlert('Configuration created successfully', 'success');
+        showAlert(t('admin.predictions.createSuccess'), 'success');
       } else {
         await updateConfig({
           groupId,
@@ -75,16 +77,16 @@ export default function ManageChampionPredictionsPage() {
             predictionCloseTime: isoCloseTime,
           },
         }).unwrap();
-        showAlert('Configuration updated successfully', 'success');
+        showAlert(t('admin.predictions.updateSuccess'), 'success');
       }
     } catch (error) {
-      showAlert(error ? String(error) : 'Failed to save configuration', 'error');
+      showAlert(error ? String(error) : t('admin.predictions.error.saveFailed'), 'error');
     }
   };
 
   const handleSettle = async () => {
     if (!selectedWinnerTeamId) {
-      showAlert('Please select a winning team', 'error');
+      showAlert(t('admin.predictions.error.selectTeam'), 'error');
       return;
     }
 
@@ -96,10 +98,10 @@ export default function ManageChampionPredictionsPage() {
           winnerTeamId: selectedWinnerTeamId,
         },
       }).unwrap();
-      showAlert('Predictions settled successfully', 'success');
+      showAlert(t('admin.predictions.settleSuccess'), 'success');
       setSettleDialogOpen(false);
     } catch (error) {
-      showAlert(error ? String(error) : 'Failed to settle predictions', 'error');
+      showAlert(error ? String(error) : t('admin.predictions.error.settleFailed'), 'error');
     }
   };
 
@@ -108,7 +110,7 @@ export default function ManageChampionPredictionsPage() {
   return (
     <div className="p-6">
       <Typography variant="h4" className="font-bold mb-6">
-        Manage Champion Predictions
+        {t('admin.predictions.title')}
       </Typography>
 
       <Grid container spacing={4}>
@@ -116,13 +118,13 @@ export default function ManageChampionPredictionsPage() {
         <Grid item xs={12} md={6}>
           <Card className="p-6">
             <Typography variant="h6" className="font-bold mb-4">
-              Prediction Settings
+              {t('admin.predictions.settings')}
             </Typography>
 
             {config?.isSettled && (
               <Alert severity="success" className="mb-4">
                 <CheckCircleIcon className="mr-2" />
-                Predictions have been settled for this group
+                {t('admin.predictions.settledAlert')}
               </Alert>
             )}
 
@@ -130,14 +132,14 @@ export default function ManageChampionPredictionsPage() {
               {/* Enable/Disable */}
               <FormControlLabel
                 control={<Switch checked={isEnabled} onChange={(e) => setIsEnabled(e.target.checked)} />}
-                label="Enable Champion Predictions"
+                label={t('admin.predictions.enableToggle')}
                 disabled={config?.isSettled}
               />
 
               {/* Open Time */}
               <TextField
                 fullWidth
-                label="Prediction Open Time"
+                label={t('admin.predictions.openTime')}
                 type="datetime-local"
                 value={openTime}
                 onChange={(e) => setOpenTime(e.target.value)}
@@ -148,7 +150,7 @@ export default function ManageChampionPredictionsPage() {
               {/* Close Time */}
               <TextField
                 fullWidth
-                label="Prediction Close Time"
+                label={t('admin.predictions.closeTime')}
                 type="datetime-local"
                 value={closeTime}
                 onChange={(e) => setCloseTime(e.target.value)}
@@ -166,7 +168,7 @@ export default function ManageChampionPredictionsPage() {
                   onClick={handleCreateOrUpdate}
                   disabled={isCreating || isUpdating}
                 >
-                  {isCreating || isUpdating ? 'Saving...' : config ? 'Update Configuration' : 'Create Configuration'}
+                  {isCreating || isUpdating ? t('common.saving') : config ? t('admin.predictions.updateButton') : t('admin.predictions.createButton')}
                 </Button>
               )}
             </div>
@@ -178,11 +180,11 @@ export default function ManageChampionPredictionsPage() {
           <Grid item xs={12} md={6}>
             <Card className="p-6 border border-yellow-200 bg-yellow-50">
               <Typography variant="h6" className="font-bold mb-4">
-                Settle Predictions
+                {t('admin.predictions.settleTitle')}
               </Typography>
 
               <Typography variant="body2" className="text-gray-600 mb-4">
-                Once settled, members will see if their prediction was correct.
+                {t('admin.predictions.settleDescription')}
               </Typography>
 
               <Button
@@ -192,7 +194,7 @@ export default function ManageChampionPredictionsPage() {
                 onClick={() => setSettleDialogOpen(true)}
                 disabled={isSettling}
               >
-                {isSettling ? 'Settling...' : 'Settle Predictions'}
+                {isSettling ? t('admin.predictions.settling') : t('admin.predictions.settleButton')}
               </Button>
             </Card>
           </Grid>
@@ -203,16 +205,16 @@ export default function ManageChampionPredictionsPage() {
       <ThemeProvider theme={lightTheme}>
       <Dialog open={settleDialogOpen} onClose={() => setSettleDialogOpen(false)} maxWidth="sm" fullWidth
         PaperProps={{ sx: { borderRadius: 4, overflow: 'hidden' } }}>
-        <DialogTitle>Settle Championship Prediction</DialogTitle>
+        <DialogTitle>{t('admin.predictions.settleDialog.title')}</DialogTitle>
         <DialogContent className="pt-6">
           <Typography variant="body2" className="text-gray-600 mb-4">
-            Select the winning team to settle all member predictions
+            {t('admin.predictions.settleDialog.description')}
           </Typography>
           <TextField
             select
             fullWidth
             size="small"
-            label="Select Winner Team"
+            label={t('admin.predictions.settleDialog.selectWinner')}
             value={selectedWinnerTeamId}
             onChange={(e) => setSelectedWinnerTeamId(e.target.value)}
             SelectProps={{
@@ -220,7 +222,7 @@ export default function ManageChampionPredictionsPage() {
             }}
             sx={inputSx}
           >
-            <option value="">-- Choose Team --</option>
+            <option value="">{t('admin.predictions.settleDialog.chooseTeam')}</option>
             {teams?.map((team: TeamDto) => (
               <option key={team.id} value={team.id}>
                 {team.name}
@@ -229,14 +231,14 @@ export default function ManageChampionPredictionsPage() {
           </TextField>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setSettleDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setSettleDialogOpen(false)}>{t('common.cancel')}</Button>
           <Button
             onClick={handleSettle}
             variant="contained"
             color="warning"
             disabled={!selectedWinnerTeamId || isSettling}
           >
-            {isSettling ? 'Settling...' : 'Confirm Settlement'}
+            {isSettling ? t('admin.predictions.settling') : t('admin.predictions.settleDialog.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

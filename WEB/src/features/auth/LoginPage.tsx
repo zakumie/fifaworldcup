@@ -11,6 +11,7 @@ import {
   Lock as LockIcon,
   Login as LoginIcon,
 } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { useLoginMutation, useGoogleLoginMutation } from './authApi';
 import { setCredentials } from './authSlice';
 import { useAppDispatch } from '../../app/hooks';
@@ -22,6 +23,7 @@ const schema = yup.object({
 });
 
 export function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
@@ -42,7 +44,7 @@ export function LoginPage() {
       setIsRedirecting(true);
       navigate('/dashboard');
     } catch {
-      setError('Invalid email or password');
+      setError(t('auth.login.error.invalidCredentials'));
     }
   };
 
@@ -55,7 +57,7 @@ export function LoginPage() {
       setIsRedirecting(true);
       navigate('/dashboard');
     } catch {
-      setError('Google login failed');
+      setError(t('auth.login.error.googleFailed'));
     }
   };
 
@@ -66,7 +68,7 @@ export function LoginPage() {
           <BallIcon sx={{ fontSize: 40, color: 'white' }} />
         </div>
         <div className="w-8 h-8 border-[3px] border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin mb-4" />
-        <p className="text-emerald-300 text-sm font-medium animate-pulse">Signing in...</p>
+        <p className="text-emerald-300 text-sm font-medium animate-pulse">{t('auth.login.signingIn')}</p>
       </div>
     );
   }
@@ -87,9 +89,9 @@ export function LoginPage() {
             <BallIcon sx={{ fontSize: 40, color: 'white' }} />
           </div>
           <h1 className="text-3xl font-black text-white tracking-tight">
-            WORLD CUP <span className="text-emerald-400">2026</span>
+            {t('common.brand.worldCup')} <span className="text-emerald-400">{t('common.brand.year')}</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-2">Predict. Compete. Win.</p>
+          <p className="text-sm text-slate-400 mt-2">{t('common.brand.tagline')}</p>
         </div>
 
         {/* Card */}
@@ -104,7 +106,7 @@ export function LoginPage() {
             {/* Email field */}
             <div className="mb-4">
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                Email
+                {t('auth.login.emailLabel')}
               </label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -130,7 +132,7 @@ export function LoginPage() {
             {/* Password field */}
             <div className="mb-6">
               <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                Password
+                {t('auth.login.passwordLabel')}
               </label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
@@ -163,7 +165,7 @@ export function LoginPage() {
               ) : (
                 <>
                   <LoginIcon sx={{ fontSize: 18 }} />
-                  Sign In
+                  {t('auth.login.signInButton')}
                 </>
               )}
             </button>
@@ -172,7 +174,7 @@ export function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-3 my-6">
             <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs font-medium text-slate-400 uppercase">or</span>
+            <span className="text-xs font-medium text-slate-400 uppercase">{t('common.or')}</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
@@ -180,7 +182,7 @@ export function LoginPage() {
           <Box display="flex" justifyContent="center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => setError('Google login failed')}
+              onError={() => setError(t('auth.login.error.googleFailed'))}
               size="large"
               width="100%"
               text="signin_with"
@@ -191,9 +193,9 @@ export function LoginPage() {
 
           {/* Register link */}
           <p className="text-center text-sm text-slate-500 mt-6">
-            Don't have an account?{' '}
+            {t('auth.login.noAccount')}{' '}
             <RouterLink to="/register" className="text-emerald-600 font-semibold hover:text-emerald-500 transition-colors">
-              Sign up
+              {t('auth.login.signUpLink')}
             </RouterLink>
           </p>
         </div>

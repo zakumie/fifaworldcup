@@ -15,6 +15,7 @@ import { useGetChampionConfigQuery } from '../predictions/championApi';
 import { MemberInfoDialog } from './MemberInfoDialog';
 import type { GroupMemberDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
+import { useTranslation } from 'react-i18next';
 
 const ROLE_STYLE: Record<string, string> = {
   Manager: 'text-blue-700 bg-blue-50 border-blue-200',
@@ -25,6 +26,7 @@ const ROLE_STYLE: Record<string, string> = {
 export function GroupDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: group, isLoading, error } = useGetGroupQuery(id ?? '', { skip: !id });
   const { data: leaderboard } = useGetLeaderboardQuery({ groupId: id ?? '' }, { skip: !id });
   const { data: championConfig } = useGetChampionConfigQuery({ groupId: id ?? '' }, { skip: !id });
@@ -60,8 +62,8 @@ export function GroupDetailPage() {
 
   if (!group) {
     const errorMessage = error && typeof error === 'object' && 'data' in error 
-      ? ((error.data as Record<string, unknown>)?.message as string) || 'Group not found'
-      : 'Group not found';
+      ? ((error.data as Record<string, unknown>)?.message as string) || t('groups.detail.notFound')
+      : t('groups.detail.notFound');
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-400">
         <GroupsIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
@@ -90,7 +92,7 @@ export function GroupDetailPage() {
             </div>
             <div className="min-w-0">
               <h1 className="text-lg sm:text-2xl font-black text-white truncate">{group.name}</h1>
-              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">{group.description || 'No description'}</p>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">{group.description || t('common.noDescription')}</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -105,16 +107,16 @@ export function GroupDetailPage() {
                 }`}
               >
                 <EmojiEventsIcon sx={{ fontSize: 18 }} />
-                <span className="hidden xs:inline">Champion</span> Prediction
+                <span className="hidden xs:inline">{t('groups.detail.championPrediction')}</span> {t('groups.detail.prediction')}
               </button>
             )}
             <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl">
-              <span className="text-[10px] sm:text-xs text-slate-400">Code:</span>
+              <span className="text-[10px] sm:text-xs text-slate-400">{t('groups.detail.code')}</span>
               <span className="text-xs sm:text-sm font-mono font-bold text-amber-400 tracking-wider">{group.inviteCode}</span>
               <button
                 onClick={handleCopy}
                 className="px-1.5 sm:px-2 py-1 rounded-lg hover:bg-emerald-800/50 transition-colors"
-                title="Copy invite code"
+                title={t('groups.detail.copyCode')}
               >
                 {copied
                   ? <CheckIcon sx={{ fontSize: 16, color: '#4ade80' }} />
@@ -133,7 +135,7 @@ export function GroupDetailPage() {
             <PeopleAltIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Members</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.members')}</p>
             <p className="text-sm sm:text-md font-bold text-white">{group.members.length}<span className="text-xs sm:text-sm text-emerald-300 font-normal ml-1">/{group.maxMembers}</span></p>
           </div>
         </div>
@@ -142,7 +144,7 @@ export function GroupDetailPage() {
             <AccountBalanceWalletIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Balance</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.balance')}</p>
             <p className="text-sm sm:text-md font-bold text-white truncate">{group.defaultBalance.toLocaleString()}</p>
           </div>
         </div>
@@ -151,7 +153,7 @@ export function GroupDetailPage() {
             <CalendarTodayIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Created</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.created')}</p>
             <p className="text-sm sm:text-md font-bold text-white truncate">{formatDate(group.createdAt, 'MMM dd, yyyy')}</p>
           </div>
         </div>
@@ -160,9 +162,9 @@ export function GroupDetailPage() {
             <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${group.isActive ? 'bg-emerald-400' : 'bg-gray-400'}`} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Status</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.status')}</p>
             <p className={`text-sm sm:text-md font-bold ${group.isActive ? 'text-white' : 'text-emerald-400'}`}>
-              {group.isActive ? 'Active' : 'Inactive'}
+              {group.isActive ? t('common.active') : t('common.inactive')}
             </p>
           </div>
         </div>
@@ -173,9 +175,9 @@ export function GroupDetailPage() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-gray-800 flex items-center gap-2">
             <PeopleAltIcon sx={{ fontSize: 20, color: '#10b981' }} />
-            Members
+            {t('groups.detail.stats.members')}
           </h2>
-          <span className="text-xs font-medium text-slate-500">{memberPercent}% capacity</span>
+          <span className="text-xs font-medium text-slate-500">{memberPercent}% {t('groups.detail.capacity')}</span>
         </div>
         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-5">
           <div className={`h-full rounded-full transition-all duration-500 ${
@@ -202,8 +204,8 @@ export function GroupDetailPage() {
                   )}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">{member.displayName ?? 'Unknown'}</p>
-                  <p className="text-[11px] text-slate-400">Joined {formatDate(member.joinedAt, 'MMM dd, yyyy')}</p>
+                  <p className="text-sm font-semibold text-gray-800">{member.displayName ?? t('common.unknown')}</p>
+                  <p className="text-[11px] text-slate-400">{t('groups.detail.joined')} {formatDate(member.joinedAt, 'MMM dd, yyyy')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">

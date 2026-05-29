@@ -23,14 +23,17 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { logout } from '../../features/auth/authSlice';
+import { logout, updateUser } from '../../features/auth/authSlice';
 import { apiSlice } from '../../app/api';
 import { setSelectedGroupId } from '../../features/groups/groupSlice';
 import { toggleThemeMode } from '../../features/settings/themeSlice';
 import { useGroupId } from '../../features/groups/useGroupId';
 import { MusicPlayerDialog } from '../MusicPlayer';
 import { HelpDialog } from '../HelpDialog';
+import { useUpdateProfileMutation } from '../../features/users/usersApi';
+import type { Language } from '../../i18n';
 
 const DRAWER_WIDTH = 260;
 const COLLAPSED_WIDTH = 72;
@@ -44,20 +47,27 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', path: '/dashboard', icon: <DashboardOutlinedIcon fontSize="small" />, section: 'main' },
-  { label: 'Groups', path: '/groups', icon: <GroupIcon fontSize="small" />, section: 'main' },
-  { label: 'Matches', path: '/matches', icon: <SportsSoccerOutlinedIcon fontSize="small" />, section: 'main' },
-  { label: 'My Bets', path: '/bets', icon: <FavoriteBorderRoundedIcon fontSize="small" />, section: 'main' },
-  { label: 'Leaderboard', path: '/leaderboard', icon: <EmojiEventsOutlinedIcon fontSize="small" />, section: 'main' },
-  { label: 'Manage Matches', path: '/admin/matches', icon: <ManageHistoryRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
-  { label: 'Manage Groups', path: '/admin/groups', icon: <RoofingRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
-  { label: 'Manage Users', path: '/admin/users', icon: <ManageAccountsIcon fontSize="small" />, adminOnly: true, section: 'admin' }
+  { label: 'nav.dashboard', path: '/dashboard', icon: <DashboardOutlinedIcon fontSize="small" />, section: 'main' },
+  { label: 'nav.groups', path: '/groups', icon: <GroupIcon fontSize="small" />, section: 'main' },
+  { label: 'nav.matches', path: '/matches', icon: <SportsSoccerOutlinedIcon fontSize="small" />, section: 'main' },
+  { label: 'nav.myBets', path: '/bets', icon: <FavoriteBorderRoundedIcon fontSize="small" />, section: 'main' },
+  { label: 'nav.leaderboard', path: '/leaderboard', icon: <EmojiEventsOutlinedIcon fontSize="small" />, section: 'main' },
+  { label: 'nav.admin.matches', path: '/admin/matches', icon: <ManageHistoryRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
+  { label: 'nav.admin.groups', path: '/admin/groups', icon: <RoofingRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
+  { label: 'nav.admin.users', path: '/admin/users', icon: <ManageAccountsIcon fontSize="small" />, adminOnly: true, section: 'admin' }
+];
+
+const LANGUAGE_OPTIONS: { code: Language; label: string; flag: string }[] = [
+  { code: 'en', label: 'English', flag: '/images/en.webp' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '/images/vi.jpg' },
 ];
 
 export function AppLayout() {
+  const { t, i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [langAnchorEl, setLangAnchorEl] = useState<null | HTMLElement>(null);
   const [musicOpen, setMusicOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const navigate = useNavigate();
@@ -65,10 +75,25 @@ export function AppLayout() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const themeMode = useAppSelector((state) => state.theme.mode);
+  const [updateProfile] = useUpdateProfileMutation();
 
   const isAdminOrManager = user?.role === 'Admin' || user?.role === 'Manager';
   const sidebarWidth = collapsed ? COLLAPSED_WIDTH : DRAWER_WIDTH;
   const { groupId, groups } = useGroupId();
+
+  const currentLang = LANGUAGE_OPTIONS.find(l => l.code === i18n.language) || LANGUAGE_OPTIONS[0];
+
+  const handleLanguageChange = async (lang: Language) => {
+    setLangAnchorEl(null);
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang);
+    dispatch(updateUser({ language: lang }));
+    if (user) {
+      try {
+        await updateProfile({ displayName: user.displayName, avatarUrl: user.avatarUrl, language: lang });
+      } catch { /* silent */ }
+    }
+  };
 
   const handleLogout = () => {
     setAnchorEl(null);
@@ -100,13 +125,13 @@ export function AppLayout() {
         <span className={`transition-colors flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
           {item.icon}
         </span>
-        {!isCollapsed && item.label}
+        {!isCollapsed && t(item.label)}
         {!isCollapsed && isActive && (
           <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/80" />
         )}
       </button>
     );
-    return isCollapsed ? <Tooltip title={item.label} placement="right" key={item.path}><li>{btn}</li></Tooltip> : <li key={item.path}>{btn}</li>;
+    return isCollapsed ? <Tooltip title={t(item.label)} placement="right" key={item.path}><li>{btn}</li></Tooltip> : <li key={item.path}>{btn}</li>;
   };
 
   const drawerContent = (isCollapsed: boolean) => (
@@ -128,7 +153,7 @@ export function AppLayout() {
 
       {/* Main Nav */}
       <nav className="flex-1 px-3 pb-4">
-        {!isCollapsed && <p className="px-3 pt-4 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Menu</p>}
+        {!isCollapsed && <p className="px-3 pt-4 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{t('nav.section.menu')}</p>}
         {isCollapsed && <div className="pt-4" />}
         <ul className="space-y-0.5">
           {mainItems.map((item) => renderNavButton(item, isCollapsed))}
@@ -136,7 +161,7 @@ export function AppLayout() {
 
         {adminItems.length > 0 && (
           <>
-            {!isCollapsed && <p className="px-3 pt-6 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Admin</p>}
+            {!isCollapsed && <p className="px-3 pt-6 pb-2 text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">{t('nav.section.admin')}</p>}
             {isCollapsed && <div className="pt-4 mb-2 border-t border-gray-100 dark:border-gray-700 mx-2" />}
             <ul className="space-y-0.5">
               {adminItems.map((item) => renderNavButton(item, isCollapsed))}
@@ -149,7 +174,7 @@ export function AppLayout() {
       <div className="p-3 border-t border-gray-100 dark:border-gray-700 space-y-1">
         {/* Help */}
         {isCollapsed ? (
-          <Tooltip title="Help" placement="right">
+          <Tooltip title={t('nav.help')} placement="right">
             <button
               onClick={() => setHelpOpen(true)}
               className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
@@ -163,12 +188,12 @@ export function AppLayout() {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
           >
             <HelpOutlineOutlinedIcon fontSize="small" />
-            <span className="text-sm font-medium">Help</span>
+            <span className="text-sm font-medium">{t('nav.help')}</span>
           </button>
         )}
         {/* Music player */}
         {isCollapsed ? (
-          <Tooltip title="Play Music" placement="right">
+          <Tooltip title={t('nav.playMusic')} placement="right">
             <button
               onClick={() => setMusicOpen(true)}
               className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"
@@ -182,12 +207,12 @@ export function AppLayout() {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"
           >
             <MusicNoteOutlinedIcon fontSize="small" />
-            <span className="text-sm font-medium">Play Music</span>
+            <span className="text-sm font-medium">{t('nav.playMusic')}</span>
           </button>
         )}
         {/* Theme toggle */}
         {isCollapsed ? (
-          <Tooltip title={themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'} placement="right">
+          <Tooltip title={themeMode === 'dark' ? t('nav.lightMode') : t('nav.darkMode')} placement="right">
             <button
               onClick={() => dispatch(toggleThemeMode())}
               className="w-full flex justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
@@ -201,7 +226,7 @@ export function AppLayout() {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
           >
             {themeMode === 'dark' ? <LightModeOutlinedIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
-            <span className="text-sm font-medium">{themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            <span className="text-sm font-medium">{themeMode === 'dark' ? t('nav.lightMode') : t('nav.darkMode')}</span>
           </button>
         )}
       </div>
@@ -237,7 +262,7 @@ export function AppLayout() {
             </IconButton>
             <div className="hidden sm:block">
               <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
-                {visibleItems.find((i) => i.path === location.pathname)?.label ?? 'World Cup 2026'}
+                {(() => { const found = visibleItems.find((i) => i.path === location.pathname); return found ? t(found.label) : 'World Cup 2026'; })()}
               </h2>
             </div>
           </div>
@@ -245,12 +270,12 @@ export function AppLayout() {
           {/* Right actions */}
           <div className="flex-1 flex items-center justify-end gap-2">
             {groups.length > 1 && (
-              <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-800 rounded-full pl-2 pr-1 py-0.5 border border-gray-200/60 dark:border-gray-600">
+              <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-800 rounded-full pl-2 pr-1 py-1.5 border border-gray-200/60 dark:border-gray-600">
                 <Groups2Icon sx={{ fontSize: 16, color: '#64748b' }} />
                 <select name='group-team'
                   value={groupId}
                   onChange={(e) => dispatch(setSelectedGroupId(e.target.value))}
-                  className="text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent border-none outline-none cursor-pointer p-[0.4rem] w-auto"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent border-none outline-none cursor-pointer px-1 py-0 w-auto"
                 >
                   {groups.map((g) => (
                     <option key={g.id} value={g.id}>{g.name}</option>
@@ -259,16 +284,42 @@ export function AppLayout() {
               </div>
             )}
 
-            {isAdminOrManager && (
-              <Tooltip title="Admin">
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
-                  <AdminPanelSettingsOutlinedIcon sx={{ fontSize: 14 }} />
-                  {user?.role}
-                </span>
-              </Tooltip>
-            )}
+            {/* Language Selector */}
+            <Tooltip title={t('nav.menu.language')}>
+              <button
+                onClick={(e) => setLangAnchorEl(e.currentTarget)}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-slate-50 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+              >
+                <img src={currentLang.flag} alt={currentLang.label} className="w-5 h-5 object-cover rounded-full" />
+                <span className="text-xs font-medium text-gray-600 dark:text-gray-300 hidden sm:inline">{currentLang.code.toUpperCase()}</span>
+              </button>
+            </Tooltip>
+            <Menu
+              anchorEl={langAnchorEl}
+              open={!!langAnchorEl}
+              onClose={() => setLangAnchorEl(null)}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              slotProps={{
+                paper: {
+                  sx: { mt: 1, minWidth: 160, borderRadius: 2, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' },
+                },
+              }}
+            >
+              {LANGUAGE_OPTIONS.map((lang) => (
+                <MenuItem
+                  key={lang.code}
+                  onClick={() => handleLanguageChange(lang.code)}
+                  selected={lang.code === i18n.language}
+                  sx={{ py: 1.5, px: 2.5 }}
+                >
+                  <img src={lang.flag} alt={lang.label} className="w-5 h-5 object-cover rounded-full mr-3" />
+                  <span className="text-sm font-medium">{lang.label}</span>
+                </MenuItem>
+              ))}
+            </Menu>
 
-            <Tooltip title="Settings">
+            <Tooltip title={t('nav.settings')}>
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small">
                 <Avatar
                   src={user?.avatarUrl || undefined}
@@ -303,17 +354,17 @@ export function AppLayout() {
               <Divider />
               <MenuItem onClick={() => { setAnchorEl(null); navigate('/profile'); }} sx={{ py: 1.5, px: 2.5 }}>
                 <ListItemIcon><PersonOutlinedIcon fontSize="small" /></ListItemIcon>
-                <span className="text-sm">Profile</span>
+                <span className="text-sm">{t('nav.menu.profile')}</span>
               </MenuItem>
               {user?.authProvider === 'Local' && (
                 <MenuItem onClick={() => { setAnchorEl(null); navigate('/change-password'); }} sx={{ py: 1.5, px: 2.5 }}>
                   <ListItemIcon><LockOutlinedIcon fontSize="small" /></ListItemIcon>
-                  <span className="text-sm">Change Password</span>
+                  <span className="text-sm">{t('nav.menu.changePassword')}</span>
                 </MenuItem>
               )}
               <MenuItem onClick={handleLogout} sx={{ py: 1.5, px: 2.5, color: 'error.main' }}>
                 <ListItemIcon><LogoutOutlinedIcon fontSize="small" sx={{ color: 'error.main' }} /></ListItemIcon>
-                <span className="text-sm">Logout</span>
+                <span className="text-sm">{t('nav.menu.logout')}</span>
               </MenuItem>
             </Menu>
           </div>
