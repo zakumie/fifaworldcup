@@ -25,19 +25,6 @@ const STEPS = [
     image: '/help/join-group.png',
   },
   {
-    icon: <VisibilityIcon sx={{ fontSize: 28 }} />,
-    color: 'from-purple-500 to-purple-600',
-    title: 'View Match Bets',
-    description: 'After a match starts or finishes, see how other members in your group have bet.',
-    instructions: [
-      'On a Live or Finished match card, click the "View" button',
-      'See all group members\' bets with their avatars and chosen teams',
-      'The winning team column is highlighted after settlement',
-      'Track who won and who lost in each match',
-    ],
-    image: '/help/match-center.png',
-  },
-  {
     icon: <SportsSoccerIcon sx={{ fontSize: 28 }} />,
     color: 'from-emerald-500 to-emerald-600',
     title: 'Place a Bet',
@@ -51,6 +38,19 @@ const STEPS = [
       'Confirm your bet before the betting window closes',
     ],
     image: '/help/place-bet.png',
+  },
+  {
+    icon: <VisibilityIcon sx={{ fontSize: 28 }} />,
+    color: 'from-purple-500 to-purple-600',
+    title: 'View Match Bets',
+    description: 'After a match starts or finishes, see how other members in your group have bet.',
+    instructions: [
+      'On a Live or Finished match card, click the "View" button',
+      'See all group members\' bets with their avatars and chosen teams',
+      'The winning team column is highlighted after settlement',
+      'Track who won and who lost in each match',
+    ],
+    image: '/help/view-match.png',
   },
   {
     icon: <FavoriteBorderIcon sx={{ fontSize: 28 }} />,
