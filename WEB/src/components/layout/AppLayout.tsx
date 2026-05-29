@@ -14,7 +14,6 @@ import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ManageHistoryRoundedIcon from '@mui/icons-material/ManageHistoryRounded';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import RoofingRoundedIcon from '@mui/icons-material/RoofingRounded';
