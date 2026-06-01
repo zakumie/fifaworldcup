@@ -251,7 +251,7 @@ export function AppLayout() {
       >
         <div className="h-full px-4 sm:px-6 flex items-center justify-between bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-700">
           {/* Mobile menu + breadcrumb */}
-          <div className="flex items-center gap-3 flex-1">
+          <div className="flex items-center gap-3 shrink-0">
             <IconButton
               onClick={() => setMobileOpen(!mobileOpen)}
               sx={{ display: { sm: 'none' }, color: 'text.primary' }}
@@ -266,23 +266,26 @@ export function AppLayout() {
             </div>
           </div>
 
-          {/* Right actions */}
-          <div className="flex-1 flex items-center justify-end gap-2">
-            {groups.length > 1 && (
-              <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-800 rounded-full pl-2 pr-1 py-1.5 border border-gray-200/60 dark:border-gray-600">
-                <Groups2Icon sx={{ fontSize: 16, color: '#64748b' }} />
+          {/* Group selector — centered on mobile */}
+          {groups.length > 1 && (
+            <div className="flex-1 flex justify-end sm:justify-end sm:justify-end mr-3">
+              <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-gray-800 rounded-full pl-2.5 pr-1.5 py-1.5 border border-gray-200/60 dark:border-gray-600 max-w-[180px] sm:max-w-none">
+                <Groups2Icon sx={{ fontSize: 16, color: '#64748b' }} className="shrink-0" />
                 <select name='group-team'
                   value={groupId}
                   onChange={(e) => dispatch(setSelectedGroupId(e.target.value))}
-                  className="text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent border-none outline-none cursor-pointer px-1 py-0 w-auto"
+                  className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent border-none outline-none cursor-pointer px-0.5 py-0 w-full truncate"
                 >
                   {groups.map((g) => (
                     <option key={g.id} value={g.id}>{g.name}</option>
                   ))}
                 </select>
               </div>
-            )}
+            </div>
+          )}
 
+          {/* Right actions */}
+          <div className="flex items-center justify-end gap-2 shrink-0">
             {/* Language Selector */}
             <Tooltip title={t('nav.menu.language')}>
               <button
@@ -424,7 +427,7 @@ export function AppLayout() {
         sx={{
           flexGrow: 1,
           width: { sm: `calc(100% - ${sidebarWidth}px)` },
-          height: '100vh',
+          height: { xs: '100dvh', sm: '100vh' },
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -433,7 +436,7 @@ export function AppLayout() {
         }}
       >
         <Toolbar />
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 sm:pb-6">
           <Outlet />
         </div>
       </Box>

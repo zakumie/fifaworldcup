@@ -100,7 +100,7 @@ export function GroupDetailPage() {
               <button
                 onClick={() => navigate(`/groups/${id}/predictions`)}
                 disabled={isPredictionExpired}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isPredictionExpired
                     ? 'bg-yellow-900/30 text-yellow-700/50 border border-yellow-800/30 cursor-not-allowed'
                     : 'bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-sm shadow-yellow-500/25 hover:shadow-lg hover:shadow-yellow-500/40 hover:from-yellow-300 hover:to-amber-300'
