@@ -196,11 +196,11 @@ export function GroupDetailPage() {
             >
               <div className="flex items-center gap-3">
                 <span className="w-5 text-xs font-bold text-slate-400 text-center">{idx + 1}</span>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0" title={member.email}>
                   {member.avatarUrl ? (
-                    <img src={member.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    <img src={member.avatarUrl} alt="" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover" />
                   ) : (
-                    <span className="text-xs font-bold text-white">{member.displayName?.charAt(0).toUpperCase()}</span>
+                    <span className="text-[10px] sm:text-xs font-bold text-white">{member.displayName?.charAt(0).toUpperCase()}</span>
                   )}
                 </div>
                 <div>
