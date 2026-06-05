@@ -191,6 +191,7 @@ export interface BetDto {
   profit: number;
   createdAt: string;
   settledAt: string | null;
+  matchStartTime: string;
   handicap: number;
   favoredTeamName: string | null;
 }

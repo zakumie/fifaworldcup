@@ -273,7 +273,7 @@ export function DashboardPage() {
                             </p>
                           </div>
                           <p className="text-xs font-semibold text-green-600 mt-0.5">
-                            {formatDate(bet.createdAt, 'MMM dd · HH:mm')}
+                            {formatDate(bet.matchStartTime, 'MMM dd · HH:mm')}
                           </p>
                         </div>
 

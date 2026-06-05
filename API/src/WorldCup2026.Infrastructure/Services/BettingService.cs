@@ -536,5 +536,6 @@ public class BettingService : IBettingService
             b.SelectedTeamId, b.SelectedTeam?.Name,
             b.BetAmount, b.Status, b.Profit,
             b.CreatedAt, b.SettledAt,
+            b.Match.StartTime,
             b.BettingConfig.Handicap, b.BettingConfig.FavoredTeam?.Name);
 }

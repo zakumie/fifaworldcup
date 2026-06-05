@@ -69,7 +69,7 @@ function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string }) {
           </p>
         </div>
         <p className="text-xs font-semibold text-amber-500">
-          {formatDate(bet.createdAt, 'MMM dd · HH:mm')}
+          {formatDate(bet.matchStartTime, 'MMM dd · HH:mm')}
         </p>
       </div>
 
