@@ -91,10 +91,18 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // CORS
+var corsOrigins = (builder.Configuration["Cors:Origins"] ?? string.Empty)
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+if (corsOrigins.Length == 0)
+{
+    corsOrigins = new[] { "http://localhost:4000" };
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
-        policy.WithOrigins(builder.Configuration["Cors:Origins"]!)
+        policy.WithOrigins(corsOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
