@@ -131,7 +131,7 @@ app.UseCors("AllowFrontend");
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups";
-    context.Response.Headers["Cross-Origin-Embedder-Policy"] = "unsafe-none";
+    //context.Response.Headers["Cross-Origin-Embedder-Policy"] = "unsafe-none";
     await next();
 });
 

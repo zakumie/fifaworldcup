@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     port: 4000,
     headers: {
-      'Cross-Origin-Opener-Policy': 'unsafe-none',
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popup',
     },
     proxy: {
       '/api': {
