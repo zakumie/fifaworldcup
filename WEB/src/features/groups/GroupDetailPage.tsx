@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Skeleton, Dialog, DialogContent, IconButton, ThemeProvider } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -8,16 +8,14 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CloseIcon from '@mui/icons-material/Close';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { useGetGroupQuery } from './groupsApi';
 import { useGetLeaderboardQuery } from '../leaderboard/leaderboardApi';
 import { useGetChampionConfigQuery } from '../predictions/championApi';
+import { MemberInfoDialog } from './MemberInfoDialog';
 import type { GroupMemberDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
-import { getTheme } from '../../app/theme';
-
-const lightTheme = getTheme('light');
+import { useTranslation } from 'react-i18next';
 
 const ROLE_STYLE: Record<string, string> = {
   Manager: 'text-blue-700 bg-blue-50 border-blue-200',
@@ -28,6 +26,7 @@ const ROLE_STYLE: Record<string, string> = {
 export function GroupDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: group, isLoading, error } = useGetGroupQuery(id ?? '', { skip: !id });
   const { data: leaderboard } = useGetLeaderboardQuery({ groupId: id ?? '' }, { skip: !id });
   const { data: championConfig } = useGetChampionConfigQuery({ groupId: id ?? '' }, { skip: !id });
@@ -63,8 +62,8 @@ export function GroupDetailPage() {
 
   if (!group) {
     const errorMessage = error && typeof error === 'object' && 'data' in error 
-      ? ((error.data as Record<string, unknown>)?.message as string) || 'Group not found'
-      : 'Group not found';
+      ? ((error.data as Record<string, unknown>)?.message as string) || t('groups.detail.notFound')
+      : t('groups.detail.notFound');
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-400">
         <GroupsIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
@@ -93,7 +92,7 @@ export function GroupDetailPage() {
             </div>
             <div className="min-w-0">
               <h1 className="text-lg sm:text-2xl font-black text-white truncate">{group.name}</h1>
-              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">{group.description || 'No description'}</p>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">{group.description || t('common.noDescription')}</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -101,23 +100,23 @@ export function GroupDetailPage() {
               <button
                 onClick={() => navigate(`/groups/${id}/predictions`)}
                 disabled={isPredictionExpired}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isPredictionExpired
                     ? 'bg-yellow-900/30 text-yellow-700/50 border border-yellow-800/30 cursor-not-allowed'
                     : 'bg-gradient-to-r from-yellow-400 to-amber-400 text-yellow-900 shadow-sm shadow-yellow-500/25 hover:shadow-lg hover:shadow-yellow-500/40 hover:from-yellow-300 hover:to-amber-300'
                 }`}
               >
                 <EmojiEventsIcon sx={{ fontSize: 18 }} />
-                <span className="hidden xs:inline">Champion</span> Prediction
+                <span className="hidden xs:inline">{t('groups.detail.championPrediction')}</span> {t('groups.detail.prediction')}
               </button>
             )}
             <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl">
-              <span className="text-[10px] sm:text-xs text-slate-400">Code:</span>
+              <span className="text-[10px] sm:text-xs text-slate-400">{t('groups.detail.code')}</span>
               <span className="text-xs sm:text-sm font-mono font-bold text-amber-400 tracking-wider">{group.inviteCode}</span>
               <button
                 onClick={handleCopy}
                 className="px-1.5 sm:px-2 py-1 rounded-lg hover:bg-emerald-800/50 transition-colors"
-                title="Copy invite code"
+                title={t('groups.detail.copyCode')}
               >
                 {copied
                   ? <CheckIcon sx={{ fontSize: 16, color: '#4ade80' }} />
@@ -136,7 +135,7 @@ export function GroupDetailPage() {
             <PeopleAltIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Members</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.members')}</p>
             <p className="text-sm sm:text-md font-bold text-white">{group.members.length}<span className="text-xs sm:text-sm text-emerald-300 font-normal ml-1">/{group.maxMembers}</span></p>
           </div>
         </div>
@@ -145,7 +144,7 @@ export function GroupDetailPage() {
             <AccountBalanceWalletIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Balance</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.balance')}</p>
             <p className="text-sm sm:text-md font-bold text-white truncate">{group.defaultBalance.toLocaleString()}</p>
           </div>
         </div>
@@ -154,7 +153,7 @@ export function GroupDetailPage() {
             <CalendarTodayIcon sx={{ fontSize: { xs: 18, sm: 24 }, color: 'white' }} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Created</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.created')}</p>
             <p className="text-sm sm:text-md font-bold text-white truncate">{formatDate(group.createdAt, 'MMM dd, yyyy')}</p>
           </div>
         </div>
@@ -163,9 +162,9 @@ export function GroupDetailPage() {
             <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${group.isActive ? 'bg-emerald-400' : 'bg-gray-400'}`} />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">Status</p>
+            <p className="text-[10px] sm:text-xs font-bold text-stone-100 uppercase tracking-wide">{t('groups.detail.stats.status')}</p>
             <p className={`text-sm sm:text-md font-bold ${group.isActive ? 'text-white' : 'text-emerald-400'}`}>
-              {group.isActive ? 'Active' : 'Inactive'}
+              {group.isActive ? t('common.active') : t('common.inactive')}
             </p>
           </div>
         </div>
@@ -176,9 +175,9 @@ export function GroupDetailPage() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-gray-800 flex items-center gap-2">
             <PeopleAltIcon sx={{ fontSize: 20, color: '#10b981' }} />
-            Members
+            {t('groups.detail.stats.members')}
           </h2>
-          <span className="text-xs font-medium text-slate-500">{memberPercent}% capacity</span>
+          <span className="text-xs font-medium text-slate-500">{memberPercent}% {t('groups.detail.capacity')}</span>
         </div>
         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-5">
           <div className={`h-full rounded-full transition-all duration-500 ${
@@ -197,16 +196,16 @@ export function GroupDetailPage() {
             >
               <div className="flex items-center gap-3">
                 <span className="w-5 text-xs font-bold text-slate-400 text-center">{idx + 1}</span>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-sm flex-shrink-0" title={member.email}>
                   {member.avatarUrl ? (
-                    <img src={member.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    <img src={member.avatarUrl} alt="" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover" />
                   ) : (
-                    <span className="text-xs font-bold text-white">{member.displayName?.charAt(0).toUpperCase()}</span>
+                    <span className="text-[10px] sm:text-xs font-bold text-white">{member.displayName?.charAt(0).toUpperCase()}</span>
                   )}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">{member.displayName ?? 'Unknown'}</p>
-                  <p className="text-[11px] text-slate-400">Joined {formatDate(member.joinedAt, 'MMM dd, yyyy')}</p>
+                  <p className="text-sm font-semibold text-gray-800">{member.displayName ?? t('common.unknown')}</p>
+                  <p className="text-[11px] text-slate-400">{t('groups.detail.joined')} {formatDate(member.joinedAt, 'MMM dd, yyyy')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -223,87 +222,12 @@ export function GroupDetailPage() {
       </div>
 
       {/* Member Info Dialog */}
-      <ThemeProvider theme={lightTheme}>
-      <Dialog
-        open={!!selectedMember}
+      <MemberInfoDialog
+        member={selectedMember}
+        stats={selectedMember ? leaderboardMap.get(selectedMember.userId) : undefined}
+        settlementMode={group.settlementMode}
         onClose={() => setSelectedMember(null)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden' } }}
-      >
-        {selectedMember && (() => {
-          const stats = leaderboardMap.get(selectedMember.userId);
-          return (
-            <DialogContent sx={{ p: 0 }}>
-              {/* Header */}
-              <div className="bg-gradient-to-r from-emerald-800 to-emerald-600 p-5 relative">
-                <IconButton
-                  onClick={() => setSelectedMember(null)}
-                  sx={{ position: 'absolute', top: 8, right: 8, color: 'white' }}
-                  size="small"
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shadow-md">
-                    {selectedMember.avatarUrl ? (
-                      <img src={selectedMember.avatarUrl} alt="" className="w-12 h-12 rounded-full object-cover" />
-                    ) : (
-                      <span className="text-lg font-bold text-white">{selectedMember.displayName?.charAt(0).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-white">{selectedMember.displayName ?? 'Unknown'}</p>
-                    <p className="text-xs text-emerald-200">Joined {formatDate(selectedMember.joinedAt, 'MMM dd, yyyy')}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="p-5 grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Total Bets</p>
-                  <p className="text-xl font-bold text-gray-800">{stats?.totalBets ?? 0}</p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Win Rate</p>
-                  <p className="text-xl font-bold text-emerald-600">{stats ? `${stats.winRate.toFixed(1)}%` : '0%'}</p>
-                </div>
-                <div className="bg-emerald-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-emerald-600 uppercase">Wins</p>
-                  <p className="text-xl font-bold text-emerald-700">{stats?.wins ?? 0}</p>
-                </div>
-                <div className="bg-amber-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-amber-600 uppercase">Draws</p>
-                  <p className="text-xl font-bold text-amber-700">{stats?.draws ?? 0}</p>
-                </div>
-                <div className="bg-red-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-red-500 uppercase">Losses</p>
-                  <p className="text-xl font-bold text-red-600">{stats?.losses ?? 0}</p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Net Profit</p>
-                  <p className={`text-xl font-bold ${(stats?.profit ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {(stats?.profit ?? 0) >= 0 ? '+' : ''}{(stats?.profit ?? 0).toLocaleString()}
-                  </p>
-                </div>
-                <div className={`rounded-xl p-3 text-center ${selectedMember.penaltyAmount > 0 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                  <p className={`text-[11px] font-semibold uppercase ${selectedMember.penaltyAmount > 0 ? 'text-red-500' : 'text-slate-500'}`}>Penalty</p>
-                  <p className={`text-xl font-bold ${selectedMember.penaltyAmount > 0 ? 'text-red-600' : 'text-gray-500'}`}>
-                    {selectedMember.penaltyAmount > 0 ? `-${selectedMember.penaltyAmount.toLocaleString()}` : '0'}
-                  </p>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center">
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase">Balance</p>
-                  <p className="text-xl font-bold text-green-800">{selectedMember.balance.toLocaleString()}</p>
-                </div>
-                
-              </div>
-            </DialogContent>
-          );
-        })()}
-      </Dialog>
-      </ThemeProvider>
+      />
     </div>
   );
 }

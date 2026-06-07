@@ -33,6 +33,7 @@ public record BetDto(
     Guid? SelectedTeamId, string? SelectedTeamName,
     decimal BetAmount, BetStatus Status, decimal Profit,
     DateTime CreatedAt, DateTime? SettledAt,
+    DateTime MatchStartTime,
     decimal Handicap = 0, string? FavoredTeamName = null);
 
 public record BetResultDto(BetStatus Status, decimal Profit);

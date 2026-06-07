@@ -3,9 +3,9 @@ namespace WorldCup2026.Application.DTOs.Users;
 public record UserProfileDto(
     Guid Id, string Email, string DisplayName,
     string? AvatarUrl, string AuthProvider,
-    DateTime CreatedAt, string TimeZone);
+    DateTime CreatedAt, string TimeZone, string Language);
 
-public record UpdateProfileRequest(string DisplayName, string? AvatarUrl, string? TimeZone);
+public record UpdateProfileRequest(string DisplayName, string? AvatarUrl, string? TimeZone, string? Language);
 
 public record AdminUserDto(
     Guid Id, string Email, string DisplayName,

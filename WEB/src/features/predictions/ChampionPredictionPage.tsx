@@ -7,6 +7,7 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import { useTranslation } from 'react-i18next';
 import { useGetChampionConfigQuery, useGetMyChampionPredictionQuery, usePlaceChampionPredictionMutation, useGetGroupChampionPredictionsQuery } from './championApi';
 import { useGetTeamsQuery } from '../matches/matchesApi';
 import { useAlert } from '../../components/AlertSnackbar';
@@ -20,6 +21,7 @@ export default function ChampionPredictionPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const navigate = useNavigate();
   const { showAlert } = useAlert();
+  const { t } = useTranslation();
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [pendingTeam, setPendingTeam] = useState<TeamDto | null>(null);
   const [activeTab, setActiveTab] = useState<'pick' | 'leaderboard'>('pick');
@@ -48,7 +50,7 @@ export default function ChampionPredictionPage() {
   useEffect(() => {
     if (placeError) {
       const err = placeError as { error?: string; data?: { error?: string } };
-      const errorMsg = err.error ?? err.data?.error ?? 'Failed to place prediction';
+      const errorMsg = err.error ?? err.data?.error ?? t('predictions.champion.error.failed');
       showAlert(errorMsg, 'error');
     }
   }, [placeError, showAlert]);
@@ -59,13 +61,13 @@ export default function ChampionPredictionPage() {
     setPendingTeam(null);
     try {
       await placeChampionPrediction({ groupId, selectedTeamId: pendingTeam.id }).unwrap();
-      showAlert(myPrediction ? 'Prediction updated!' : 'Prediction placed!', 'success');
+      showAlert(myPrediction ? t('predictions.champion.updated') : t('predictions.champion.placed'), 'success');
     } catch {
       setSelectedTeamId(myPrediction?.selectedTeamId || null);
     }
   }, [groupId, pendingTeam, myPrediction, placeChampionPrediction, showAlert]);
 
-  if (!groupId) return <p className="text-center text-gray-500 py-8">Group not found</p>;
+  if (!groupId) return <p className="text-center text-gray-500 py-8">{t('predictions.champion.groupNotFound')}</p>;
 
   if (configLoading || teamsLoading || predictionLoading) {
     return (
@@ -75,7 +77,7 @@ export default function ChampionPredictionPage() {
     );
   }
 
-  if (!config) return <Alert severity="error" sx={{ borderRadius: 3 }}>No championship prediction config found</Alert>;
+  if (!config) return <Alert severity="error" sx={{ borderRadius: 3 }}>{t('predictions.champion.noConfig')}</Alert>;
 
   const now = new Date();
   const isOpen = now >= new Date(config.predictionOpenTime) && now < new Date(config.predictionCloseTime);
@@ -102,8 +104,8 @@ export default function ChampionPredictionPage() {
               <EmojiEventsIcon sx={{ fontSize: { xs: 22, sm: 26 }, color: '#a04500' }} />
             </div>
             <div>
-              <h1 className="text-lg sm:text-2xl font-black text-amber-950 leading-tight">Champion Prediction</h1>
-              <p className="text-xs sm:text-sm text-amber-800/70">Pick the World Cup 2026 winner</p>
+              <h1 className="text-lg sm:text-2xl font-black text-amber-950 leading-tight">{t('predictions.champion.title')}</h1>
+              <p className="text-xs sm:text-sm text-amber-800/70">{t('predictions.champion.subtitle')}</p>
             </div>
           </div>
           {isOpen && <PredictionDeadlineTimer closeTime={config.predictionCloseTime} />}
@@ -123,7 +125,7 @@ export default function ChampionPredictionPage() {
           <div>
             <div className="flex items-center gap-2">
               <CheckCircleIcon sx={{ fontSize: 18, color: '#059669' }} />
-              <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide">Championship Settled</p>
+              <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide">{t('predictions.champion.settled')}</p>
             </div>
             <p className="text-xl font-black text-emerald-900 dark:text-emerald-100 mt-0.5">
               {winnerTeam.name} <span className="text-emerald-600 dark:text-emerald-400 font-medium text-base">({winnerTeam.code})</span>
@@ -148,17 +150,17 @@ export default function ChampionPredictionPage() {
                 })()}
               </div>
               <div>
-                <p className="text-xs font-bold text-violet-500 dark:text-violet-400 uppercase tracking-wide">Your Prediction</p>
+                <p className="text-xs font-bold text-violet-500 dark:text-violet-400 uppercase tracking-wide">{t('predictions.champion.yourPrediction')}</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{myPrediction.selectedTeamName}</p>
                 {config.isSettled && (
                   <div className="flex items-center gap-1 mt-0.5">
                     {myPrediction.isCorrect ? (
                       <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                        <CheckCircleIcon sx={{ fontSize: 14 }} /> You Win
+                        <CheckCircleIcon sx={{ fontSize: 14 }} /> {t('predictions.champion.youWin')}
                       </span>
                     ) : (
                       <span className="text-xs font-bold text-red-500 flex items-center gap-1">
-                        <CancelIcon sx={{ fontSize: 14 }} /> You Lost
+                        <CancelIcon sx={{ fontSize: 14 }} /> {t('predictions.champion.youLost')}
                       </span>
                     )}
                   </div>
@@ -180,7 +182,7 @@ export default function ChampionPredictionPage() {
           }`}
         >
           <EmojiEventsIcon sx={{ fontSize: 18 }} />
-          Select Champion
+          {t('predictions.champion.tabs.select')}
         </button>
         <button
           onClick={() => setActiveTab('leaderboard')}
@@ -191,7 +193,7 @@ export default function ChampionPredictionPage() {
           }`}
         >
           <PeopleAltIcon sx={{ fontSize: 18 }} />
-          Group Predictions
+          {t('predictions.champion.tabs.group')}
           {groupPredictions && groupPredictions.length > 0 && (
             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
               activeTab === 'leaderboard' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400' : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300'
@@ -207,7 +209,7 @@ export default function ChampionPredictionPage() {
         <div className="mb-8">
           {isClosed && !config.isSettled && (
             <Alert severity="warning" sx={{ mb: 2, borderRadius: 3 }}>
-              Prediction window has closed. You cannot change your prediction.
+              {t('predictions.champion.windowClosed')}
             </Alert>
           )}
 
@@ -266,15 +268,15 @@ export default function ChampionPredictionPage() {
                 </div>
                 <h3 className="text-lg font-black text-amber-950">{pendingTeam.name}</h3>
                 <p className="text-sm text-amber-800/70 mt-1">
-                  {myPrediction ? 'Change your champion prediction to' : 'Pick as your champion prediction?'}
+                  {myPrediction ? t('predictions.champion.dialog.changeTo') : t('predictions.champion.dialog.pickAs')}
                 </p>
               </div>
             </div>
             <div className="p-5">
               <p className="text-sm text-gray-500 text-center mb-4">
                 {myPrediction
-                  ? <>You will change from <strong>{myPrediction.selectedTeamName}</strong> to <strong>{pendingTeam.name}</strong></>
-                  : <>You are about to predict <strong>{pendingTeam.name}</strong> as the World Cup 2026 champion</>}
+                  ? <>{t('predictions.champion.dialog.changeFromPart1')} <strong>{myPrediction.selectedTeamName}</strong> {t('predictions.champion.dialog.changeFromPart2')} <strong>{pendingTeam.name}</strong></>
+                  : <>{t('predictions.champion.dialog.aboutToPredictPart1')} <strong>{pendingTeam.name}</strong> {t('predictions.champion.dialog.aboutToPredictPart2')}</>}
               </p>
               <div className="flex gap-2">
                 <Button
@@ -282,7 +284,7 @@ export default function ChampionPredictionPage() {
                   onClick={() => setPendingTeam(null)}
                   sx={{ borderRadius: 2, textTransform: 'none', py: 1.2 }}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
                 <Button
                   fullWidth
@@ -296,7 +298,7 @@ export default function ChampionPredictionPage() {
                     '&:hover': { background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)' },
                   }}
                 >
-                  {isPlacing ? 'Confirming...' : 'Confirm Pick'}
+                  {isPlacing ? t('predictions.champion.dialog.confirming') : t('predictions.champion.dialog.confirmPick')}
                 </Button>
               </div>
             </div>

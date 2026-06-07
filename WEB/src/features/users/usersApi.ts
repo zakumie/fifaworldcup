@@ -23,6 +23,9 @@ export const usersApi = apiSlice.injectEndpoints({
       query: ({ id, body }) => ({ url: `/users/${id}/active`, method: 'PUT', body }),
       invalidatesTags: ['Users'],
     }),
+    resetPassword: builder.mutation<string, string>({
+      query: (id) => ({ url: `/users/${id}/reset-password`, method: 'POST' }),
+    }),
   }),
 });
 
@@ -32,4 +35,5 @@ export const {
   useGetAllUsersQuery,
   useUpdateUserRoleMutation,
   useToggleUserActiveMutation,
+  useResetPasswordMutation,
 } = usersApi;

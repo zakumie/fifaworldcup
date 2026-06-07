@@ -20,7 +20,7 @@ public class UserService : IUserService
 
         return Result<UserProfileDto>.Success(new UserProfileDto(
             user.Id, user.Email, user.DisplayName,
-            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone));
+            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone, user.Language));
     }
 
     public async Task<Result<UserProfileDto>> UpdateProfileAsync(Guid userId, UpdateProfileRequest request)
@@ -37,11 +37,18 @@ public class UserService : IUserService
                 return Result<UserProfileDto>.Failure($"Invalid timezone: '{request.TimeZone}'. Allowed: {string.Join(", ", allowed)}");
             user.TimeZone = request.TimeZone;
         }
+        if (!string.IsNullOrEmpty(request.Language))
+        {
+            var allowedLangs = new[] { "en", "vi" };
+            if (!allowedLangs.Contains(request.Language, StringComparer.OrdinalIgnoreCase))
+                return Result<UserProfileDto>.Failure($"Invalid language: '{request.Language}'. Allowed: {string.Join(", ", allowedLangs)}");
+            user.Language = request.Language.ToLowerInvariant();
+        }
         await _db.SaveChangesAsync();
 
         return Result<UserProfileDto>.Success(new UserProfileDto(
             user.Id, user.Email, user.DisplayName,
-            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone));
+            user.AvatarUrl, user.AuthProvider.ToString(), user.CreatedAt, user.TimeZone, user.Language));
     }
 
     public async Task<Result<List<AdminUserDto>>> GetAllUsersAsync()
@@ -103,5 +110,20 @@ public class UserService : IUserService
             user.Id, user.Email, user.DisplayName,
             user.AvatarUrl, user.AuthProvider.ToString(),
             user.Role.ToString(), user.IsActive, user.CreatedAt));
+    }
+
+    public async Task<Result<string>> ResetPasswordAsync(Guid userId)
+    {
+        var user = await _db.Users.FindAsync(userId);
+        if (user == null) return Result<string>.Failure("User not found.");
+
+        if (user.AuthProvider != AuthProvider.Local)
+            return Result<string>.Failure("Password reset is only available for local accounts.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("123456");
+        user.UpdatedAt = DateTime.UtcNow;
+        await _db.SaveChangesAsync();
+
+        return Result<string>.Success("Password has been reset to default.");
     }
 }

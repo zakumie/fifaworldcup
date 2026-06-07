@@ -1,0 +1,725 @@
+﻿{
+  "common": {
+    "vs": "vs",
+    "home": "Home",
+    "cancel": "Cancel",
+    "close": "Close",
+    "done": "Done",
+    "update": "Update",
+    "create": "Create",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "viewAll": "View All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "unknown": "Unknown",
+    "none": "None",
+    "even": "Even",
+    "or": "or",
+    "status": "Status",
+    "members": "Members",
+    "handicap": "Handicap",
+    "pick": "Pick",
+    "wager": "Wager",
+    "profitLoss": "P/L",
+    "total": "Total:",
+    "activeLabel": "Active:",
+    "edit": "Edit",
+    "noDescription": "No description",
+    "tryDifferentSearch": "Try a different search term",
+    "tryAgainLater": "Please try again later",
+    "groupNotFound": "Group not found",
+    "error": {
+      "generic": "An error occurred"
+    },
+    "brand": {
+      "worldCup": "WORLD CUP",
+      "year": "2026",
+      "full": "World Cup 2026",
+      "tagline": "Predict. Compete. Win."
+    },
+    "filter": {
+      "all": "All",
+      "upcoming": "Upcoming",
+      "live": "Live",
+      "finished": "Finished",
+      "settled": "Settled",
+      "pending": "Pending",
+      "won": "Won",
+      "lost": "Lost",
+      "open": "Open",
+      "active": "Active",
+      "inactive": "Inactive",
+      "myBets": "My Bets"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of"
+    }
+  },
+  "auth": {
+    "validation": {
+      "invalidEmail": "Invalid email",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "min2Chars": "Min 2 characters",
+      "displayNameRequired": "Display name is required",
+      "min6Chars": "Min 6 characters",
+      "passwordsMustMatch": "Passwords must match",
+      "confirmPasswordRequired": "Confirm password is required"
+    },
+    "login": {
+      "error": {
+        "invalidCredentials": "Invalid email or password",
+        "googleFailed": "Google login failed"
+      },
+      "signingIn": "Signing in...",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "signInButton": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "register": {
+      "error": {
+        "failed": "Registration failed. Email may already be in use."
+      },
+      "subtitle": "Create your prediction account",
+      "displayNameLabel": "Display Name",
+      "displayNamePlaceholder": "Your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "createButton": "Create Account",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "changePassword": {
+      "error": {
+        "allRequired": "All fields are required",
+        "minLength": "New password must be at least 6 characters",
+        "mismatch": "New passwords do not match",
+        "samePassword": "New password must be different from current password",
+        "failed": "Failed to change password"
+      },
+      "success": "Password changed successfully!",
+      "title": "Change Password",
+      "subtitle": "Update your account password",
+      "currentLabel": "Current Password",
+      "newLabel": "New Password",
+      "confirmLabel": "Confirm New Password",
+      "hint": {
+        "minChars": "Must be at least 6 characters",
+        "mismatch": "Passwords do not match"
+      },
+      "changedButton": "Password Changed!",
+      "submitButton": "Change Password"
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "groups": "Groups",
+    "matches": "Matches",
+    "myBets": "My Bets",
+    "leaderboard": "Leaderboard",
+    "admin": {
+      "matches": "Manage Matches",
+      "groups": "Manage Groups",
+      "users": "Manage Users"
+    },
+    "brand": {
+      "title": "WC 2026",
+      "subtitle": "Predictions"
+    },
+    "section": {
+      "menu": "Menu",
+      "admin": "Admin"
+    },
+    "help": "Help",
+    "playMusic": "Play Music",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "settings": "Settings",
+    "menu": {
+      "profile": "Profile",
+      "changePassword": "Change Password",
+      "logout": "Logout",
+      "language": "Language"
+    },
+    "adminBadge": "Admin"
+  },
+  "dashboard": {
+    "title": "DASHBOARD",
+    "welcomeBack": "Welcome back, ",
+    "stats": {
+      "myGroups": "My Groups",
+      "upcoming": "Upcoming",
+      "winRate": "Win Rate",
+      "netProfit": "Net Profit",
+      "netLoss": "Net Loss"
+    },
+    "sections": {
+      "upcomingMatches": "Upcoming Matches",
+      "recentBets": "Recent Bets"
+    },
+    "empty": {
+      "noUpcoming": "No upcoming matches",
+      "noBets": "No bets yet",
+      "noBetsHint": "Place your first bet from Matches"
+    }
+  },
+  "groups": {
+    "list": {
+      "title": "MY GROUPS",
+      "subtitle": "Join groups · Compete with friends · Climb the leaderboard",
+      "joinButton": "Join Group",
+      "searchPlaceholder": "Search groups...",
+      "empty": {
+        "notFound": "No groups found",
+        "noGroups": "No groups yet",
+        "hint": "Join an existing group or ask an admin to create one"
+      }
+    },
+    "card": {
+      "defaultBalance": "Default Balance",
+      "inviteCode": "Invite Code",
+      "created": "Created ",
+      "copyInviteCode": "Copy invite code"
+    },
+    "detail": {
+      "notFound": "Group not found",
+      "championPrediction": "Champion Prediction",
+      "prediction": "Prediction",
+      "code": "Code:",
+      "copyCode": "Copy invite code",
+      "stats": {
+        "members": "Members",
+        "balance": "Balance",
+        "created": "Created",
+        "status": "Status"
+      },
+      "capacity": "capacity",
+      "joined": "Joined "
+    },
+    "mode": {
+      "winnerKeeps": "Winner Keeps",
+      "normal": "Normal",
+      "normalWin": "Win = bet + profit",
+      "normalLose": "Lose = lose bet",
+      "winnerKeepsDesc": "Win = +0, Lose = -bet",
+      "skipAutoLose": "Skip = auto lose"
+    },
+    "join": {
+      "validation": {
+        "required": "Invite code is required"
+      },
+      "error": {
+        "invalid": "Invalid invite code or group is full"
+      },
+      "title": "Join a Group",
+      "subtitle": "Enter an invite code to join",
+      "codeLabel": "Invite Code",
+      "codePlaceholder": "Enter invite code...",
+      "joiningButton": "Joining...",
+      "submitButton": "Join Group"
+    },
+    "create": {
+      "validation": {
+        "nameRequired": "Name is required"
+      },
+      "error": {
+        "noPermission": "You do not have permission to create groups.",
+        "failed": "Failed to create group"
+      },
+      "title": "Create New Group",
+      "subtitle": "Set up a new betting group for members",
+      "nameLabel": "Group Name",
+      "namePlaceholder": "e.g. World Cup Legends",
+      "descriptionLabel": "Description (optional)",
+      "descriptionPlaceholder": "What's this group about?",
+      "maxMembersLabel": "Max Members",
+      "balanceLabel": "Starting Balance",
+      "settlementMode": "Settlement Mode",
+      "championSection": "Champion Prediction",
+      "enableChampion": "Enable Champion Prediction",
+      "championDescription": "Members predict the World Cup winner",
+      "openTimeLabel": "Open Time",
+      "closeTimeLabel": "Close Time",
+      "submitButton": "Create Group"
+    },
+    "edit": {
+      "validation": {
+        "nameRequired": "Name is required"
+      },
+      "success": "Group updated successfully!",
+      "error": {
+        "noPermission": "You do not have permission to edit this group.",
+        "failed": "Failed to update group",
+        "settleFailed": "Failed to settle champion predictions"
+      },
+      "settleSuccess": "Champion predictions settled!",
+      "title": "Edit Group",
+      "nameLabel": "Group Name",
+      "descriptionLabel": "Description",
+      "maxMembersLabel": "Max Members",
+      "balanceLabel": "Default Balance",
+      "settlementMode": "Settlement Mode",
+      "championSection": "Champion Prediction",
+      "settledWinner": "Settled — Winner: ",
+      "enableChampion": "Enable Champion Prediction",
+      "championDescription": "Members predict the World Cup winner",
+      "openTimeLabel": "Open Time",
+      "closeTimeLabel": "Close Time",
+      "selectWinner": "Select winner team...",
+      "settleButton": "Settle",
+      "statusSection": "Group Status",
+      "statusActive": "Group is active and accepting bets",
+      "statusInactive": "Group is deactivated"
+    }
+  },
+  "matches": {
+    "status": {
+      "live": "● Live",
+      "finished": "Finished",
+      "upcoming": "Upcoming",
+      "open": "Open",
+      "settled": "Settled",
+      "postponed": "Postponed",
+      "cancelled": "Cancelled"
+    },
+    "list": {
+      "title": "MATCH CENTER",
+      "titleMatch": "MATCH",
+      "titleCenter": "CENTER",
+      "subtitle": "Predict results · Place bets · Win big",
+      "searchPlaceholder": "Search teams...",
+      "empty": {
+        "notFound": "No matches found",
+        "filterHint": "Try selecting a different filter"
+      }
+    },
+    "card": {
+      "handicap": "Handicap:",
+      "yourBet": "Your bet:",
+      "viewButton": "View",
+      "betNow": "Bet Now",
+      "updateBet": "Update Bet"
+    }
+  },
+  "betting": {
+    "place": {
+      "editTitle": "Edit Your Bet",
+      "title": "Place Your Bet",
+      "updatedSuccess": "Bet Updated!",
+      "placedSuccess": "Bet Placed!",
+      "youPicked": "You picked ",
+      "potentialWin": "Potential win: ",
+      "error": {
+        "updateFailed": "Failed to update bet",
+        "placeFailed": "Failed to place bet"
+      },
+      "pickWinner": "Pick your winner",
+      "bettingCloses": "Betting closes ",
+      "betAmount": "Bet Amount",
+      "min": "Min:",
+      "max": "Max:",
+      "potentialWinLabel": "Potential Win",
+      "updateButton": "Update Bet",
+      "confirmButton": "Confirm Bet"
+    },
+    "view": {
+      "wagered": "wagered",
+      "kickoff": "Kick-off",
+      "bet": "Bet",
+      "empty": {
+        "title": "No bets placed yet",
+        "hint": "Be the first to place a bet!"
+      },
+      "noBet": "No Bet",
+      "member": "member",
+      "members": "members",
+      "noOnePicked": "No one picked "
+    },
+    "config": {
+      "editTitle": "Edit Betting Config",
+      "createTitle": "Setup Betting",
+      "handicapLabel": "Handicap",
+      "favoredTeamLabel": "Favored Team",
+      "home": "(Home)",
+      "away": "(Away)",
+      "oddsLabel": "Odds (multiplier)",
+      "minBetLabel": "Min Bet",
+      "maxBetLabel": "Max Bet",
+      "fixedBetToggle": "Fixed Bet Amount",
+      "fixedAmountLabel": "Fixed Amount",
+      "opensLabel": "Betting Opens",
+      "closesLabel": "Betting Closes"
+    }
+  },
+  "bets": {
+    "title": "MY BETS",
+    "titleMy": "MY",
+    "titleBets": "BETS",
+    "subtitle": "Track your predictions · Analyze performance",
+    "searchPlaceholder": "Search teams...",
+    "noGroup": {
+      "title": "No Group Selected",
+      "hint": "Join a group to start tracking your bets"
+    },
+    "stats": {
+      "totalBets": "Total Bets",
+      "winRate": "Win Rate",
+      "netProfit": "Net Profit",
+      "netLoss": "Net Loss",
+      "totalWagered": "Total Wagered"
+    },
+    "row": {
+      "profit": "Profit",
+      "loss": "Loss"
+    },
+    "status": {
+      "won": "Won",
+      "halfwon": "Half Won",
+      "lost": "Lost",
+      "halflost": "Half Lost",
+      "push": "Push",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "empty": {
+      "noMatch": "No bets match your filter",
+      "noMatchHint": "Try a different search term or filter",
+      "noBets": "No bets yet",
+      "noBetsHint": "Place your first bet from the Matches page"
+    },
+    "pagination": {
+      "bets": "bets"
+    }
+  },
+  "leaderboard": {
+    "title": "LEADERBOARD",
+    "subtitle": "Top players · Win rates · Rankings",
+    "totalPlayers": "Total Players",
+    "noGroup": {
+      "title": "No Group Selected",
+      "hint": "Join a group to see the leaderboard"
+    },
+    "error": {
+      "loadFailed": "Failed to load leaderboard"
+    },
+    "fullRankings": "Full Rankings",
+    "table": {
+      "rank": "#",
+      "player": "Player",
+      "wdl": "W / D / L",
+      "rate": "Rate",
+      "penalty": "Penalty",
+      "profit": "Profit",
+      "loss": "Loss",
+      "balance": "Balance"
+    },
+    "empty": {
+      "title": "No rankings yet",
+      "hint": "Place bets to appear on the leaderboard"
+    }
+  },
+  "predictions": {
+    "champion": {
+      "title": "Champion Prediction",
+      "subtitle": "Pick the World Cup 2026 winner",
+      "groupNotFound": "Group not found",
+      "noConfig": "No championship prediction config found",
+      "settled": "Championship Settled",
+      "yourPrediction": "Your Prediction",
+      "youWin": "You Win",
+      "youLost": "You Lost",
+      "tabs": {
+        "select": "Select Champion",
+        "group": "Group Predictions"
+      },
+      "windowClosed": "Prediction window has closed. You cannot change your prediction.",
+      "updated": "Prediction updated!",
+      "placed": "Prediction placed!",
+      "error": {
+        "failed": "Failed to place prediction"
+      },
+      "dialog": {
+        "changeTo": "Change your champion prediction to",
+        "pickAs": "Pick as your champion prediction?",
+        "changeFrom": "You will change from {{from}} to {{to}}",
+        "changeFromPart1": "You will change from",
+        "changeFromPart2": "to",
+        "aboutToPredict": "You are about to predict {{team}} as the World Cup 2026 champion",
+        "aboutToPredictPart1": "You are about to predict",
+        "aboutToPredictPart2": "as the World Cup 2026 champion",
+        "confirming": "Confirming...",
+        "confirmPick": "Confirm Pick"
+      }
+    }
+  },
+  "admin": {
+    "groups": {
+      "title": "MANAGE GROUPS",
+      "subtitle": "Create, edit, and manage all betting groups",
+      "newButton": "New Group",
+      "searchPlaceholder": "Search groups by name...",
+      "table": {
+        "group": "Group",
+        "members": "Members",
+        "balance": "Balance",
+        "mode": "Mode",
+        "actions": "Actions"
+      },
+      "viewGroup": "View group",
+      "editGroup": "Edit group",
+      "empty": {
+        "notFound": "No groups found",
+        "noGroups": "No groups yet",
+        "hint": "Create your first group to get started"
+      },
+      "createFirst": "Create First Group",
+      "createSuccess": "Group created successfully!"
+    },
+    "matches": {
+      "title": "MANAGE MATCHES",
+      "subtitle": "Configure match status, scores and betting",
+      "searchPlaceholder": "Search matches by team name...",
+      "configured": "Configured:",
+      "pending": "Pending:",
+      "live": "Live:",
+      "table": {
+        "match": "Match",
+        "stage": "Stage",
+        "score": "Score",
+        "status": "Status",
+        "date": "Date",
+        "action": "Action"
+      },
+      "manage": "Manage match",
+      "empty": {
+        "notFound": "No matches found",
+        "noMatches": "No matches available",
+        "filterHint": "Try selecting a different filter"
+      },
+      "dialog": {
+        "title": "Match Administration",
+        "tabs": {
+          "betting": "Betting Config",
+          "statusScore": "Status & Score"
+        },
+        "error": {
+          "updateFailed": "Failed to update match"
+        },
+        "matchStatus": "Match Status",
+        "score": "Score",
+        "noGroup": "Select a group from the Matches page to manage betting.",
+        "odds": "Odds",
+        "betAmount": "Bet Amount",
+        "bettingWindow": "Betting Window",
+        "editConfig": "Edit Config"
+      }
+    },
+    "users": {
+      "title": "MANAGE USERS",
+      "subtitle": "Manage user roles and account status",
+      "searchPlaceholder": "Search users by name or email...",
+      "stats": {
+        "total": "Total",
+        "active": "Active",
+        "admins": "Admins"
+      },
+      "tabs": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "columns": {
+        "user": "User",
+        "role": "Role",
+        "provider": "Provider",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "role": {
+        "admin": "Admin",
+        "user": "User"
+      },
+      "actions": {
+        "resetPassword": "Reset password",
+        "changeRole": "Change role",
+        "deactivate": "Deactivate user",
+        "activate": "Activate user"
+      },
+      "deactivated": "{{name}} has been deactivated. Pending bets cancelled.",
+      "reactivated": "{{name}} has been reactivated.",
+      "failedUpdateStatus": "Failed to update user status.",
+      "noResults": "No users found",
+      "empty": "No users yet",
+      "emptyHint": "Users will appear here after registration",
+      "tryDifferentSearch": "Try a different search term",
+      "roleUpdated": "{{name}}'s role updated to {{role}}.",
+      "failedUpdateRole": "Failed to update role.",
+      "passwordResetSuccess": "{{name}}'s password has been reset to default.",
+      "failedResetPassword": "Failed to reset password.",
+      "editRoleDialog": {
+        "title": "Edit Role",
+        "systemRole": "System Role",
+        "hint": "Admin users can manage matches, groups, and other users.",
+        "save": "Save Role"
+      },
+      "resetDialog": {
+        "title": "Reset Password",
+        "confirm": "Are you sure you want to reset the password for {{name}} to default?",
+        "hint": "The user will need to change their password after logging in."
+      }
+    },
+    "predictions": {
+      "title": "Manage Champion Predictions",
+      "settings": "Prediction Settings",
+      "settledAlert": "Predictions have been settled for this group",
+      "enableToggle": "Enable Champion Predictions",
+      "openTime": "Prediction Open Time",
+      "closeTime": "Prediction Close Time",
+      "updateButton": "Update Configuration",
+      "createButton": "Create Configuration",
+      "createSuccess": "Configuration created successfully",
+      "updateSuccess": "Configuration updated successfully",
+      "error": {
+        "saveFailed": "Failed to save configuration",
+        "selectTeam": "Please select a winning team",
+        "settleFailed": "Failed to settle predictions"
+      },
+      "settleTitle": "Settle Predictions",
+      "settleDescription": "Once settled, members will see if their prediction was correct.",
+      "settleButton": "Settle Predictions",
+      "settling": "Settling...",
+      "settleDialog": {
+        "title": "Settle Championship Prediction",
+        "description": "Select the winning team to settle all member predictions",
+        "selectWinner": "Select Winner Team",
+        "chooseTeam": "-- Choose Team --",
+        "confirm": "Confirm Settlement"
+      },
+      "settleSuccess": "Predictions settled successfully"
+    }
+  },
+  "profile": {
+    "title": "MY PROFILE",
+    "subtitle": "Manage your account settings",
+    "notFound": "Profile not found",
+    "info": {
+      "email": "Email",
+      "authProvider": "Auth Provider",
+      "memberSince": "Member Since"
+    },
+    "form": {
+      "displayName": "Display Name",
+      "timezone": "Timezone",
+      "timezoneHint": "All times will be displayed in this timezone",
+      "language": "Language",
+      "languageHint": "Choose your preferred language",
+      "chooseAvatar": "Choose Avatar",
+      "avatarUrlPlaceholder": "Or paste an image URL...",
+      "applyButton": "Apply",
+      "removeAvatar": "Remove avatar",
+      "error": {
+        "nameRequired": "Display name is required",
+        "updateFailed": "Failed to update profile"
+      },
+      "savedButton": "Saved!",
+      "saveButton": "Save Changes"
+    }
+  },
+  "help": {
+    "title": "How to Play",
+    "subtitle": "Your guide to World Cup 2026 Predictions",
+    "stepsLabel": "Steps",
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "gotIt": "Got it!"
+    },
+    "steps": {
+      "joinGroup": {
+        "title": "Join a Group",
+        "description": "Start by joining a betting group using an invite code from your friends or create your own group.",
+        "step1": "Go to the Groups page from the sidebar menu",
+        "step2": "Click the \"Join Group\" button at the top",
+        "step3": "Enter the invite code shared by your group admin",
+        "step4": "Once joined, you'll see the group in your list with members count and default balance"
+      },
+      "placeBet": {
+        "title": "Place a Bet",
+        "description": "Browse upcoming World Cup matches and place your predictions with virtual currency.",
+        "step1": "Navigate to the Match Center from the sidebar",
+        "step2": "Find an upcoming match with a \"Bet Now\" button",
+        "step3": "Click \"Bet Now\" to open the betting dialog",
+        "step4": "Select which team you think will win (considering the handicap)",
+        "step5": "Enter your bet amount within the allowed range",
+        "step6": "Confirm your bet before the betting window closes"
+      },
+      "viewBets": {
+        "title": "View Match Bets",
+        "description": "After a match starts or finishes, see how other members in your group have bet.",
+        "step1": "On a Live or Finished match card, click the \"View\" button",
+        "step2": "See all group members' bets with their avatars and chosen teams",
+        "step3": "The winning team column is highlighted after settlement",
+        "step4": "Track who won and who lost in each match"
+      },
+      "myBets": {
+        "title": "My Bets",
+        "description": "Track all your betting history — see your pending, won, and lost bets in one place.",
+        "step1": "Click \"My Bets\" in the sidebar menu",
+        "step2": "View all your bets organized by match",
+        "step3": "Filter by status: Pending, Won, Lost, or All",
+        "step4": "See your profit/loss for each individual bet",
+        "step5": "Also accessible from Match Center → \"My Bets\" tab"
+      },
+      "leaderboard": {
+        "title": "Leaderboard",
+        "description": "Check the group rankings — see who's leading in profit, win rate, and total bets.",
+        "step1": "Go to the Leaderboard page from the sidebar",
+        "step2": "See all members ranked by their performance",
+        "step3": "Track stats: Balance, Profit, Win Rate, Total Bets",
+        "step4": "The top 3 players are highlighted with medals",
+        "step5": "Compare your performance against other group members"
+      },
+      "champion": {
+        "title": "Champion Prediction",
+        "description": "The mini game! Predict which team will win the World Cup 2026 for bonus rewards.",
+        "step1": "From the Groups page, look for the \"Predict Champion\" button on your group card",
+        "step2": "Browse all 48 participating teams organized by group",
+        "step3": "Select the team you believe will win the World Cup",
+        "step4": "Submit your prediction before the deadline",
+        "step5": "If your team wins the tournament, you earn bonus points!"
+      }
+    }
+  },
+  "music": {
+    "artist": "World Cup 2026",
+    "noSongs": "No songs available",
+    "playlist": "Playlist",
+    "songsCount": "songs",
+    "nowPlaying": "PLAYING"
+  },
+  "members": {
+    "stats": {
+      "netLoss": "Net Loss",
+      "netProfit": "Net Profit",
+      "totalBets": "Total Bets",
+      "winRate": "Win Rate",
+      "wins": "Wins",
+      "draws": "Draws",
+      "losses": "Losses",
+      "penalty": "Penalty",
+      "balance": "Balance"
+    },
+    "joined": "Joined "
+  },
+  "language": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

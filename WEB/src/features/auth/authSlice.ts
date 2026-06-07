@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import i18n from '../../i18n';
 import type { UserInfo } from '../../types';
 
 interface AuthState {
@@ -13,6 +14,12 @@ const initialState: AuthState = {
   user: JSON.parse(sessionStorage.getItem('user') || 'null'),
 };
 
+// Sync i18n language on app load if user is already logged in
+if (initialState.user?.language) {
+  i18n.changeLanguage(initialState.user.language);
+  localStorage.setItem('language', initialState.user.language);
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -24,6 +31,21 @@ const authSlice = createSlice({
       sessionStorage.setItem('token', action.payload.accessToken);
       sessionStorage.setItem('refreshToken', action.payload.refreshToken);
       sessionStorage.setItem('user', JSON.stringify(action.payload.user));
+      // Sync language preference
+      if (action.payload.user.language) {
+        i18n.changeLanguage(action.payload.user.language);
+        localStorage.setItem('language', action.payload.user.language);
+      }
+    },
+    updateUser(state, action: PayloadAction<Partial<UserInfo>>) {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+        sessionStorage.setItem('user', JSON.stringify(state.user));
+        if (action.payload.language) {
+          i18n.changeLanguage(action.payload.language);
+          localStorage.setItem('language', action.payload.language);
+        }
+      }
     },
     logout(state) {
       state.token = null;
@@ -36,5 +58,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, updateUser, logout } = authSlice.actions;
 export default authSlice.reducer;

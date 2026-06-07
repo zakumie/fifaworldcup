@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useTranslation } from 'react-i18next';
 import { useGetAllGroupsQuery } from './groupsApi';
 import { CreateGroupDialog } from './CreateGroupDialog';
 import { EditGroupDialog } from './EditGroupDialog';
@@ -17,6 +18,7 @@ import { AlertSnackbar, useAlert } from '../../components/AlertSnackbar';
 import type { GroupDto } from '../../types';
 
 export function ManageGroupsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: groups, isLoading } = useGetAllGroupsQuery();
   const [createOpen, setCreateOpen] = useState(false);
@@ -44,16 +46,16 @@ export function ManageGroupsPage() {
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
               <SettingsIcon sx={{ fontSize: { xs: 24, sm: 28 }, color: '#94a3b8' }} />
-              <span>MANAGE <span className="text-blue-400">GROUPS</span></span>
+              <span>{t('admin.groups.title')}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Create, edit, and manage all betting groups</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('admin.groups.subtitle')}</p>
           </div>
           <button
             onClick={() => setCreateOpen(true)}
             className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-sm shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-200 active:scale-95"
           >
             <AddIcon sx={{ fontSize: 18 }} />
-            New Group
+            {t('admin.groups.newButton')}
           </button>
         </div>
 
@@ -64,7 +66,7 @@ export function ManageGroupsPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search groups by name..."
+            placeholder={t('admin.groups.searchPlaceholder')}
             className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
           />
         </div>
@@ -73,12 +75,12 @@ export function ManageGroupsPage() {
         <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
           <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <GroupsIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-[10px] sm:text-xs text-slate-400">Total:</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">{t('common.total')}</span>
             <span className="text-[10px] sm:text-xs font-bold text-white">{groups?.length ?? 0}</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700">
             <PeopleAltIcon sx={{ fontSize: 16, color: '#94a3b8' }} />
-            <span className="text-[10px] sm:text-xs text-slate-400">Active:</span>
+            <span className="text-[10px] sm:text-xs text-slate-400">{t('common.active')}:</span>
             <span className="text-[10px] sm:text-xs font-bold text-emerald-400">{groups?.filter(g => g.isActive).length ?? 0}</span>
           </div>
         </div>
@@ -98,11 +100,11 @@ export function ManageGroupsPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           {/* Table header */}
           <div className="hidden sm:grid grid-cols-12 gap-4 px-5 py-3 bg-slate-50 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wide">
-            <div className="col-span-4">Group</div>
-            <div className="col-span-2 text-center">Members</div>
-            <div className="col-span-2 text-center">Balance</div>
-            <div className="col-span-2 text-center">Mode</div>
-            <div className="col-span-2 text-right">Actions</div>
+            <div className="col-span-4">{t('admin.groups.table.group')}</div>
+            <div className="col-span-2 text-center">{t('admin.groups.table.members')}</div>
+            <div className="col-span-2 text-center">{t('admin.groups.table.balance')}</div>
+            <div className="col-span-2 text-center">{t('admin.groups.table.mode')}</div>
+            <div className="col-span-2 text-right">{t('admin.groups.table.actions')}</div>
           </div>
 
           {/* Table rows */}
@@ -118,7 +120,7 @@ export function ManageGroupsPage() {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-sm font-bold text-gray-800 truncate">{group.name}</h3>
-                  <p className="text-xs text-slate-400 truncate">{group.description || 'No description'}</p>
+                  <p className="text-xs text-slate-400 truncate">{group.description || t('common.noDescription')}</p>
                 </div>
               </div>
 
@@ -137,7 +139,7 @@ export function ManageGroupsPage() {
               <div className="col-span-2 text-center">
                 <Chip
                   size="small"
-                  label={group.settlementMode === 'WinnerKeepsLoserPays' ? 'Winner Keeps' : 'Normal'}
+                  label={group.settlementMode === 'WinnerKeepsLoserPays' ? t('groups.mode.winnerKeeps') : t('groups.mode.normal')}
                   color={group.settlementMode === 'WinnerKeepsLoserPays' ? 'warning' : 'default'}
                   variant="outlined"
                   sx={{ fontSize: '0.7rem', height: 24 }}
@@ -146,10 +148,10 @@ export function ManageGroupsPage() {
 
               {/* Actions */}
               <div className="col-span-2 flex items-center justify-end gap-1">
-                <IconButton size="small" onClick={() => navigate(`/groups/${group.id}`)} title="View group">
+                <IconButton size="small" onClick={() => navigate(`/groups/${group.id}`)} title={t('admin.groups.viewGroup')}>
                   <VisibilityIcon fontSize="small" sx={{ color: '#64748b' }} />
                 </IconButton>
-                <IconButton size="small" onClick={() => openEditDialog(group)} title="Edit group">
+                <IconButton size="small" onClick={() => openEditDialog(group)} title={t('common.edit')}>
                   <EditIcon fontSize="small" sx={{ color: '#64748b' }} />
                 </IconButton>
               </div>
@@ -162,9 +164,9 @@ export function ManageGroupsPage() {
       {!isLoading && (!filteredGroups || filteredGroups.length === 0) && (
         <div className="flex flex-col items-center justify-center py-16 text-slate-400">
           <GroupsIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-          <p className="text-lg font-medium">{search ? 'No groups found' : 'No groups yet'}</p>
+          <p className="text-lg font-medium">{search ? t('admin.groups.empty.notFound') : t('admin.groups.empty.noGroups')}</p>
           <p className="text-sm mt-1">
-            {search ? 'Try a different search term' : 'Create your first group to get started'}
+            {search ? t('common.tryDifferentSearch') : t('admin.groups.empty.hint')}
           </p>
           {!search && (
             <button
@@ -172,7 +174,7 @@ export function ManageGroupsPage() {
               className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all"
             >
               <AddIcon sx={{ fontSize: 18 }} />
-              Create First Group
+              {t('admin.groups.createFirst')}
             </button>
           )}
         </div>
@@ -184,7 +186,7 @@ export function ManageGroupsPage() {
         onClose={() => setCreateOpen(false)}
         onCreated={(id) => {
           setCreateOpen(false);
-          showAlert('Group created successfully!');
+          showAlert(t('admin.groups.createSuccess'));
           navigate(`/groups/${id}`);
         }}
         onError={(msg) => showAlert(msg, 'error')}

@@ -13,8 +13,10 @@ import {
   FavoriteBorderRounded as FavoriteBorderRoundedIcon
 } from '@mui/icons-material';
 
+import { useTranslation } from 'react-i18next';
 import { useGetMyBetsQuery } from './bettingApi';
 import { useGroupId } from '../groups/useGroupId';
+import { useGetGroupQuery } from '../groups/groupsApi';
 import type { BetDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 
@@ -44,10 +46,12 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   );
 }
 
-function BetRow({ bet }: { bet: BetDto }) {
+function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string }) {
+  const { t } = useTranslation();
   const profitColor = bet.profit > 0 ? 'text-emerald-600' : bet.profit < 0 ? 'text-red-600' : 'text-gray-500';
   const statusStyle = STATUS_COLORS[bet.status] || STATUS_COLORS.Cancelled;
   const { formatDate } = useUserTimeZone();
+  const displayProfitLabel = profitLabel || t('bets.row.profit');
 
   return (
     <div className="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200">
@@ -58,20 +62,20 @@ function BetRow({ bet }: { bet: BetDto }) {
             {bet.homeTeamName}
           </p>
           <p className="text-sm font-semibold text-gray-400 truncate px-2">
-            vs
+            {t('common.vs')}
           </p>
           <p className="text-sm font-semibold text-emerald-800 truncate">
             {bet.awayTeamName}
           </p>
         </div>
         <p className="text-xs font-semibold text-amber-500">
-          {formatDate(bet.createdAt, 'MMM dd · HH:mm')}
+          {formatDate(bet.matchStartTime, 'MMM dd · HH:mm')}
         </p>
       </div>
 
       {/* Pick */}
       <div className="hidden sm:flex flex-col items-center min-w-[80px]">
-        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">Pick</span>
+        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{t('common.pick')}</span>
         <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200 text-xs font-semibold">
           {bet.selectedTeamName ?? '—'}
         </span>
@@ -79,13 +83,13 @@ function BetRow({ bet }: { bet: BetDto }) {
 
       {/* Amount */}
       <div className="hidden md:flex flex-col items-center min-w-[70px]">
-        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">Wager</span>
+        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{t('common.wager')}</span>
         <span className="text-sm font-bold text-gray-800">{bet.betAmount.toLocaleString()}</span>
       </div>
 
       {/* Profit */}
       <div className="flex flex-col items-center min-w-[80px]">
-        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">Profit</span>
+        <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{displayProfitLabel}</span>
         <span className={`text-sm font-bold ${profitColor}`}>
           {bet.profit > 0 ? '+' : ''}{bet.profit.toLocaleString()}
         </span>
@@ -94,7 +98,7 @@ function BetRow({ bet }: { bet: BetDto }) {
       {/* Status Badge */}
       <div className="min-w-[80px] flex justify-end">
         <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full border ${statusStyle}`}>
-          {bet.status}
+          {t(`bets.status.${bet.status.toLowerCase()}`)}
         </span>
       </div>
     </div>
@@ -102,8 +106,12 @@ function BetRow({ bet }: { bet: BetDto }) {
 }
 
 export function BetHistoryPage() {
+  const { t } = useTranslation();
   const { groupId } = useGroupId();
   const { data, isLoading } = useGetMyBetsQuery({ groupId }, { skip: !groupId });
+  const { data: group } = useGetGroupQuery(groupId, { skip: !groupId });
+  const profitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? t('bets.stats.netLoss') : t('bets.stats.netProfit');
+  const betProfitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? t('bets.row.loss') : t('bets.row.profit');
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -190,9 +198,9 @@ export function BetHistoryPage() {
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
               <FavoriteBorderRoundedIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
-              <span>MY <span className="text-emerald-400">BETS</span></span>
+              <span>{t('bets.titleMy')} <span className="text-emerald-400">{t('bets.titleBets')}</span></span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Track your predictions · Analyze performance</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('bets.subtitle')}</p>
           </div>
         </div>
 
@@ -204,27 +212,27 @@ export function BetHistoryPage() {
               type="text"
               value={search}
               onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Search teams..."
+              placeholder={t('bets.searchPlaceholder')}
               className="w-full pl-10 pr-4 py-2.5 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
             />
           </div>
           <div className="flex items-center gap-1 bg-[#1a2e1f] rounded-xl p-1 overflow-x-auto no-scrollbar">
-            {STATUS_FILTERS.map((t) => (
+            {STATUS_FILTERS.map((filter) => (
               <button
-                key={t}
-                onClick={() => handleStatusFilter(t)}
+                key={filter}
+                onClick={() => handleStatusFilter(filter)}
                 className={`
                   px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap
-                  ${statusFilter === t
+                  ${statusFilter === filter
                     ? 'bg-amber-400 text-gray-900 shadow-sm'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-[#243a2a]'
                   }
                 `}
               >
-                {t}
+                {t(`common.filter.${filter.toLowerCase()}`)}
                 {data && (
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${getTabCountStyle(t, statusFilter === t)}`}>
-                    {getTabCount(t)}
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${getTabCountStyle(filter, statusFilter === filter)}`}>
+                    {getTabCount(filter)}
                   </span>
                 )}
               </button>
@@ -239,8 +247,8 @@ export function BetHistoryPage() {
           <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
             <BetIcon sx={{ fontSize: 32, color: 'primary.main' }} />
           </div>
-          <Typography variant="h6" color="text.secondary" gutterBottom>No Group Selected</Typography>
-          <Typography variant="body2" color="text.secondary">Join a group to start tracking your bets</Typography>
+          <Typography variant="h6" color="text.secondary" gutterBottom>{t('bets.noGroup.title')}</Typography>
+          <Typography variant="body2" color="text.secondary">{t('bets.noGroup.hint')}</Typography>
         </div>
       )}
 
@@ -262,22 +270,22 @@ export function BetHistoryPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard
               icon={<BetIcon sx={{ fontSize: 24, color: '#fff' }} />}
-              label="Total Bets"
+              label={t('bets.stats.totalBets')}
               value={stats.total.toString()}
             />
             <StatCard
               icon={<WinRateIcon sx={{ fontSize: 24, color: '#fff' }} />}
-              label="Win Rate"
+              label={t('bets.stats.winRate')}
               value={`${stats.winRate}%`}
             />
             <StatCard
               icon={<ProfitIcon sx={{ fontSize: 24, color: '#fff' }} />}
-              label="Net Profit"
-              value={`${stats.netProfit >= 0 ? '+' : ''} ${stats.netProfit.toLocaleString()}`}
+              label={profitLabel}
+              value={`${stats.netProfit > 0 ? '+' : ''} ${stats.netProfit.toLocaleString()}`}
             />
             <StatCard
               icon={<TrophyIcon sx={{ fontSize: 24, color: '#fff' }} />}
-              label="Total Wagered"
+              label={t('bets.stats.totalWagered')}
               value={stats.totalWagered.toLocaleString()}
             />
           </div>
@@ -285,22 +293,22 @@ export function BetHistoryPage() {
           {/* Bet List */}
           <div className="space-y-2">
             {paginatedBets.map((bet) => (
-              <BetRow key={bet.id} bet={bet} />
+              <BetRow key={bet.id} bet={bet} profitLabel={betProfitLabel} />
             ))}
 
             {filteredBets.length === 0 && data.length > 0 && (
               <div className="flex flex-col items-center justify-center py-16 text-slate-400">
                 <SearchIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-                <p className="text-lg font-medium">No bets match your filter</p>
-                <p className="text-sm">Try a different search term or filter</p>
+                <p className="text-lg font-medium">{t('bets.empty.noMatch')}</p>
+                <p className="text-sm">{t('bets.empty.noMatchHint')}</p>
               </div>
             )}
 
             {data.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 text-slate-400">
                 <FavoriteBorderRoundedIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-                <p className="text-lg font-medium">No bets yet</p>
-                <p className="text-sm">Place your first bet from the Matches page</p>
+                <p className="text-lg font-medium">{t('bets.empty.noBets')}</p>
+                <p className="text-sm">{t('bets.empty.noBetsHint')}</p>
               </div>
             )}
           </div>
@@ -308,7 +316,7 @@ export function BetHistoryPage() {
           {/* Pagination */}
           {filteredBets.length > pageSize && (
             <div className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-sm text-gray-600">
-              <span>Showing <strong>{(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredBets.length)}</strong> of {filteredBets.length} bets</span>
+              <span>{t('common.pagination.showing')} <strong>{(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredBets.length)}</strong> {t('common.pagination.of')} {filteredBets.length} {t('bets.pagination.bets')}</span>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}

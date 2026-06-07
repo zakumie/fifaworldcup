@@ -11,12 +11,14 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
 import { useGetGroupsQuery, useGetAllGroupsQuery } from './groupsApi';
 import { JoinGroupDialog } from './JoinGroupDialog';
 import type { RootState } from '../../app/store';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 
 export function GroupListPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const { formatDate } = useUserTimeZone();
@@ -50,9 +52,9 @@ export function GroupListPage() {
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
               <GroupsIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
-              <span>MY <span className="text-emerald-400">GROUPS</span></span>
+              <span>{t('groups.list.title')}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Join groups · Compete with friends · Climb the leaderboard</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('groups.list.subtitle')}</p>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -60,7 +62,7 @@ export function GroupListPage() {
               className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white border border-white hover:bg-emerald-600/50 transition-all duration-200 active:scale-95"
             >
               <LoginIcon sx={{ fontSize: 18 }} />
-              Join Group
+              {t('groups.list.joinButton')}
             </button>
           </div>
         </div>
@@ -71,7 +73,7 @@ export function GroupListPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search groups..."
+            placeholder={t('groups.list.searchPlaceholder')}
             className="w-full pl-10 pr-4 py-2.5 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
           />
         </div>
@@ -106,18 +108,18 @@ export function GroupListPage() {
                     <div>
                       <h3 className="text-base font-bold text-gray-800 leading-tight">{group.name}</h3>
                       <p className="text-xs text-slate-400 mt-0.5">
-                        Created {formatDate(group.createdAt, 'MMM dd, yyyy')}
+                        {t('groups.card.created')}{formatDate(group.createdAt, 'MMM dd, yyyy')}
                       </p>
                     </div>
                   </div>
                   <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${group.isActive ? 'text-emerald-700 bg-emerald-50' : 'text-gray-500 bg-gray-100'}`}>
-                    {group.isActive ? 'Active' : 'Inactive'}
+                    {group.isActive ? t('common.active') : t('common.inactive')}
                   </span>
                 </div>
 
                 {/* Description */}
                 <p className="text-sm text-slate-500 mb-4 line-clamp-2 min-h-[40px]">
-                  {group.description || 'No description'}
+                  {group.description || t('common.noDescription')}
                 </p>
 
                 {/* Members progress bar */}
@@ -125,7 +127,7 @@ export function GroupListPage() {
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-xs text-slate-500 flex items-center gap-1">
                       <PeopleAltIcon sx={{ fontSize: 14 }} />
-                      Members
+                      {t('common.members')}
                     </span>
                     <span className="text-xs font-bold text-gray-700">{group.memberCount}/{group.maxMembers}</span>
                   </div>
@@ -143,7 +145,7 @@ export function GroupListPage() {
                 <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 mb-3">
                   <span className="text-xs text-slate-500 flex items-center gap-1">
                     <AccountBalanceWalletIcon sx={{ fontSize: 14 }} />
-                    Default Balance
+                    {t('groups.card.defaultBalance')}
                   </span>
                   <span className="text-xs font-bold text-emerald-600">
                     {group.defaultBalance.toLocaleString()}
@@ -152,13 +154,13 @@ export function GroupListPage() {
 
                 {/* Invite code */}
                 <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 border border-amber-100">
-                  <span className="text-xs font-bold uppercase text-gray-400 truncate px-2">Invite Code</span>
+                  <span className="text-xs font-bold uppercase text-gray-400 truncate px-2">{t('groups.card.inviteCode')}</span>
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs font-mono font-bold text-amber-700 tracking-wider">{group.inviteCode}</span>
                     <button
                       onClick={(e) => handleCopy(e, group.inviteCode, group.id)}
                       className="p-0.5 rounded hover:bg-amber-200/50 transition-colors"
-                      title="Copy invite code"
+                      title={t('groups.card.copyInviteCode')}
                     >
                       {copiedId === group.id
                         ? <CheckIcon sx={{ fontSize: 14, color: '#16a34a' }} />
@@ -177,8 +179,8 @@ export function GroupListPage() {
       {!isLoading && (!filteredData || filteredData.length === 0) && (
         <div className="flex flex-col items-center justify-center py-16 text-slate-400">
           <GroupsIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-          <p className="text-lg font-medium">{search ? 'No groups found' : 'No groups yet'}</p>
-          <p className="text-sm">{search ? 'Try a different search term' : 'Join an existing group or ask an admin to create one'}</p>
+          <p className="text-lg font-medium">{search ? t('groups.list.empty.notFound') : t('groups.list.empty.noGroups')}</p>
+          <p className="text-sm">{search ? t('common.tryDifferentSearch') : t('groups.list.empty.hint')}</p>
         </div>
       )}
 

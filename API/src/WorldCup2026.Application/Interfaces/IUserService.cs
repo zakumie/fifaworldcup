@@ -10,4 +10,5 @@ public interface IUserService
     Task<Result<List<AdminUserDto>>> GetAllUsersAsync();
     Task<Result<AdminUserDto>> UpdateUserRoleAsync(Guid userId, UpdateUserRoleRequest request);
     Task<Result<AdminUserDto>> ToggleUserActiveAsync(Guid userId, ToggleUserActiveRequest request);
+    Task<Result<string>> ResetPasswordAsync(Guid userId);
 }

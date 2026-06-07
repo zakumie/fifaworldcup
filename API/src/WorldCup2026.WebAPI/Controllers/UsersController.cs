@@ -39,4 +39,9 @@ public class UsersController : BaseApiController
     [Authorize(Policy = "AdminOnly")]
     public async Task<ActionResult> ToggleUserActive(Guid id, ToggleUserActiveRequest request)
         => HandleResult(await _users.ToggleUserActiveAsync(id, request));
+
+    [HttpPost("{id}/reset-password")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<ActionResult> ResetPassword(Guid id)
+        => HandleResult(await _users.ResetPasswordAsync(id));
 }

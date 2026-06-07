@@ -23,14 +23,14 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
     const refreshToken = (api.getState() as RootState).auth.refreshToken;
     if (refreshToken) {
       const refreshResult = await rawBaseQuery(
-        { url: '/auth/refresh', method: 'POST', body: { refreshToken } },
+        { url: '/auth/refresh-token', method: 'POST', body: { refreshToken } },
         api,
         extraOptions,
       );
 
       if (refreshResult.data) {
         const { setCredentials } = await import('../features/auth/authSlice');
-        api.dispatch(setCredentials(refreshResult.data as { accessToken: string; refreshToken: string; user: { id: string; email: string; displayName: string; avatarUrl: string | null; timeZone: string } }));
+        api.dispatch(setCredentials(refreshResult.data as { accessToken: string; refreshToken: string; user: { id: string; email: string; displayName: string; avatarUrl: string | null; timeZone: string; language: string } }));
         result = await rawBaseQuery(args, api, extraOptions);
       } else {
         const { logout } = await import('../features/auth/authSlice');

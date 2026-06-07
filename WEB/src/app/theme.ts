@@ -21,7 +21,7 @@ export function getTheme(mode: 'light' | 'dark') {
         : { default: '#f5f5f5', paper: '#ffffff' },
     },
     typography: {
-      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: '"Be Vietnam Pro", "Inter", "Roboto", "Helvetica", "Arial", sans-serif',
       h4: { fontWeight: 700 },
       h5: { fontWeight: 600 },
       h6: { fontWeight: 600 },

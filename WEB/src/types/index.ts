@@ -8,6 +8,7 @@ export interface RegisterRequest {
   password: string;
   displayName: string;
   timeZone?: string;
+  language?: string;
 }
 
 export interface AuthResponse {
@@ -23,6 +24,7 @@ export interface UserInfo {
   avatarUrl: string | null;
   role?: UserRole;
   timeZone: string;
+  language: string;
   authProvider?: string;
 }
 
@@ -189,6 +191,7 @@ export interface BetDto {
   profit: number;
   createdAt: string;
   settledAt: string | null;
+  matchStartTime: string;
   handicap: number;
   favoredTeamName: string | null;
 }
@@ -246,12 +249,14 @@ export interface UserProfileDto {
   authProvider: string;
   createdAt: string;
   timeZone: string;
+  language: string;
 }
 
 export interface UpdateProfileRequest {
   displayName: string;
   avatarUrl: string | null;
   timeZone?: string;
+  language?: string;
 }
 
 export interface ChangePasswordRequest {

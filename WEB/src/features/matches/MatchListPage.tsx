@@ -14,8 +14,17 @@ import { ViewBetsDialog } from '../betting/ViewBetsDialog';
 import type { BetDto, BettingConfigDto, MatchDto, SettlementMode } from '../../types';
 import { formatStage } from '../../utils/formatStage';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
+import { useTranslation } from 'react-i18next';
 
 const STATUS_TABS = ['All', 'Upcoming', 'Live', 'Finished', 'My Bets'];
+
+const TAB_I18N_KEY: Record<string, string> = {
+  All: 'common.filter.all',
+  Upcoming: 'common.filter.upcoming',
+  Live: 'common.filter.live',
+  Finished: 'common.filter.finished',
+  'My Bets': 'common.filter.myBets',
+};
 
 interface MatchCardProps {
   match: MatchDto;
@@ -37,6 +46,7 @@ const BET_STATUS_STYLE: Record<string, string> = {
 };
 
 const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settlementMode }: MatchCardProps) {
+  const { t } = useTranslation();
   const [betDialogOpen, setBetDialogOpen] = useState(false);
   const [viewBetsOpen, setViewBetsOpen] = useState(false);
   const { formatDate } = useUserTimeZone();
@@ -59,16 +69,16 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
   let statusStyle: string;
 
   if (isLive) {
-    statusLabel = '● Live';
+    statusLabel = t('matches.status.live');
     statusStyle = 'text-white bg-red-500 animate-pulse';
   } else if (isFinished || isSettled) {
-    statusLabel = 'Finished';
+    statusLabel = t('matches.status.finished');
     statusStyle = 'text-green-700 bg-green-100';
   } else if (hasConfig) {
-    statusLabel = 'Upcoming';
+    statusLabel = t('matches.status.upcoming');
     statusStyle = 'text-blue-600 bg-blue-50';
   } else {
-    statusLabel = 'Open';
+    statusLabel = t('matches.status.open');
     statusStyle = 'text-slate-500 bg-slate-100';
   }
 
@@ -96,7 +106,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-3 my-5">
+          <div className="flex items-center justify-center gap-3 my-5 cursor-pointer" onClick={() => settlementMode === "WinnerKeepsLoserPays" && setViewBetsOpen(true)}>
             <div className="flex-1 text-center">
               {match.homeTeam.flagUrl && (
                 <img src={match.homeTeam.flagUrl} alt="" className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm" />
@@ -108,7 +118,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
             <div className="text-center min-w-[80px]">
               {(!isLive && !isFinished && !isSettled) ? (
                 <div className="flex flex-col items-center">
-                  <span className="text-lg font-semibold text-slate-400">vs</span>
+                  <span className="text-lg font-semibold text-slate-400">{t('common.vs')}</span>
                   <span className="text-xs text-slate-400 flex items-center gap-1">
                     <AccessTimeIcon sx={{ fontSize: 14 }} />
                     {formatDate(match.startTime, 'MMM dd · HH:mm')}
@@ -138,12 +148,12 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
           {config && (
             <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 mb-3">
               <div className="flex items-center gap-1.5 text-xs text-slate-600">
-                <span className="font-medium text-slate-400">Handicap:</span>
+                <span className="font-medium text-slate-400">{t('common.handicap')}:</span>
                 {config.handicap !== 0 ? (
                   <span className="font-bold text-gray-800">
-                    {config.favoredTeamName ?? 'Home'} {config.handicap > 0 ? '+' : ''}{config.handicap}
+                    {config.favoredTeamName ?? t('common.home')} {config.handicap > 0 ? '+' : ''}{config.handicap}
                   </span>
-                ) : <span className='font-bold text-gray-800'>Even</span>}
+                ) : <span className='font-bold text-gray-800'>{t('common.even')}</span>}
               </div>
               <span className="bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold">
                 {config.isFixedBet
@@ -155,7 +165,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
           )}
           <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-green-50 border border-slate-100 mb-3">
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <span className="font-medium text-slate-400">Your bet:</span>
+              <span className="font-medium text-slate-400">{t('matches.card.yourBet')}:</span>
               <span className="font-bold text-gray-800">{myBet ? myBet.selectedTeamName : '_'}</span>
             </div>
             <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${BET_STATUS_STYLE[myBet ? myBet.status : 'Open'] ?? 'text-gray-600 bg-gray-100'}`}>
@@ -170,7 +180,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                   onClick={() => setViewBetsOpen(true)}
                   className={`${canBet ? 'flex-1' : 'w-full'} justify-center inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 border border-emerald-500 hover:bg-emerald-50 py-3 rounded-xl transition-all duration-200 active:scale-95`}
                 >
-                  View
+                  {t('matches.card.viewButton')}
                 </button>
               )}
               {canBet && (
@@ -178,7 +188,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                   onClick={() => setBetDialogOpen(true)}
                   className="flex-1 justify-center inline-flex items-center gap-1 text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
                 >
-                  {myBet ? 'Update Bet' : 'Bet Now'}
+                  {myBet ? t('matches.card.updateBet') : t('matches.card.betNow')}
                 </button>
               )}
             </div>
@@ -213,6 +223,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
 const PAGE_SIZE = 12;
 
 export function MatchListPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
@@ -313,9 +324,9 @@ export function MatchListPage() {
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 sm:gap-3">
               <SportsSoccerIcon sx={{ fontSize: { xs: 26, sm: 32 }, color: 'white' }} />
-              <span>MATCH <span className="text-emerald-400">CENTER</span></span>
+              <span>{t('matches.list.titleMatch')} <span className="text-emerald-400">{t('matches.list.titleCenter')}</span></span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Predict results · Place bets · Win big</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('matches.list.subtitle')}</p>
           </div>
         </div>
 
@@ -327,29 +338,29 @@ export function MatchListPage() {
               type="text"
               value={search}
               onChange={handleSearchChange}
-              placeholder="Search teams..."
+              placeholder={t('matches.list.searchPlaceholder')}
               className="w-full pl-10 pr-4 py-2.5 bg-[#1a2e1f] border border-[#2d4a35] rounded-xl text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
             />
           </div>
           <div className="flex items-center gap-1 bg-[#1a2e1f] rounded-xl p-1 overflow-x-auto scrollbar-hide">
-            {STATUS_TABS.map((t) => (
+            {STATUS_TABS.map((tab) => (
               <button
-                key={t}
-                onClick={() => handleTabChange(t)}
+                key={tab}
+                onClick={() => handleTabChange(tab)}
                 className={`
                   px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap flex-shrink-0
-                  ${activeTab === t
+                  ${activeTab === tab
                     ? 'bg-amber-400 text-gray-900 shadow-sm'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-[#243a2a]'
                   }
                 `}
               >
-                {t === 'Live' && <span className="inline-block w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />}
-                {t}
-                {t === 'Upcoming' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === t ? 'bg-blue-900/20 text-blue-900' : 'bg-blue-500/20 text-blue-400'}`}>{upcomingCount}</span>}
-                {t === 'Live' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === t ? 'bg-red-900/20 text-red-900' : 'bg-red-500/20 text-red-400'}`}>{liveCount}</span>}
-                {t === 'Finished' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === t ? 'bg-green-900/20 text-green-900' : 'bg-green-500/20 text-green-400'}`}>{finishedCount}</span>}
-                {t === 'My Bets' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === t ? 'bg-amber-900/20 text-amber-900' : 'bg-amber-500/20 text-amber-400'}`}>{myBetsCount}</span>}
+                {tab === 'Live' && <span className="inline-block w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />}
+                {t(TAB_I18N_KEY[tab])}
+                {tab === 'Upcoming' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-blue-900/20 text-blue-900' : 'bg-blue-500/20 text-blue-400'}`}>{upcomingCount}</span>}
+                {tab === 'Live' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-red-900/20 text-red-900' : 'bg-red-500/20 text-red-400'}`}>{liveCount}</span>}
+                {tab === 'Finished' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-green-900/20 text-green-900' : 'bg-green-500/20 text-green-400'}`}>{finishedCount}</span>}
+                {tab === 'My Bets' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-amber-900/20 text-amber-900' : 'bg-amber-500/20 text-amber-400'}`}>{myBetsCount}</span>}
               </button>
             ))}
           </div>
@@ -393,8 +404,8 @@ export function MatchListPage() {
       {!isLoading && filteredMatches.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-slate-400">
           <SportsSoccerIcon sx={{ fontSize: 48, color: '#cbd5e1', mb: 1 }} />
-          <p className="text-lg font-medium">No matches found</p>
-          <p className="text-sm">{search ? 'Try a different search term' : 'Try selecting a different filter'}</p>
+          <p className="text-lg font-medium">{t('matches.list.empty.notFound')}</p>
+          <p className="text-sm">{search ? t('common.tryDifferentSearch') : t('matches.list.empty.filterHint')}</p>
         </div>
       )}
     </div>
