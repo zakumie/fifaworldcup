@@ -150,7 +150,7 @@ export function MusicPlayerDialog({ open, onClose }: MusicPlayerDialogProps) {
       <IconButton
         onClick={onClose}
         size="small"
-        sx={{ position: 'absolute', top: 8, right: 8, color: 'rgba(255, 255, 255, 0.84)', zIndex: 1, '&:hover': { color: 'white' } }}
+        sx={{ position: 'absolute', backgroundColor: 'rgba(255, 255, 255, 0.31)', top: 8, right: 8, color: 'rgba(255, 255, 255, 0.84)', zIndex: 1, '&:hover': { color: 'white', backgroundColor: 'rgba(131, 127, 127, 0.23)' } }}
       >
         <CloseIcon fontSize="small" />
       </IconButton>
