@@ -172,6 +172,7 @@ export default function ChampionPredictionPage() {
       )}
 
       {/* Tabs */}
+      {!isClosed && (
       <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mb-6">
         <button
           onClick={() => setActiveTab('pick')}
@@ -203,9 +204,10 @@ export default function ChampionPredictionPage() {
           )}
         </button>
       </div>
+      )}
 
       {/* Tab: Select Champion */}
-      {activeTab === 'pick' && (
+      {!isClosed && activeTab === 'pick' && (
         <div className="mb-8">
           {isClosed && !config.isSettled && (
             <Alert severity="warning" sx={{ mb: 2, borderRadius: 3 }}>
@@ -235,7 +237,7 @@ export default function ChampionPredictionPage() {
       )}
 
       {/* Tab: Group Predictions */}
-      {activeTab === 'leaderboard' && groupPredictions && (
+      {(isClosed || activeTab === 'leaderboard') && groupPredictions && (
         <GroupPredictionsLeaderboard predictions={groupPredictions} isSettled={config.isSettled} teams={teams} />
       )}
 

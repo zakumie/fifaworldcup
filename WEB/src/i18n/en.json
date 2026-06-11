@@ -124,6 +124,7 @@
     "matches": "Matches",
     "myBets": "My Bets",
     "leaderboard": "Leaderboard",
+    "predictions": "Predictions",
     "admin": {
       "matches": "Manage Matches",
       "groups": "Manage Groups",

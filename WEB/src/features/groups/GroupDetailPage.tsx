@@ -39,10 +39,7 @@ export function GroupDetailPage() {
     return new Map(leaderboard.map(e => [e.userId, e]));
   }, [leaderboard]);
 
-  const isPredictionExpired = useMemo(
-    () => championConfig ? new Date(championConfig.predictionCloseTime) < new Date() : false,
-    [championConfig]
-  );
+  const isPredictionExpired = false;
 
   const handleCopy = useCallback(() => {
     if (!group) return;
@@ -99,7 +96,6 @@ export function GroupDetailPage() {
             {championConfig?.isEnabled && (
               <button
                 onClick={() => navigate(`/groups/${id}/predictions`)}
-                disabled={isPredictionExpired}
                 className={`flex items-center gap-1.5 sm:gap-2 px-3 py-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isPredictionExpired
                     ? 'bg-yellow-900/30 text-yellow-700/50 border border-yellow-800/30 cursor-not-allowed'

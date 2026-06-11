@@ -18,6 +18,7 @@ import ManageHistoryRoundedIcon from '@mui/icons-material/ManageHistoryRounded';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import RoofingRoundedIcon from '@mui/icons-material/RoofingRounded';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MusicNoteOutlinedIcon from '@mui/icons-material/MusicNoteOutlined';
@@ -103,7 +104,10 @@ export function AppLayout() {
   };
 
   const visibleItems = NAV_ITEMS.filter((item) => !item.adminOnly || isAdminOrManager);
-  const mainItems = visibleItems.filter((item) => item.section === 'main');
+  const mainItems = [
+    ...visibleItems.filter((item) => item.section === 'main'),
+    ...(groupId ? [{ label: 'nav.predictions', path: `/groups/${groupId}/predictions`, icon: <MilitaryTechOutlinedIcon fontSize="small" />, section: 'main' }] : []),
+  ];
   const adminItems = visibleItems.filter((item) => item.section === 'admin');
 
   const renderNavButton = (item: NavItem, isCollapsed: boolean) => {
