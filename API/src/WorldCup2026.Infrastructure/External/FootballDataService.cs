@@ -120,10 +120,6 @@ public class FootballDataService : IExternalMatchService
 
                 if (existing != null)
                 {
-                    // Don't update matches that have already completed
-                    if (existing.Status == MatchStatus.Finished)
-                        continue;
-
                     // Don't overwrite Upcoming (admin-configured) back to Open (external initial)
                     if (!(existing.Status == MatchStatus.Upcoming && matchStatus == MatchStatus.Open))
                         existing.Status = matchStatus;
