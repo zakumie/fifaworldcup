@@ -30,7 +30,7 @@ const STATUS_COLORS: Record<string, string> = {
   Cancelled: 'bg-gray-50 text-gray-500 border-gray-200',
 };
 
-const STATUS_FILTERS = ['All', 'Pending', 'Won', 'Lost', 'Settled'] as const;
+const STATUS_FILTERS = ['All', 'Pending', 'Won', 'Lost'] as const;
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
@@ -127,13 +127,12 @@ export function BetHistoryPage() {
     return { total: data.length, wins, winRate, netProfit, totalWagered };
   }, [data]);
 
-  const { pendingCount, wonCount, lostCount, settledCount } = useMemo(() => {
-    if (!data) return { pendingCount: 0, wonCount: 0, lostCount: 0, settledCount: 0 };
+  const { pendingCount, wonCount, lostCount } = useMemo(() => {
+    if (!data) return { pendingCount: 0, wonCount: 0, lostCount: 0 };
     return {
       pendingCount: data.filter((b) => b.status === 'Pending').length,
       wonCount: data.filter((b) => b.status === 'Won' || b.status === 'HalfWon').length,
       lostCount: data.filter((b) => b.status === 'Lost' || b.status === 'HalfLost').length,
-      settledCount: data.filter((b) => b.status !== 'Pending' && b.status !== 'Cancelled').length,
     };
   }, [data]);
 
@@ -147,8 +146,6 @@ export function BetHistoryPage() {
       items = items.filter((b) => b.status === 'Lost' || b.status === 'HalfLost');
     } else if (statusFilter === 'Pending') {
       items = items.filter((b) => b.status === 'Pending');
-    } else if (statusFilter === 'Settled') {
-      items = items.filter((b) => b.status !== 'Pending' && b.status !== 'Cancelled');
     }
 
     if (search.trim()) {
@@ -178,7 +175,6 @@ export function BetHistoryPage() {
     if (tab === 'Pending') return pendingCount;
     if (tab === 'Won') return wonCount;
     if (tab === 'Lost') return lostCount;
-    if (tab === 'Settled') return settledCount;
     return data?.length ?? 0;
   };
 
@@ -186,7 +182,6 @@ export function BetHistoryPage() {
     if (tab === 'Won') return isActive ? 'bg-emerald-900/20 text-emerald-900' : 'bg-emerald-500/20 text-emerald-400';
     if (tab === 'Lost') return isActive ? 'bg-red-900/20 text-red-900' : 'bg-red-500/20 text-red-400';
     if (tab === 'Pending') return isActive ? 'bg-amber-900/20 text-amber-900' : 'bg-amber-500/20 text-amber-400';
-    if (tab === 'Settled') return isActive ? 'bg-purple-900/20 text-purple-900' : 'bg-purple-500/20 text-purple-400';
     return isActive ? 'bg-slate-900/20 text-slate-900' : 'bg-slate-500/20 text-slate-400';
   };
 
