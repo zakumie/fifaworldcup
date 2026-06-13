@@ -62,7 +62,7 @@ export function MemberInfoDialog({ member, stats, settlementMode, onClose }: Mem
               </div>
               <div className="bg-slate-50 rounded-xl p-3 text-center">
                 <p className="text-[11px] font-semibold text-slate-500 uppercase">{t('members.stats.winRate')}</p>
-                <p className="text-xl font-bold text-emerald-600">{stats ? `${stats.winRate.toFixed(1) * 100}%` : '0%'}</p>
+                <p className="text-xl font-bold text-emerald-600">{stats ? `${(stats.winRate * 100).toFixed(1)}%` : '0%'}</p>
               </div>
               <div className="bg-emerald-50 rounded-xl p-3 text-center">
                 <p className="text-[11px] font-semibold text-emerald-600 uppercase">{t('members.stats.wins')}</p>
