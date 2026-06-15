@@ -54,29 +54,29 @@ function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string }) {
   const displayProfitLabel = profitLabel || t('bets.row.profit');
 
   return (
-    <div className="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200">
+    <div className="group flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200">
       {/* Match Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center">
-          <p className="text-sm font-semibold text-sky-800 truncate">
+          <p className="text-xs sm:text-sm font-semibold text-sky-800 truncate">
             {bet.homeTeamName}
           </p>
-          <p className="text-sm font-semibold text-gray-400 truncate px-2">
+          <p className="text-xs sm:text-sm font-semibold text-gray-400 truncate px-1 sm:px-2">
             {t('common.vs')}
           </p>
-          <p className="text-sm font-semibold text-emerald-800 truncate">
+          <p className="text-xs sm:text-sm font-semibold text-emerald-800 truncate">
             {bet.awayTeamName}
           </p>
         </div>
-        <p className="text-xs font-semibold text-amber-500">
+        <p className="text-[10px] sm:text-xs font-semibold text-amber-500">
           {formatDateLocalized(bet.matchStartTime)}
         </p>
       </div>
 
       {/* Pick */}
-      <div className="hidden sm:flex flex-col items-center min-w-[80px]">
+      <div className="flex flex-col items-center min-w-[50px] sm:min-w-[80px]">
         <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{t('common.pick')}</span>
-        <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200 text-xs font-semibold">
+        <span className="inline-flex items-center px-1 sm:px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200 text-[10px] sm:text-xs font-semibold truncate max-w-[60px] sm:max-w-none">
           {bet.selectedTeamName ?? '—'}
         </span>
       </div>
@@ -88,16 +88,16 @@ function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string }) {
       </div>
 
       {/* Profit */}
-      <div className="flex flex-col items-center min-w-[80px]">
+      <div className="flex flex-col items-center min-w-[50px] sm:min-w-[80px]">
         <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{displayProfitLabel}</span>
-        <span className={`text-sm font-bold ${profitColor}`}>
+        <span className={`text-xs sm:text-sm font-bold ${profitColor}`}>
           {bet.profit > 0 ? '+' : ''}{bet.profit.toLocaleString()}
         </span>
       </div>
 
       {/* Status Badge */}
-      <div className="min-w-[80px] flex justify-end">
-        <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full border ${statusStyle}`}>
+      <div className="min-w-[55px] sm:min-w-[80px] flex justify-end">
+        <span className={`inline-flex items-center text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full border ${statusStyle}`}>
           {t(`bets.status.${bet.status.toLowerCase()}`)}
         </span>
       </div>
