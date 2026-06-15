@@ -67,7 +67,7 @@ export function DashboardPage() {
   const { t } = useTranslation();
   const { data: groups, isLoading: groupsLoading } = useGetGroupsQuery();
   const { groupId } = useGroupId();
-  const matchesArg = useMemo(() => ({}), []);
+  const matchesArg = useMemo(() => ({ pageSize: 100 }), []);
   const { data: matches, isLoading: matchesLoading } = useGetMatchesQuery(matchesArg);
   const { data: bets, isLoading: betsLoading } = useGetMyBetsQuery({ groupId }, { skip: !groupId });
   const { data: groupConfigs } = useGetGroupConfigsQuery({ groupId }, { skip: !groupId });

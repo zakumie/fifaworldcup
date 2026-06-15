@@ -89,6 +89,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
         shadow-sm hover:shadow-lg transition-all duration-300
         overflow-hidden
         ${isLive ? 'ring-2 ring-red-400/50' : ''}
+        ${!myBet && hasConfig && !isLive && !isFinished && !isSettled ? 'ring-1 ring-emerald-400 bg-emerald-50/30' : ''}
       `}>
         {isLive && (
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-orange-400 animate-pulse" />
