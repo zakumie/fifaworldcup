@@ -43,7 +43,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'score' | 'betting'>('betting');
   const [showBettingForm, setShowBettingForm] = useState(false);
-  const { formatDate } = useUserTimeZone();
+  const { formatDate, formatDateLocalized } = useUserTimeZone();
 
   const [updateScore, { isLoading, error, reset: resetMutation }] = useUpdateScoreMutation();
 
@@ -289,7 +289,7 @@ export function MatchAdminDialog({ open, match, groupId, config, onClose }: Prop
                 <div className="rounded-xl border border-gray-100 p-3 bg-gray-50/50">
                   <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">{t('admin.matches.dialog.bettingWindow')}</p>
                   <p className="text-xs text-gray-600">
-                    {formatDate(config.bettingOpenTime, 'MMM dd, HH:mm')} → {formatDate(config.bettingCloseTime, 'MMM dd, HH:mm')}
+                    {formatDateLocalized(config.bettingOpenTime)} → {formatDateLocalized(config.bettingCloseTime)}
                   </p>
                 </div>
 

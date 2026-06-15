@@ -21,32 +21,32 @@ public class MatchesController : BaseApiController
         => HandleResult(await _matches.GetByIdAsync(id));
 
     [HttpPost]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> Create(CreateMatchRequest request)
         => HandleResult(await _matches.CreateAsync(request));
 
     [HttpPut("{id:guid}")]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> Update(Guid id, UpdateMatchRequest request)
         => HandleResult(await _matches.UpdateAsync(id, request));
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> Delete(Guid id)
         => HandleResult(await _matches.DeleteAsync(id));
 
     [HttpPut("{id:guid}/score")]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> UpdateScore(Guid id, UpdateScoreRequest request)
         => HandleResult(await _matches.UpdateScoreAsync(id, request));
 
     [HttpPost("sync")]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> SyncFromExternal()
         => HandleResult(await _matches.SyncFromExternalAsync());
 
     [HttpPost("sync-teams")]
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> SyncTeams(int isSyncAll = 0)
         => HandleResult(await _matches.SyncTeamsAsync());
 

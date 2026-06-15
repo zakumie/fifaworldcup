@@ -50,7 +50,7 @@ function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string }) {
   const { t } = useTranslation();
   const profitColor = bet.profit > 0 ? 'text-emerald-600' : bet.profit < 0 ? 'text-red-600' : 'text-gray-500';
   const statusStyle = STATUS_COLORS[bet.status] || STATUS_COLORS.Cancelled;
-  const { formatDate } = useUserTimeZone();
+  const { formatDateLocalized } = useUserTimeZone();
   const displayProfitLabel = profitLabel || t('bets.row.profit');
 
   return (
@@ -69,7 +69,7 @@ function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string }) {
           </p>
         </div>
         <p className="text-xs font-semibold text-amber-500">
-          {formatDate(bet.matchStartTime, 'MMM dd · HH:mm')}
+          {formatDateLocalized(bet.matchStartTime)}
         </p>
       </div>
 

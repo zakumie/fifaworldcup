@@ -18,10 +18,12 @@ public class BettingController : BaseApiController
     }
 
     [HttpPost("configs")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> CreateConfig([FromBody] CreateBettingConfigRequest request)
         => HandleResult(await _betting.CreateConfigAsync(request, _currentUser.UserId));
 
     [HttpPut("configs/{configId:guid}")]
+    [Authorize(Policy = "AdminOrManager")]
     public async Task<ActionResult> UpdateConfig(Guid configId, [FromBody] UpdateBettingConfigRequest request)
         => HandleResult(await _betting.UpdateConfigAsync(configId, request, _currentUser.UserId));
 

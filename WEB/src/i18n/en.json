@@ -545,6 +545,7 @@
       },
       "role": {
         "admin": "Admin",
+        "manager": "Manager",
         "user": "User"
       },
       "actions": {

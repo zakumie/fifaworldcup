@@ -1,4 +1,4 @@
-import { format as fnsFormat, parseISO } from 'date-fns';
+import { format as fnsFormat, parseISO, isToday, isTomorrow, isYesterday } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 
 /**
@@ -43,4 +43,41 @@ export function toLocalDatetimeInput(iso: string): string {
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+const VI_WEEKDAYS = ['CN', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7'];
+const EN_WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+/**
+ * Format a datetime based on language preference with relative day labels.
+ * - Shows "Today"/"Tomorrow"/"Yesterday" (or Vietnamese equivalents) for near dates.
+ * - Otherwise shows weekday + "MMM dd, yyyy · HH:mm".
+ */
+export function formatDateByLanguage(
+  utcDate: string | Date,
+  timeZone: string,
+  language: string,
+): string {
+  const date = typeof utcDate === 'string' ? parseISO(utcDate) : utcDate;
+  const zonedDate = toZonedTime(date, timeZone);
+  const time = fnsFormat(zonedDate, 'HH:mm');
+
+  const isVi = language === 'vi';
+
+  if (isToday(zonedDate)) {
+    return `${isVi ? 'Hôm nay' : 'Today'} · ${time}`;
+  }
+  if (isTomorrow(zonedDate)) {
+    return `${isVi ? 'Ngày mai' : 'Tomorrow'} · ${time}`;
+  }
+  if (isYesterday(zonedDate)) {
+    return `${isVi ? 'Hôm qua' : 'Yesterday'} · ${time}`;
+  }
+
+  const weekday = isVi
+    ? VI_WEEKDAYS[zonedDate.getDay()]
+    : EN_WEEKDAYS[zonedDate.getDay()];
+  const dateStr = fnsFormat(zonedDate, isVi ? 'dd/MM' : 'MMM dd');
+
+  return `${weekday}, ${isVi ? 'Ngày ' + dateStr : dateStr} · ${time}`;
 }

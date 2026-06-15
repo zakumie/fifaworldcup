@@ -34,6 +34,7 @@ import { MusicPlayerDialog } from '../MusicPlayer';
 import { HelpDialog } from '../HelpDialog';
 import { useUpdateProfileMutation } from '../../features/users/usersApi';
 import type { Language } from '../../i18n';
+import type { UserRole } from '../../types';
 
 const DRAWER_WIDTH = 260;
 const COLLAPSED_WIDTH = 72;
@@ -42,7 +43,7 @@ interface NavItem {
   label: string;
   path: string;
   icon: React.ReactNode;
-  adminOnly?: boolean;
+  roles?: UserRole[];
   section?: string;
 }
 
@@ -52,9 +53,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'nav.matches', path: '/matches', icon: <SportsSoccerOutlinedIcon fontSize="small" />, section: 'main' },
   { label: 'nav.myBets', path: '/bets', icon: <FavoriteBorderRoundedIcon fontSize="small" />, section: 'main' },
   { label: 'nav.leaderboard', path: '/leaderboard', icon: <EmojiEventsOutlinedIcon fontSize="small" />, section: 'main' },
-  { label: 'nav.admin.matches', path: '/admin/matches', icon: <ManageHistoryRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
-  { label: 'nav.admin.groups', path: '/admin/groups', icon: <RoofingRoundedIcon fontSize="small" />, adminOnly: true, section: 'admin' },
-  { label: 'nav.admin.users', path: '/admin/users', icon: <ManageAccountsIcon fontSize="small" />, adminOnly: true, section: 'admin' }
+  { label: 'nav.admin.matches', path: '/admin/matches', icon: <ManageHistoryRoundedIcon fontSize="small" />, roles: ['Admin', 'Manager'], section: 'admin' },
+  { label: 'nav.admin.groups', path: '/admin/groups', icon: <RoofingRoundedIcon fontSize="small" />, roles: ['Admin'], section: 'admin' },
+  { label: 'nav.admin.users', path: '/admin/users', icon: <ManageAccountsIcon fontSize="small" />, roles: ['Admin'], section: 'admin' }
 ];
 
 const LANGUAGE_OPTIONS: { code: Language; label: string; flag: string }[] = [
@@ -77,7 +78,6 @@ export function AppLayout() {
   const themeMode = useAppSelector((state) => state.theme.mode);
   const [updateProfile] = useUpdateProfileMutation();
 
-  const isAdminOrManager = user?.role === 'Admin' || user?.role === 'Manager';
   const sidebarWidth = collapsed ? COLLAPSED_WIDTH : DRAWER_WIDTH;
   const { groupId, groups } = useGroupId();
 
@@ -103,7 +103,7 @@ export function AppLayout() {
     navigate('/login');
   };
 
-  const visibleItems = NAV_ITEMS.filter((item) => !item.adminOnly || isAdminOrManager);
+  const visibleItems = NAV_ITEMS.filter((item) => !item.roles || (user?.role && item.roles.includes(user.role)));
   const mainItems = [
     ...visibleItems.filter((item) => item.section === 'main'),
     ...(groupId ? [{ label: 'nav.predictions', path: `/groups/${groupId}/predictions`, icon: <MilitaryTechOutlinedIcon fontSize="small" />, section: 'main' }] : []),

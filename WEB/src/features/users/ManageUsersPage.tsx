@@ -23,7 +23,7 @@ import { inputSx } from '../../utils/formStyles';
 const lightTheme = getTheme('light');
 
 const STATUS_TABS = ['All', 'Active', 'Inactive'] as const;
-const ROLES = ['User', 'Admin'] as const;
+const ROLES = ['User', 'Manager', 'Admin'] as const;
 
 export function ManageUsersPage() {
   const { t } = useTranslation();
@@ -215,7 +215,7 @@ export function ManageUsersPage() {
                 <Chip
                   size="small"
                   label={t(`admin.users.role.${user.role.toLowerCase()}`)}
-                  color={user.role === 'Admin' ? 'warning' : 'default'}
+                  color={user.role === 'Admin' ? 'warning' : user.role === 'Manager' ? 'info' : 'default' }
                   variant="outlined"
                   sx={{ fontSize: '0.7rem', height: 24 }}
                 />

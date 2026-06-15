@@ -63,7 +63,7 @@ function StatCard({ label, value, Icon, bg, hoverBg, onClick }: {
 export function DashboardPage() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
-  const { formatDate } = useUserTimeZone();
+  const { formatDateLocalized, formatDate } = useUserTimeZone();
   const { t } = useTranslation();
   const { data: groups, isLoading: groupsLoading } = useGetGroupsQuery();
   const { groupId } = useGroupId();
@@ -103,7 +103,7 @@ export function DashboardPage() {
 
   const recentBets = useMemo(() => bets?.slice(0, 5) ?? [], [bets]);
   const upcomingSlice = useMemo(() => upcomingMatches.slice(0, 5), [upcomingMatches]);
-  const todayStr = useMemo(() => formatDate(new Date(), 'MMM dd, yyyy'), [formatDate]);
+  const todayStr = useMemo(() => formatDate(new Date()),  [formatDate]);
 
   const goTo = useCallback((path: string) => () => navigate(path), [navigate]);
 
@@ -200,7 +200,7 @@ export function DashboardPage() {
                          </div>
                         <div className="flex items-center gap-2 mt-0.5">
                           <p className="text-xs font-semibold text-green-600">
-                            {formatDate(match.startTime, 'MMM dd · HH:mm')}
+                            {formatDateLocalized(match.startTime)}
                           </p>
                         </div>
                       </div>
@@ -273,7 +273,7 @@ export function DashboardPage() {
                             </p>
                           </div>
                           <p className="text-xs font-semibold text-green-600 mt-0.5">
-                            {formatDate(bet.matchStartTime, 'MMM dd · HH:mm')}
+                            {formatDateLocalized(bet.matchStartTime)}
                           </p>
                         </div>
 

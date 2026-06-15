@@ -38,7 +38,8 @@ public enum BetStatus
 public enum SystemRole
 {
     User = 0,
-    Admin = 1
+    Admin = 1,
+    Manager = 2
 }
 
 public enum TransactionType

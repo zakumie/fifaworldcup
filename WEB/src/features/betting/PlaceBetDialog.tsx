@@ -26,7 +26,7 @@ const DIALOG_PAPER_SX = { borderRadius: 4, overflow: 'hidden', bgcolor: 'transpa
 
 export function PlaceBetDialog({ open, config, match, existingBet, settlementMode, onClose }: Props) {
   const { t } = useTranslation();
-  const { formatDate } = useUserTimeZone();
+  const { formatDateLocalized } = useUserTimeZone();
   const isEditMode = !!existingBet;
   const defaultTeamId = existingBet?.selectedTeamId ?? match.homeTeam.id;
   const defaultAmount = existingBet?.betAmount
@@ -120,7 +120,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
           <div className="flex items-center justify-center gap-2 mt-4">
             <span className="flex items-center font-semibold gap-1 text-[11px] text-white bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-sm">
               <AccessTimeIcon sx={{ fontSize: 12 }} />
-              {formatDate(match.startTime, 'MMM dd, HH:mm')}
+              {formatDateLocalized(match.startTime)}
             </span>
             {handicapLabel && (
               <span className="text-[11px] font-semibold text-amber-300 bg-amber-400/15 px-2.5 py-1 rounded-full">
@@ -171,7 +171,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                       {t('betting.place.pickWinner')}
                     </label>
                     <p className="gap-2 text-xs font-semibold text-red-400 bg-red/10 px-2.5 py-1 p-4 rounded-xl border-2 mb-2.5 block border-red-350 bg-red-40/50 shadow-sm shadow-red-50">
-                      {t('betting.place.bettingCloses')}{formatDate(config.bettingCloseTime, 'MMM dd, HH:mm')}
+                      {t('betting.place.bettingCloses')}{formatDateLocalized(config.bettingCloseTime)}
                     </p>
                   </div>
 

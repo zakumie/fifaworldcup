@@ -49,7 +49,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
   const { t } = useTranslation();
   const [betDialogOpen, setBetDialogOpen] = useState(false);
   const [viewBetsOpen, setViewBetsOpen] = useState(false);
-  const { formatDate } = useUserTimeZone();
+  const { formatDateLocalized } = useUserTimeZone();
 
   const now = Date.now();
   const bettingOpen = config
@@ -121,7 +121,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                   <span className="text-lg font-semibold text-slate-400">{t('common.vs')}</span>
                   <span className="text-xs text-slate-400 flex items-center gap-1">
                     <AccessTimeIcon sx={{ fontSize: 14 }} />
-                    {formatDate(match.startTime, 'MMM dd · HH:mm')}
+                    {formatDateLocalized(match.startTime)}
                   </span>
                 </div>
               ) : (

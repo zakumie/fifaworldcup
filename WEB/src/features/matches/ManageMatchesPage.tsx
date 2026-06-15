@@ -34,7 +34,7 @@ interface MatchRowProps {
 
 const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProps) {
   const [adminDialogOpen, setAdminDialogOpen] = useState(false);
-  const { formatDate } = useUserTimeZone();
+  const { formatDateLocalized } = useUserTimeZone();
   const { t } = useTranslation();
 
   const isLive = match.status === 'Live';
@@ -96,7 +96,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="text-[10px] text-slate-400 truncate">{formatStage(match.stage, match.group)}</span>
                 <span className="text-[10px] text-slate-300">·</span>
-                <span className="text-[10px] text-blue-800 font-semibold">{formatDate(match.startTime, 'MMM dd, HH:mm')}</span>
+                <span className="text-[10px] text-blue-800 font-semibold">{formatDateLocalized(match.startTime)}</span>
               </div>
             </div>
           </div>
@@ -133,7 +133,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
                 )}
                 <span className="text-sm font-bold text-gray-800 truncate">{match.awayTeam.code}</span>
               </div>
-              <p className="text-xs text-blue-800 font-semibold truncate">{formatDate(match.startTime, 'MMM dd, HH:mm')}</p>
+              <p className="text-xs text-blue-800 font-semibold truncate">{formatDateLocalized(match.startTime)}</p>
             </div>
           </div>
 
@@ -162,7 +162,7 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
 
           {/* Date */}
           <div className="col-span-3 text-center">
-            <span className="text-xs text-slate-500">{formatDate(match.startTime, 'MMM dd, HH:mm')}</span>
+            <span className="text-xs text-slate-500">{formatDateLocalized(match.startTime)}</span>
           </div>
 
           {/* Action */}

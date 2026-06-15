@@ -123,7 +123,7 @@ function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }
 
 export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props) {
   const { t } = useTranslation();
-  const { formatDate } = useUserTimeZone();
+  const { formatDateLocalized } = useUserTimeZone();
   const isMobile = useMediaQuery('(max-width:480px)');
   const { data: bets, isLoading } = useGetMatchBetsQuery({ groupId, matchId }, { skip: !open });
   const { data: group } = useGetGroupQuery(groupId, { skip: !open || !groupId });
@@ -224,7 +224,7 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
             <span className="text-[10px] text-white/40 uppercase">{t('betting.view.kickoff')}</span>
             <span className="text-xs font-semibold text-white/80">
-              {formatDate(match.startTime, 'dd MMM - HH:mm')}
+              {formatDateLocalized(match.startTime)}
             </span>
           </div>
           {config && config.handicap !== 0 && (
