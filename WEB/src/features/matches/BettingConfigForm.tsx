@@ -42,7 +42,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
 
   const defaultOpen = toLocalDatetimeInput(new Date().toISOString());
   const defaultClose = toLocalDatetimeInput(
-    new Date(new Date(match.startTime).getTime() - 2 * 60 * 60 * 1000).toISOString()
+    new Date(new Date(match.startTime).getTime() - 15 * 60 * 1000).toISOString()
   );
 
   const { control, handleSubmit, reset, watch, formState: { errors } } = useForm<BettingFormValues>({
