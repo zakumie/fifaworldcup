@@ -170,7 +170,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               <span className="font-bold text-gray-800">{myBet ? myBet.selectedTeamName : '_'}</span>
             </div>
             <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${BET_STATUS_STYLE[myBet ? myBet.status : 'Open'] ?? 'text-gray-600 bg-gray-100'}`}>
-              {myBet ? myBet.status : '__'}
+              {myBet ? t(`bets.status.${myBet.status.toLowerCase()}`) : '__'}
             </span>
           </div>
 

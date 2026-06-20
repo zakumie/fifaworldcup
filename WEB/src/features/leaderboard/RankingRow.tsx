@@ -1,8 +1,10 @@
 import { EmojiEvents as TrophyIcon } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { PODIUM_STYLES } from './PodiumCard';
 import type { LeaderboardEntryDto } from '../../types';
 
 export function RankingRow({ entry, onClick }: { entry: LeaderboardEntryDto; onClick?: () => void }) {
+  const { t } = useTranslation();
   const isTop3 = entry.rank <= 3;
   const profitColor = entry.profit > 0 ? 'text-emerald-600' : entry.profit < 0 ? 'text-red-600' : 'text-gray-500';
   const podiumStyle = isTop3 ? PODIUM_STYLES[entry.rank - 1] : null;
@@ -37,11 +39,11 @@ export function RankingRow({ entry, onClick }: { entry: LeaderboardEntryDto; onC
 
       {/* W/D/L */}
       <div className="hidden sm:flex items-center gap-1 min-w-[120px] justify-center">
-        <span className="text-xs font-semibold text-emerald-600">{entry.wins}W</span>
+        <span className="text-xs font-semibold text-emerald-600">{entry.wins}{t('leaderboard.table.win')}</span>
         <span className="text-gray-300">/</span>
-        <span className="text-xs font-semibold text-amber-500">{entry.draws}D</span>
+        <span className="text-xs font-semibold text-amber-500">{entry.draws}{t('leaderboard.table.draw')}</span>
         <span className="text-gray-300">/</span>
-        <span className="text-xs font-semibold text-red-500">{entry.losses}L</span>
+        <span className="text-xs font-semibold text-red-500">{entry.losses}{t('leaderboard.table.lose')}</span>
       </div>
 
       {/* Win Rate */}

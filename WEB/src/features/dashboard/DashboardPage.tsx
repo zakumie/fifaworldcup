@@ -185,44 +185,55 @@ export function DashboardPage() {
                       ? `${cfg.favoredTeamName ?? 'Fav'} ${cfg.handicap > 0 ? '+' : ''}${cfg.handicap}`
                       : null;
                     return (
-                    <div key={match.id} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition-colors">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center">
-                          <p className="text-sm font-semibold text-sky-800 truncate">
-                            {match.homeTeam.name}
+                      <div
+                        key={match.id}
+                        className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center">
+                            <p className="text-sm font-semibold text-sky-800 truncate">
+                              {match.homeTeam.name}
                             </p>
-                          <p className="text-sm font-semibold text-gray-400 truncate px-2">
-                              {t('common.vs')}
+                            <p className="text-sm font-semibold text-gray-400 truncate px-2">
+                              {t("common.vs")}
                             </p>
-                          <p className="text-sm font-semibold text-emerald-800 truncate">
-                            {match.awayTeam.name}
+                            <p className="text-sm font-semibold text-emerald-800 truncate">
+                              {match.awayTeam.name}
                             </p>
-                         </div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <p className="text-xs font-semibold text-green-600">
-                            {formatDateLocalized(match.startTime)}
-                          </p>
+                          </div>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <p className="text-xs font-semibold text-green-600">
+                              {formatDateLocalized(match.startTime)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
                         {/* Handicap */}
                         <div className="hidden sm:flex flex-col items-center min-w-[200px]">
-                          <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{t('common.handicap')}</span>
+                          <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">
+                            {t("common.handicap")}
+                          </span>
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-600 border border-violet-200 text-xs font-semibold">
-                            {handicapLabel ?? t('common.even')}
+                            {handicapLabel ?? t("common.even")}
                           </span>
                         </div>
                         <div className="flex flex-col items-center min-w-[100px]">
                           {/* Status */}
-                          <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{t('common.status')}</span>
-                          <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full border ${
-                            match.status === 'Live' ? 'bg-red-50 text-red-600 border-red-100' :
-                            match.status === 'Upcoming' ? 'bg-blue-50 text-blue-600 border-blue-100' :
-                            'bg-slate-50 text-slate-600 border-slate-100'
-                          }`}>
-                            {match.status}
+                          <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">
+                            {t("common.status")}
+                          </span>
+                          <span
+                            className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full border ${
+                              match.status === "Live"
+                                ? "bg-red-50 text-red-600 border-red-100"
+                                : match.status === "Upcoming"
+                                  ? "bg-blue-50 text-blue-600 border-blue-100"
+                                  : "bg-slate-50 text-slate-600 border-slate-100"
+                            }`}
+                          >
+                            {t(`matches.status.${match.status.toLowerCase()}`)}
                           </span>
                         </div>
-                    </div>
+                      </div>
                     );
                   })
                 )}
@@ -312,7 +323,7 @@ export function DashboardPage() {
                           {/* Status */}
                           <span className="text-[10px] font-medium text-gray-400 uppercase mb-0.5">{t('common.status')}</span>
                           <span className={`text-[10px] font-bold px-2 py-1 rounded-full border uppercase ${badgeStyle}`}>
-                            {bet.status}
+                            {t(`bets.status.${bet.status.toLowerCase()}`)}
                           </span>
                         </div>
                       </div>

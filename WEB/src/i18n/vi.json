@@ -382,9 +382,9 @@
     },
     "status": {
       "won": "Thắng",
-      "halfwon": "Thắng nửa",
+      "halfwon": "Thắng 1/2",
       "lost": "Thua",
-      "halflost": "Thua nửa",
+      "halflost": "Thua 1/2",
       "push": "Hòa",
       "pending": "Chờ",
       "cancelled": "Đã hủy"
@@ -419,7 +419,10 @@
       "penalty": "Phạt",
       "profit": "Lợi nhuận",
       "loss": "Thua lỗ",
-      "balance": "Số dư"
+      "balance": "Số dư",
+      "win": "T",
+      "draw": "H",
+      "lose": "B"
     },
     "empty": {
       "title": "Chưa có xếp hạng",

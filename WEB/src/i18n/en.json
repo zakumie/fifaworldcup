@@ -385,7 +385,7 @@
       "halfwon": "Half Won",
       "lost": "Lost",
       "halflost": "Half Lost",
-      "push": "Push",
+      "push": "Draw",
       "pending": "Pending",
       "cancelled": "Cancelled"
     },
@@ -419,7 +419,10 @@
       "penalty": "Penalty",
       "profit": "Profit",
       "loss": "Loss",
-      "balance": "Balance"
+      "balance": "Balance",
+      "win": "W",
+      "draw": "D",
+      "lose": "L"
     },
     "empty": {
       "title": "No rankings yet",
