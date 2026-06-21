@@ -297,6 +297,15 @@ export function MatchListPage() {
       );
     }
 
+    if (activeTab === 'Upcoming') {
+      return items.sort((a, b) => {
+        const aBet = myBets?.some((bet) => bet.matchId === a.id) ? 1 : 0;
+        const bBet = myBets?.some((bet) => bet.matchId === b.id) ? 1 : 0;
+        if (aBet !== bBet) return aBet - bBet;
+        return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
+      });
+    }
+
     const dir = (activeTab === 'My Bets' || activeTab === 'Finished') ? -1 : 1;
     return items.sort((a, b) => dir * (new Date(a.startTime).getTime() - new Date(b.startTime).getTime()));
   }, [data?.items, search, activeTab, upcomingMatches, myBets]);
