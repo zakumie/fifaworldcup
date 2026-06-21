@@ -213,6 +213,8 @@ export interface LeaderboardEntryDto {
   balance: number;
   winRate: number;
   penaltyAmount: number;
+  rankChange: number;
+  streak: number;
 }
 
 export interface PagedResult<T> {

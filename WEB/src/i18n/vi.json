@@ -422,7 +422,8 @@
       "balance": "Số dư",
       "win": "T",
       "draw": "H",
-      "lose": "B"
+      "lose": "B",
+      "streak": "Chuỗi"
     },
     "empty": {
       "title": "Chưa có xếp hạng",

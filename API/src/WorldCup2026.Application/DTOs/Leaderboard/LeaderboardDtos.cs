@@ -4,7 +4,8 @@ public record LeaderboardEntryDto(
     int Rank, Guid UserId, string DisplayName, string? AvatarUrl,
     int TotalBets, int Wins, int Losses, int Draws,
     decimal TotalWagered, decimal TotalPayout, decimal Profit,
-    decimal Balance, decimal WinRate, decimal PenaltyAmount);
+    decimal Balance, decimal WinRate, decimal PenaltyAmount,
+    int RankChange, int Streak);
 
 public record DashboardDto(
     List<LeaderboardEntryDto> TopWinners,

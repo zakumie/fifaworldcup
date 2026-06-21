@@ -422,7 +422,8 @@
       "balance": "Balance",
       "win": "W",
       "draw": "D",
-      "lose": "L"
+      "lose": "L",
+      "streak": "Streak"
     },
     "empty": {
       "title": "No rankings yet",

@@ -121,10 +121,10 @@ export function LeaderboardPage() {
             <div className="hidden sm:flex items-center gap-3 px-5 py-2.5 bg-gray-50 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">
               <span className="w-8 text-center">{t('leaderboard.table.rank')}</span>
               <span className="flex-1">{t('leaderboard.table.player')}</span>
-              <span className="min-w-[120px] text-center">{t('leaderboard.table.wdl')}</span>
-              <span className="min-w-[70px] text-center">{t('leaderboard.table.rate')}</span>
-              <span className="min-w-[70px] text-right">{t('leaderboard.table.penalty')}</span>
-              <span className="min-w-[70px] text-right">{profitLabel}</span>
+              <span className="min-w-[100px] text-center">{t('leaderboard.table.wdl')}</span>
+              <span className="min-w-[56px] text-center">{t('leaderboard.table.rate')}</span>
+              <span className="min-w-[60px] text-right">{t('leaderboard.table.penalty')}</span>
+              <span className="min-w-[65px] text-right">{profitLabel}</span>
               <span className="min-w-[70px] text-right">{t('leaderboard.table.balance')}</span>
             </div>
 

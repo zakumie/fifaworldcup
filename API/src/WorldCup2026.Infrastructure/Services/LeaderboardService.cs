@@ -80,15 +80,65 @@ public class LeaderboardService : ILeaderboardService
                 };
             })
             .OrderByDescending(e => e.Balance)
-            .ThenByDescending(e => e.Profit)
+            .ThenByDescending(e => e.Wins)
             .ToList();
 
-        var ranked = entries.Select((e, i) => new LeaderboardEntryDto(
-            i + 1, e.UserId, e.DisplayName, e.AvatarUrl,
-            e.TotalBets, e.Wins, e.Losses, e.Draws,
-            e.TotalWagered, e.TotalPayout, e.Profit,
-            e.Balance, e.WinRate, e.PenaltyAmount)
-        ).ToList();
+        // Get previous snapshot for rank change calculation
+        var previousSnapshot = await _db.LeaderboardSnapshots
+            .AsNoTracking()
+            .Where(s => s.GroupId == groupId)
+            .GroupBy(s => s.UserId)
+            .Select(g => g.OrderByDescending(s => s.SnapshotDate).First())
+            .ToDictionaryAsync(s => s.UserId, ct);
+
+        // Calculate streak per user (consecutive wins/losses from most recent settled bets)
+        var userStreaks = await _db.Bets
+            .AsNoTracking()
+            .Where(b => b.GroupId == groupId && b.Status != BetStatus.Cancelled && b.Status != BetStatus.Pending)
+            .GroupBy(b => b.UserId)
+            .Select(g => new
+            {
+                UserId = g.Key,
+                RecentBets = g.OrderByDescending(b => b.SettledAt).Take(20)
+                    .Select(b => b.Status).ToList()
+            })
+            .ToDictionaryAsync(x => x.UserId, x => x.RecentBets, ct);
+
+        var ranked = entries.Select((e, i) =>
+        {
+            int rankChange = 0;
+            if (previousSnapshot.TryGetValue(e.UserId, out var prev))
+                rankChange = prev.Rank - (i + 1); // positive = moved up
+
+            int streak = 0;
+            if (userStreaks.TryGetValue(e.UserId, out var recentBets))
+            {
+                foreach (var status in recentBets)
+                {
+                    if (status == BetStatus.Won || status == BetStatus.HalfWon)
+                    {
+                        if (streak >= 0) streak++;
+                        else break;
+                    }
+                    else if (status == BetStatus.Lost || status == BetStatus.HalfLost)
+                    {
+                        if (streak <= 0) streak--;
+                        else break;
+                    }
+                    else // Push
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return new LeaderboardEntryDto(
+                i + 1, e.UserId, e.DisplayName, e.AvatarUrl,
+                e.TotalBets, e.Wins, e.Losses, e.Draws,
+                e.TotalWagered, e.TotalPayout, e.Profit,
+                e.Balance, e.WinRate, e.PenaltyAmount,
+                rankChange, streak);
+        }).ToList();
 
         await _cache.SetAsync(cacheKey, ranked, TimeSpan.FromMinutes(5));
         return Result<List<LeaderboardEntryDto>>.Success(ranked);
