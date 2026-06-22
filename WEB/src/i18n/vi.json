@@ -296,6 +296,11 @@
       "titleCenter": "ĐẤU",
       "subtitle": "Dự đoán kết quả · Đặt cược · Thắng lớn",
       "searchPlaceholder": "Tìm kiếm đội...",
+      "betFilter": {
+        "all": "Tất cả",
+        "not-bet": "Chưa cược",
+        "betted": "Đã cược"
+      },
       "empty": {
         "notFound": "Không tìm thấy trận đấu",
         "filterHint": "Thử chọn bộ lọc khác"

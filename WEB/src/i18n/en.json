@@ -296,6 +296,11 @@
       "titleCenter": "CENTER",
       "subtitle": "Predict results · Place bets · Win big",
       "searchPlaceholder": "Search teams...",
+      "betFilter": {
+        "all": "All",
+        "not-bet": "Not Bet",
+        "betted": "Betted"
+      },
       "empty": {
         "notFound": "No matches found",
         "filterHint": "Try selecting a different filter"

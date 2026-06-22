@@ -81,6 +81,7 @@ public class LeaderboardService : ILeaderboardService
             })
             .OrderByDescending(e => e.Balance)
             .ThenByDescending(e => e.Wins)
+            .ThenByDescending(e => e.WinRate)
             .ToList();
 
         // Get previous snapshot for rank change calculation
@@ -104,11 +105,32 @@ public class LeaderboardService : ILeaderboardService
             })
             .ToDictionaryAsync(x => x.UserId, x => x.RecentBets, ct);
 
+        // Assign ranks with ties: same Balance + Wins + WinRate = same rank, next rank skips
+        var ranks = new int[entries.Count];
+        for (int i = 0; i < entries.Count; i++)
+        {
+            if (i == 0)
+            {
+                ranks[i] = 1;
+            }
+            else if (entries[i].Balance == entries[i - 1].Balance
+                  && entries[i].Wins == entries[i - 1].Wins
+                  && entries[i].WinRate == entries[i - 1].WinRate)
+            {
+                ranks[i] = ranks[i - 1]; // tied rank
+            }
+            else
+            {
+                ranks[i] = i + 1; // standard competition ranking (skip)
+            }
+        }
+
         var ranked = entries.Select((e, i) =>
         {
+            int rank = ranks[i];
             int rankChange = 0;
             if (previousSnapshot.TryGetValue(e.UserId, out var prev))
-                rankChange = prev.Rank - (i + 1); // positive = moved up
+                rankChange = prev.Rank - rank; // positive = moved up
 
             int streak = 0;
             if (userStreaks.TryGetValue(e.UserId, out var recentBets))
@@ -133,7 +155,7 @@ public class LeaderboardService : ILeaderboardService
             }
 
             return new LeaderboardEntryDto(
-                i + 1, e.UserId, e.DisplayName, e.AvatarUrl,
+                rank, e.UserId, e.DisplayName, e.AvatarUrl,
                 e.TotalBets, e.Wins, e.Losses, e.Draws,
                 e.TotalWagered, e.TotalPayout, e.Profit,
                 e.Balance, e.WinRate, e.PenaltyAmount,

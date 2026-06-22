@@ -228,6 +228,7 @@ export function MatchListPage() {
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [betFilter, setBetFilter] = useState<'all' | 'not-bet' | 'betted'>('all');
 
   const { data, isLoading } = useGetMatchesQuery({ pageSize: 100 });
   const { groupId, groups } = useGroupId();
@@ -276,6 +277,11 @@ export function MatchListPage() {
       });
     } else if (activeTab === 'Upcoming') {
       items = upcomingMatches;
+      if (betFilter === 'not-bet') {
+        items = items.filter((m) => !myBets?.some((b) => b.matchId === m.id));
+      } else if (betFilter === 'betted') {
+        items = items.filter((m) => myBets?.some((b) => b.matchId === m.id));
+      }
     } else if (activeTab === 'Live') {
       items = data.items.filter((m) => m.status === 'Live');
     } else if (activeTab === 'Finished') {
@@ -297,18 +303,9 @@ export function MatchListPage() {
       );
     }
 
-    if (activeTab === 'Upcoming') {
-      return items.sort((a, b) => {
-        const aBet = myBets?.some((bet) => bet.matchId === a.id) ? 1 : 0;
-        const bBet = myBets?.some((bet) => bet.matchId === b.id) ? 1 : 0;
-        if (aBet !== bBet) return aBet - bBet;
-        return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
-      });
-    }
-
     const dir = (activeTab === 'My Bets' || activeTab === 'Finished') ? -1 : 1;
     return items.sort((a, b) => dir * (new Date(a.startTime).getTime() - new Date(b.startTime).getTime()));
-  }, [data?.items, search, activeTab, upcomingMatches, myBets]);
+  }, [data?.items, search, activeTab, upcomingMatches, myBets, betFilter]);
 
   const totalPages = Math.ceil(filteredMatches.length / PAGE_SIZE);
   const paginatedMatches = useMemo(() => {
@@ -319,6 +316,7 @@ export function MatchListPage() {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setPage(1);
+    if (tab !== 'Upcoming') setBetFilter('all');
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -376,6 +374,27 @@ export function MatchListPage() {
           </div>
         </div>
       </div>
+
+      {/* Bet filter toggle for Upcoming */}
+      {activeTab === 'Upcoming' && (
+        <div className="flex items-center gap-1 mb-4 bg-gray-100 rounded-xl p-1 w-fit">
+          {(['all', 'not-bet', 'betted'] as const).map((filter) => (
+            <button
+              key={filter}
+              onClick={() => { setBetFilter(filter); setPage(1); }}
+              className={`
+                px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
+                ${betFilter === filter
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+                }
+              `}
+            >
+              {t(`matches.list.betFilter.${filter}`)}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Match grid */}
       {isLoading && (
