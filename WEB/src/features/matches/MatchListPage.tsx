@@ -166,7 +166,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
           )}
           <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-green-50 border border-slate-100 mb-3">
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <span className="font-medium text-slate-400">{t('matches.card.yourBet')}:</span>
+              <span className="font-medium text-slate-400">{t('matches.card.yourBet')}</span>
               <span className="font-bold text-gray-800">{myBet ? myBet.selectedTeamName : '_'}</span>
             </div>
             <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${BET_STATUS_STYLE[myBet ? myBet.status : 'Open'] ?? 'text-gray-600 bg-gray-100'}`}>
@@ -377,22 +377,36 @@ export function MatchListPage() {
 
       {/* Bet filter toggle for Upcoming */}
       {activeTab === 'Upcoming' && (
-        <div className="flex items-center gap-1 mb-4 bg-gray-100 rounded-xl p-1 w-fit">
-          {(['all', 'not-bet', 'betted'] as const).map((filter) => (
-            <button
-              key={filter}
-              onClick={() => { setBetFilter(filter); setPage(1); }}
-              className={`
-                px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
-                ${betFilter === filter
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-                }
-              `}
-            >
-              {t(`matches.list.betFilter.${filter}`)}
-            </button>
-          ))}
+        <div className="flex items-center gap-1 mb-4 bg-gray-100 dark:bg-gray-900 rounded-xl p-1 w-fit border border-gray-200 dark:border-gray-700">
+          {(['all', 'not-bet', 'betted'] as const).map((filter) => {
+            const isActive = betFilter === filter;
+            const activeStyle =
+              filter === 'all'
+                ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                : filter === 'not-bet'
+                ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 shadow-sm'
+                : 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 shadow-sm';
+            const inactiveStyle =
+              'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-white/60 dark:hover:bg-gray-700/60';
+            return (
+              <button
+                key={filter}
+                onClick={() => { setBetFilter(filter); setPage(1); }}
+                className={`
+                  px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1
+                  ${isActive ? activeStyle : inactiveStyle}
+                `}
+              >
+                {filter === 'not-bet' && (
+                  <span className={`${isActive ? 'bg-amber-500 dark:bg-amber-400' : 'bg-gray-400 dark:bg-gray-500'}`} />
+                )}
+                {filter === 'betted' && (
+                  <span className={`${isActive ? 'bg-emerald-500 dark:bg-emerald-400' : 'bg-gray-400 dark:bg-gray-500'}`} />
+                )}
+                {t(`matches.list.betFilter.${filter}`)}
+              </button>
+            );
+          })}
         </div>
       )}
 
