@@ -21,11 +21,13 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
       fullWidth
       PaperProps={{
         sx: {
-          borderRadius: 4,
+          borderRadius: { xs: 2, sm: 4 },
           background: 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #dc2626 100%)',
-          border: '4px solid #fbbf24',
+          border: { xs: '2px solid #fbbf24', sm: '4px solid #fbbf24' },
           position: 'relative',
           overflow: 'hidden',
+          m: { xs: 1, sm: 2 },
+          maxHeight: { xs: '95vh', sm: '90vh' },
         },
       }}
     >
@@ -33,17 +35,17 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
       <Box
         sx={{
           position: 'absolute',
-          top: 16,
-          right: 16,
+          top: { xs: 8, sm: 16 },
+          right: { xs: 8, sm: 16 },
           zIndex: 10,
         }}
       >
-        <Button
+        {/* <Button
           onClick={onClose}
           sx={{
             minWidth: 'auto',
-            width: 36,
-            height: 36,
+            width: { xs: 44, sm: 36 },
+            height: { xs: 44, sm: 36 },
             borderRadius: '50%',
             bgcolor: 'rgba(255, 255, 255, 0.2)',
             border: '2px solid #fbbf24',
@@ -52,21 +54,21 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
             },
           }}
         >
-          <CloseIcon sx={{ color: '#fbbf24', fontSize: 28 }} />
-        </Button>
+          <CloseIcon sx={{ color: '#fbbf24', fontSize: { xs: 24, sm: 28 } }} />
+        </Button> */}
       </Box>
 
-      <DialogContent sx={{ p: 4, pt: 5 }}>
+      <DialogContent sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 3, sm: 5 }, overflowY: 'auto' }}>
         {/* Header with badge */}
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 2, sm: 3 } }}>
           <Box
             component="img"
             src="/images/cand.png"
             alt="Police Badge"
             sx={{
-              width: 100,
-              height: 80,
-              mb: 2,
+              width: { xs: 80, sm: 100 },
+              height: { xs: 64, sm: 80 },
+              mb: { xs: 1.5, sm: 2 },
               mx: 'auto',
               display: 'block',
               filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3))',
@@ -84,6 +86,7 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
               textTransform: 'uppercase',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
               mb: 0.5,
+              fontSize: { xs: '1rem', sm: '1.5rem' },
             }}
           >
             {t('leaderboard.warning.department')}
@@ -92,7 +95,7 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
             variant="body2"
             sx={{
               color: '#fde68a',
-              fontSize: '0.75rem',
+              fontSize: { xs: '0.65rem', sm: '0.75rem' },
               textTransform: 'uppercase',
               letterSpacing: 1,
             }}
@@ -105,9 +108,9 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
         <Box
           sx={{
             bgcolor: 'rgba(254, 243, 199, 0.95)',
-            borderRadius: 3,
-            p: 3,
-            mb: 3,
+            borderRadius: { xs: 2, sm: 3 },
+            p: { xs: 2, sm: 3 },
+            mb: { xs: 2, sm: 3 },
             border: '2px solid #fbbf24',
           }}
         >
@@ -118,141 +121,91 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
               fontWeight: 800,
               textAlign: 'center',
               mb: 2,
-              fontSize: { xs: '1.1rem', sm: '1.25rem' },
+              fontSize: { xs: '0.95rem', sm: '1.1rem', md: '1.25rem' },
+              lineHeight: 1.3,
             }}
           >
             {t('leaderboard.warning.title')}
           </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: { xs: 2, sm: 3 }, mb: 2 }}>
+            {/* Left: Deny bet image */}
             <Box
               sx={{
-                minWidth: 80,
-                mr: 2,
+                flexShrink: 0,
                 display: 'flex',
                 justifyContent: 'center',
               }}
             >
               <Box
+                component="img"
+                src="/images/denybet.png"
+                alt="Deny Betting"
                 sx={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: '50%',
-                  bgcolor: '#dc2626',
-                  border: '3px solid #991b1b',
+                  width: { xs: 100, sm: 130 },
+                  height: { xs: 100, sm: 130 },
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15))',
+                }}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </Box>
+
+            {/* Right: Info boxes stacked */}
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Box
+                sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
+                  gap: 1.5,
+                  p: 2,
+                  bgcolor: '#eff6ff',
+                  borderRadius: 2,
+                  border: '1px solid #bfdbfe',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
                 }}
               >
-                <Box
+                <Box sx={{ fontSize: '1.5rem', lineHeight: 1, flexShrink: 0 }}>🔒</Box>
+                <Typography
+                  variant="body2"
                   sx={{
-                    fontSize: '2rem',
-                    lineHeight: 1,
+                    color: '#1e40af',
+                    fontSize: { xs: '0.75rem', sm: '0.8rem' },
+                    lineHeight: 1.5,
+                    fontWeight: 500,
                   }}
                 >
-                  🎰
-                </Box>
-                <Box
+                  {t('leaderboard.warning.dataProtection')}
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  p: 2,
+                  bgcolor: '#eff6ff',
+                  borderRadius: 2,
+                  border: '1px solid #bfdbfe',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.06)',
+                }}
+              >
+                <Box sx={{ fontSize: '1.5rem', lineHeight: 1, flexShrink: 0 }}>👮</Box>
+                <Typography
+                  variant="body2"
                   sx={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '50%',
-                    border: '4px solid #dc2626',
-                    transform: 'rotate(45deg)',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      width: '120%',
-                      height: 4,
-                      bgcolor: '#dc2626',
-                      top: '50%',
-                      left: '-10%',
-                      transform: 'translateY(-50%)',
-                    },
+                    color: '#1e40af',
+                    fontSize: { xs: '0.75rem', sm: '0.8rem' },
+                    lineHeight: 1.5,
+                    fontWeight: 500,
                   }}
-                />
+                >
+                  {t('leaderboard.warning.enforcement')}
+                </Typography>
               </Box>
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: '#1f2937',
-                  lineHeight: 1.6,
-                  fontSize: { xs: '0.85rem', sm: '0.95rem' },
-                }}
-              >
-                {t('leaderboard.warning.description')}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                p: 2,
-                bgcolor: '#dbeafe',
-                borderRadius: 2,
-                border: '1px solid #3b82f6',
-              }}
-            >
-              <Box
-                sx={{
-                  fontSize: '1.5rem',
-                  lineHeight: 1,
-                }}
-              >
-                🔒
-              </Box>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: '#1e40af',
-                  fontSize: '0.75rem',
-                  lineHeight: 1.4,
-                }}
-              >
-                {t('leaderboard.warning.dataProtection')}
-              </Typography>
-            </Box>
-
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                p: 2,
-                bgcolor: '#dbeafe',
-                borderRadius: 2,
-                border: '1px solid #3b82f6',
-              }}
-            >
-              <Box
-                sx={{
-                  fontSize: '1.5rem',
-                  lineHeight: 1,
-                }}
-              >
-                👮
-              </Box>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: '#1e40af',
-                  fontSize: '0.75rem',
-                  lineHeight: 1.4,
-                }}
-              >
-                {t('leaderboard.warning.enforcement')}
-              </Typography>
             </Box>
           </Box>
         </Box>
@@ -261,22 +214,24 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
         <Box
           sx={{
             display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
             alignItems: 'center',
             justifyContent: 'center',
             gap: 1,
-            p: 2,
+            p: { xs: 1.5, sm: 2 },
             bgcolor: 'rgba(254, 243, 199, 0.3)',
             borderRadius: 2,
           }}
         >
-          <WarningAmberIcon sx={{ color: '#fbbf24', fontSize: 20 }} />
+          <WarningAmberIcon sx={{ color: '#fbbf24', fontSize: { xs: 18, sm: 20 }, flexShrink: 0 }} />
           <Typography
             variant="caption"
             sx={{
               color: '#fef3c7',
               fontWeight: 600,
-              fontSize: '0.8rem',
+              fontSize: { xs: '0.7rem', sm: '0.8rem' },
               textAlign: 'center',
+              lineHeight: 1.4,
             }}
           >
             {t('leaderboard.warning.footer')}
@@ -287,25 +242,27 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
         <Box
           sx={{
             display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
             alignItems: 'center',
             justifyContent: 'center',
             gap: 1,
-            p: 2,
+            p: { xs: 1.5, sm: 2 },
             mt: 2,
             bgcolor: 'rgba(169, 249, 229, 0.2)',
             borderRadius: 2,
             border: '1px solid rgba(251, 191, 36, 0.3)',
           }}
         >
-          <CheckCircleOutlinedIcon sx={{ color: '#17ccab', fontSize: 20 }} />
+          <CheckCircleOutlinedIcon sx={{ color: '#17ccab', fontSize: { xs: 18, sm: 20 }, flexShrink: 0 }} />
           <Typography
             variant="caption"
             sx={{
               color: '#3cd7a6',
               fontWeight: 500,
-              fontSize: '0.75rem',
+              fontSize: { xs: '0.7rem', sm: '0.75rem' },
               textAlign: 'center',
               fontStyle: 'italic',
+              lineHeight: 1.4,
             }}
           >
             {t('leaderboard.warning.footer2')}
@@ -318,8 +275,8 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
       <DialogActions
         sx={{
           justifyContent: 'center',
-          pb: 3,
-          px: 4,
+          pb: { xs: 2, sm: 3 },
+          px: { xs: 2, sm: 4 },
         }}
       >
         <Button
@@ -330,12 +287,13 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
             bgcolor: '#fbbf24',
             color: '#7f1d1d',
             fontWeight: 700,
-            fontSize: '1rem',
-            px: 6,
-            py: 1.5,
+            fontSize: { xs: '0.9rem', sm: '1rem' },
+            px: { xs: 4, sm: 6 },
+            py: { xs: 1.25, sm: 1.5 },
             borderRadius: 2,
             textTransform: 'uppercase',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
+            minHeight: 44,
             '&:hover': {
               bgcolor: '#f59e0b',
             },
