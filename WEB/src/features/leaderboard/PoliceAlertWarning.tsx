@@ -1,5 +1,4 @@
 import { Dialog, DialogContent, DialogActions, Button, Box, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import { useTranslation } from 'react-i18next';
@@ -40,22 +39,6 @@ export function PoliceAlertWarning({ open, onClose, onAccept }: PoliceAlertWarni
           zIndex: 10,
         }}
       >
-        {/* <Button
-          onClick={onClose}
-          sx={{
-            minWidth: 'auto',
-            width: { xs: 44, sm: 36 },
-            height: { xs: 44, sm: 36 },
-            borderRadius: '50%',
-            bgcolor: 'rgba(255, 255, 255, 0.2)',
-            border: '2px solid #fbbf24',
-            '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.3)',
-            },
-          }}
-        >
-          <CloseIcon sx={{ color: '#fbbf24', fontSize: { xs: 24, sm: 28 } }} />
-        </Button> */}
       </Box>
 
       <DialogContent sx={{ p: { xs: 2, sm: 4 }, pt: { xs: 3, sm: 5 }, overflowY: 'auto' }}>
