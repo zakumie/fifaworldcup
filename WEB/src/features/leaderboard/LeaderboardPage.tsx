@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Skeleton } from '@mui/material';
 import {
   EmojiEvents as TrophyIcon,
@@ -10,6 +10,7 @@ import { useGetLeaderboardQuery } from './leaderboardApi';
 import { useGroupId } from '../groups/useGroupId';
 import { useGetGroupQuery } from '../groups/groupsApi';
 import { MemberInfoDialog } from '../groups/MemberInfoDialog';
+import { PoliceAlertWarning } from './PoliceAlertWarning';
 import { PodiumCard, PODIUM_STYLES } from './PodiumCard';
 import { RankingRow } from './RankingRow';
 import type { LeaderboardEntryDto, GroupMemberDto } from '../../types';
@@ -24,18 +25,69 @@ export function LeaderboardPage() {
   const { data: group } = useGetGroupQuery(groupId, { skip: !groupId });
   const [selectedMember, setSelectedMember] = useState<GroupMemberDto | null>(null);
   const [selectedStats, setSelectedStats] = useState<LeaderboardEntryDto | undefined>(undefined);
+  const [showWarning, setShowWarning] = useState(false);
+  const [pendingMemberInfo, setPendingMemberInfo] = useState<{
+    member: GroupMemberDto;
+    stats: LeaderboardEntryDto;
+  } | null>(null);
+
+  const STORAGE_KEY = 'leaderboard_warning_shown';
 
   const membersMap = useMemo(() => {
     if (!group?.members) return new Map<string, GroupMemberDto>();
     return new Map(group.members.map(m => [m.userId, m]));
   }, [group]);
 
+  useEffect(() => {
+    // Check if warning has been shown before
+    const warningShown = localStorage.getItem(STORAGE_KEY);
+    if (!warningShown) {
+      // First time, don't mark as shown yet - only mark when user clicks podium
+    }
+
+    // Cleanup: Remove storage key when leaving the page
+    return () => {
+      localStorage.removeItem(STORAGE_KEY);
+    };
+  }, []);
+
   const handleMemberClick = (entry: LeaderboardEntryDto) => {
     const member = membersMap.get(entry.userId);
-    if (member) {
+    if (!member) return;
+
+    // Check if this is a top 3 podium click and warning hasn't been shown
+    const warningShown = localStorage.getItem(STORAGE_KEY);
+    const isTop3 = entry.rank <= 3;
+
+    if (isTop3 && !warningShown) {
+      // First time clicking top 3 - show warning
+      setPendingMemberInfo({ member, stats: entry });
+      setShowWarning(true);
+    } else {
+      // Either not top 3, or warning already shown - show member info directly
       setSelectedMember(member);
       setSelectedStats(entry);
     }
+  };
+
+  const handleWarningAccept = () => {
+    // Mark warning as shown
+    localStorage.setItem(STORAGE_KEY, 'true');
+    setShowWarning(false);
+
+    // Show the member info that was pending
+    if (pendingMemberInfo) {
+      setSelectedMember(pendingMemberInfo.member);
+      setSelectedStats(pendingMemberInfo.stats);
+      setPendingMemberInfo(null);
+    }
+  };
+
+  const handleWarningClose = () => {
+    // User closed warning without accepting - mark as shown anyway
+    localStorage.setItem(STORAGE_KEY, 'true');
+    setShowWarning(false);
+    setPendingMemberInfo(null);
   };
 
   const profitLabel = group?.settlementMode === 'WinnerKeepsLoserPays' ? t('leaderboard.table.loss') : t('leaderboard.table.profit');
@@ -146,6 +198,12 @@ export function LeaderboardPage() {
           <p className="text-sm text-gray-500">{t('leaderboard.empty.hint')}</p>
         </div>
       )}
+
+      <PoliceAlertWarning
+        open={showWarning}
+        onClose={handleWarningClose}
+        onAccept={handleWarningAccept}
+      />
 
       <MemberInfoDialog
         member={selectedMember}

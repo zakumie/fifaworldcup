@@ -433,6 +433,17 @@
     "empty": {
       "title": "Chưa có xếp hạng",
       "hint": "Đặt cược để xuất hiện trên bảng xếp hạng"
+    },
+    "warning": {
+      "department": "CÔNG AN NHÂN DÂN",
+      "subtitle": "Vì nước quên thân, vì dân phục vụ",
+      "title": "HÀNH VI ĐÁNH BẠC TRÁI PHÉP DƯỚI BẤT KỲ HÌNH THỨC NÀO ĐỀU BỊ PHÁP LUẬT VIỆT NAM NGHIÊM CẤM VÀ XỬ LÝ NGHIÊM KHẮC",
+      "description": "Dữ liệu cá cược, lịch sử giao dịch và thông tin người tham gia trên các nền tảng mạng xã hội hoặc website trực tuyến đều lưu lại dấu vết kỹ thuật số. Cơ quan chức năng hoàn toàn có thể thu thập các chứng cứ điện tử này để phục vụ công tác điều tra.",
+      "dataProtection": "Dữ liệu cá cược, lịch sử giao dịch và thông tin người tham gia lưu lại dấu vết kỹ thuật số",
+      "enforcement": "Cơ quan chức năng hoàn toàn có thể thu thập chứng cứ điện tử để phục vụ công tác điều tra",
+      "footer": "TUÂN THỦ PHÁP LUẬT · BẢO VỆ BẢN THÂN · XÂY DỰNG XÃ HỘI AN TOÀN",
+      "footer2": "Chỉ nên tham gia mini game dự đoán kết quả WorldCup với các đồng nghiệp yêu quí ở công ty của bạn.",
+      "understood": "Tôi đã hiểu"
     }
   },
   "predictions": {
