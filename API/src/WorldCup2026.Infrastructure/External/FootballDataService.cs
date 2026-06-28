@@ -134,7 +134,7 @@ public class FootballDataService : IExternalMatchService
                         ExternalMatchId = externalId,
                         HomeTeamId = homeTeam.Id,
                         AwayTeamId = awayTeam.Id,
-                        MatchDay = m.TryGetProperty("matchday", out var md) ? md.GetInt32() : 0,
+                        MatchDay = m.TryGetProperty("matchday", out var md) && md.ValueKind == JsonValueKind.Number ? md.GetInt32() : 0,
                         Stage = m.GetProperty("stage").GetString() ?? "GROUP_STAGE",
                         Group = group,
                         StartTime = m.GetProperty("utcDate").GetDateTime(),
