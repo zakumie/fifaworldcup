@@ -104,9 +104,16 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
             {(match.status === 'Open' || match.status === 'Upcoming') ? (
               <span className="text-xs text-slate-400 font-medium">— : —</span>
             ) : (
-              <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
-                {match.homeScore} - {match.awayScore}
-              </span>
+              <div className="flex flex-col items-end gap-0.5">
+                <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
+                  {match.homeScore} - {match.awayScore}
+                </span>
+                {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
+                  <span className="text-[10px] text-amber-600 font-medium">
+                    ET: {match.extraHomeScore} - {match.extraAwayScore}
+                  </span>
+                )}
+              </div>
             )}
             <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${statusStyle}`}>
               {statusLabel}
@@ -147,9 +154,16 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
             {(match.status === 'Open' || match.status === 'Upcoming') ? (
               <span className="text-sm text-slate-400">— : —</span>
             ) : (
-              <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
-                {match.homeScore} - {match.awayScore}
-              </span>
+              <div className="flex flex-col items-center gap-0.5">
+                <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
+                 {match.homeScore}  - {match.awayScore}
+                </span>
+                {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
+                  <span className="text-[10px] text-amber-600 font-medium">
+                   {match.extraHomeScore} - {match.extraAwayScore}
+                  </span>
+                )}
+              </div>
             )}
           </div>
 

@@ -126,13 +126,21 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                   </span>
                 </div>
               ) : (
-                <div className={`
-                  inline-flex items-center gap-2 px-4 py-2 rounded-xl
-                  ${isLive ? 'bg-red-50' : 'bg-gray-50'}
-                `}>
-                  <span className="text-2xl font-black text-gray-800">{match.homeScore}</span>
-                  <span className="text-lg text-gray-400">-</span>
-                  <span className="text-2xl font-black text-gray-800">{match.awayScore}</span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className={`
+                    inline-flex items-center gap-2 px-4 py-2 rounded-xl
+                    ${isLive ? 'bg-red-50' : 'bg-gray-50'}
+                  `}>
+                    <span className="text-2xl font-black text-gray-800">{match.homeScore}</span>
+                    <span className="text-lg text-gray-400">-</span>
+                    <span className="text-2xl font-black text-gray-800">{match.awayScore}</span>
+                  </div>
+                  {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
+                    <div className="flex items-center gap-1 text-xs">
+                      <span className="text-amber-600 font-medium">{t('matches.card.extraTime')}:</span>
+                      <span className="text-gray-700 font-bold">{match.extraHomeScore} - {match.extraAwayScore}</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

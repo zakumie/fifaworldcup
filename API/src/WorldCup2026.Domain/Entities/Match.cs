@@ -10,6 +10,8 @@ public class Match : BaseEntity
     public Guid AwayTeamId { get; set; }
     public int? HomeScore { get; set; }
     public int? AwayScore { get; set; }
+    public int? ExtraHomeScore { get; set; }
+    public int? ExtraAwayScore { get; set; }
     public int MatchDay { get; set; }
     public string Stage { get; set; } = null!;
     public string? Group { get; set; }

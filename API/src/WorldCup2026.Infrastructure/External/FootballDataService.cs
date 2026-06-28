@@ -109,6 +109,7 @@ public class FootballDataService : IExternalMatchService
                 };
 
                 int? homeScore = null, awayScore = null;
+                int? extraHomeScore = null, extraAwayScore = null;
                 if (m.TryGetProperty("score", out var score))
                 {
                     var ft = score.GetProperty("fullTime");
@@ -116,6 +117,15 @@ public class FootballDataService : IExternalMatchService
                         homeScore = hs.GetInt32();
                     if (ft.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
                         awayScore = aws.GetInt32();
+                    
+                    // Extract extra time scores if available
+                    if (score.TryGetProperty("extraTime", out var et))
+                    {
+                        if (et.TryGetProperty("home", out var ehs) && ehs.ValueKind == JsonValueKind.Number)
+                            extraHomeScore = ehs.GetInt32();
+                        if (et.TryGetProperty("away", out var eas) && eas.ValueKind == JsonValueKind.Number)
+                            extraAwayScore = eas.GetInt32();
+                    }
                 }
 
                 if (existing != null)
@@ -125,6 +135,8 @@ public class FootballDataService : IExternalMatchService
                         existing.Status = matchStatus;
                     existing.HomeScore = homeScore;
                     existing.AwayScore = awayScore;
+                    existing.ExtraHomeScore = extraHomeScore;
+                    existing.ExtraAwayScore = extraAwayScore;
                     existing.Group = group;
                 }
                 else
@@ -140,7 +152,9 @@ public class FootballDataService : IExternalMatchService
                         StartTime = m.GetProperty("utcDate").GetDateTime(),
                         Status = matchStatus,
                         HomeScore = homeScore,
-                        AwayScore = awayScore
+                        AwayScore = awayScore,
+                        ExtraHomeScore = extraHomeScore,
+                        ExtraAwayScore = extraAwayScore
                     });
                     count++;
                 }

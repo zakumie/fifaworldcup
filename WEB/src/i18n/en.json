@@ -311,7 +311,8 @@
       "yourBet": "Your bet:",
       "viewButton": "View",
       "betNow": "Bet Now",
-      "updateBet": "Update Bet"
+      "updateBet": "Update Bet",
+      "extraTime": "Extra Time"
     }
   },
   "betting": {
