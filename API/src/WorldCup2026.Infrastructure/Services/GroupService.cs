@@ -176,7 +176,7 @@ public class GroupService : IGroupService
 
             missedMatches = settledConfigs.Count;
             penaltyAmount = settledConfigs.Sum(amt => amt ?? 0m);
-            balance = group.DefaultBalance - penaltyAmount;
+            //balance = group.DefaultBalance - penaltyAmount;
         }
 
         var member = new GroupMember

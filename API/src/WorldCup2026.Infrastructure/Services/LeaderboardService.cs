@@ -73,10 +73,11 @@ public class LeaderboardService : ILeaderboardService
                     Draws = draws,
                     TotalWagered = s?.TotalWagered ?? 0,
                     TotalPayout = s?.TotalPayout ?? 0,
-                    Profit = profit - m.PenaltyAmount,
-                    Balance = m.Balance,
+                    Profit = profit,
+                    Balance = m.Balance - m.RewardAmount + m.PenaltyAmount,
                     WinRate = Math.Round(winRate, 4),
                     PenaltyAmount = m.PenaltyAmount,
+                    RewardAmount = m.RewardAmount
                 };
             })
             .OrderByDescending(e => e.Balance)

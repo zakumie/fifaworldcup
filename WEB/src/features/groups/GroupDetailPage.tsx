@@ -17,12 +17,6 @@ import type { GroupMemberDto } from '../../types';
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
 import { useTranslation } from 'react-i18next';
 
-const ROLE_STYLE: Record<string, string> = {
-  Manager: 'text-blue-700 bg-blue-50 border-blue-200',
-  Admin: 'text-purple-700 bg-purple-50 border-purple-200',
-  Member: 'text-slate-600 bg-slate-50 border-slate-200',
-};
-
 export function GroupDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -243,7 +237,8 @@ export function GroupDetailPage() {
         {/* Members list */}
         <div className="space-y-2">
           {sortedMembers.map((member, idx) => {
-            const netLoss = group.defaultBalance - member.balance;
+            const balanceAmount = member.balance - member.rewardAmount + member.penaltyAmount;
+            const netLoss = group.defaultBalance - balanceAmount;
             return (
               <div
                 key={member.userId}
@@ -302,7 +297,7 @@ export function GroupDetailPage() {
                   </div>
                   <div className="flex flex-col items-end">
                     <span className="text-[10px] text-slate-400">{t("groups.detail.balance")}</span>
-                    <span className="text-sm font-bold text-gray-800">{member.balance.toLocaleString()}</span>
+                    <span className="text-sm font-bold text-gray-800">{balanceAmount.toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -324,7 +319,7 @@ export function GroupDetailPage() {
                 </div>
                 <div className="hidden md:flex col-span-2 items-center justify-end">
                   <span className="text-sm font-bold text-gray-800">
-                    {member.balance.toLocaleString()}
+                    {balanceAmount.toLocaleString()}
                   </span>
                 </div>
               </div>

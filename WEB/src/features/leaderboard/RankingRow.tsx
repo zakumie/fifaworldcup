@@ -101,10 +101,19 @@ export function RankingRow({ entry, onClick }: { entry: LeaderboardEntryDto; onC
       {/* Penalty */}
       <div className="hidden sm:block min-w-[60px] text-right">
         {entry.penaltyAmount > 0 ? (
-          <span className="text-xs font-bold text-stone-500">-{entry.penaltyAmount.toLocaleString()}</span>
+          <span className="text-xs font-bold text-red-500">-{entry.penaltyAmount.toLocaleString()}</span>
         ) : (
           <span className="text-xs text-gray-300">—</span>
-        )}
+        )}        
+      </div>
+
+      {/* Reward */}
+      <div className="hidden sm:block min-w-[60px] text-right">
+        {entry.rewardAmount > 0 ? (
+          <span className="text-xs font-bold text-green-500">+{entry.rewardAmount.toLocaleString()}</span>
+        ) : (
+          <span className="text-xs text-gray-300">—</span>
+        )}        
       </div>
 
       {/* Profit */}

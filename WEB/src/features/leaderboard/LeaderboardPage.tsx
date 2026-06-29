@@ -176,6 +176,7 @@ export function LeaderboardPage() {
               <span className="min-w-[100px] text-center">{t('leaderboard.table.wdl')}</span>
               <span className="min-w-[56px] text-center">{t('leaderboard.table.rate')}</span>
               <span className="min-w-[60px] text-right">{t('leaderboard.table.penalty')}</span>
+              <span className="min-w-[60px] text-right">{t('leaderboard.table.reward')}</span>
               <span className="min-w-[65px] text-right">{profitLabel}</span>
               <span className="min-w-[70px] text-right">{t('leaderboard.table.balance')}</span>
             </div>

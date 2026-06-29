@@ -217,6 +217,7 @@ export interface LeaderboardEntryDto {
   balance: number;
   winRate: number;
   penaltyAmount: number;
+  rewardAmount: number;
   rankChange: number;
   streak: number;
 }
