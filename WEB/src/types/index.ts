@@ -52,6 +52,7 @@ export interface GroupDetailDto {
   inviteCode: string;
   maxMembers: number;
   defaultBalance: number;
+  fundAmount: number;
   isActive: boolean;
   createdAt: string;
   settlementMode: SettlementMode;
@@ -69,6 +70,7 @@ export interface GroupMemberDto {
   joinedAt: string;
   isActive: boolean;
   penaltyAmount: number;
+  rewardAmount: number;
 }
 
 export interface CreateGroupRequest {

@@ -1,0 +1,2 @@
+ALTER TABLE GroupMembers
+ADD RewardAmount DECIMAL(18, 2) NOT NULL DEFAULT 0;

@@ -16,9 +16,9 @@ public record GroupDto(
 public record GroupDetailDto(
     Guid Id, string Name, string? Description, string InviteCode,
     int MaxMembers, decimal DefaultBalance, bool IsActive,
-    DateTime CreatedAt, SettlementMode SettlementMode, List<GroupMemberDto> Members);
+    DateTime CreatedAt, SettlementMode SettlementMode, List<GroupMemberDto> Members, decimal FundAmount);
 
 public record GroupMemberDto(
     Guid Id, Guid UserId, string DisplayName, string Email,
     string? AvatarUrl, GroupRole Role, decimal Balance,
-    DateTime JoinedAt, bool IsActive, decimal PenaltyAmount);
+    DateTime JoinedAt, bool IsActive, decimal PenaltyAmount, decimal RewardAmount);

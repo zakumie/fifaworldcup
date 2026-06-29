@@ -199,10 +199,16 @@
         "members": "Members",
         "balance": "Balance",
         "created": "Created",
-        "status": "Status"
+        "status": "Status",
+        "point": "Total Score"
       },
       "capacity": "capacity",
-      "joined": "Joined "
+      "joined": "Joined ",
+      "member": "Member",
+      "penalty": "Penalty",
+      "reward": "Reward",
+      "netLoss": "Net",
+      "balance": "Balance"
     },
     "mode": {
       "winnerKeeps": "Winner Keeps",

@@ -199,10 +199,16 @@
         "members": "Thành viên",
         "balance": "Số dư",
         "created": "Ngày tạo",
-        "status": "Trạng thái"
+        "status": "Trạng thái",
+        "point": "Tổng Điểm"
       },
       "capacity": "sức chứa",
-      "joined": "Tham gia "
+      "joined": "Tham gia ",
+      "member": "Thành viên",
+      "penalty": "Phạt",
+      "reward": "Thưởng",
+      "netLoss": "Lỗ ròng",
+      "balance": "Số dư"
     },
     "mode": {
       "winnerKeeps": "Người thắng giữ",

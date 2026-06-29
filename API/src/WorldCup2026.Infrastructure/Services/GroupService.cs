@@ -102,12 +102,15 @@ public class GroupService : IGroupService
 
         var members = group.Members.Select(m => new GroupMemberDto(
             m.Id, m.UserId, m.User.DisplayName, m.User.Email,
-            m.User.AvatarUrl, m.Role, m.Balance, m.JoinedAt, m.IsActive, m.PenaltyAmount)).ToList();
+            m.User.AvatarUrl, m.Role, m.Balance, m.JoinedAt, m.IsActive, m.PenaltyAmount, m.RewardAmount)).ToList();
+
+        decimal TotalAmount = members.Sum(m => m.Balance);
+        decimal FundAmount = (group.DefaultBalance * members.Count) - TotalAmount;
 
         return Result<GroupDetailDto>.Success(new GroupDetailDto(
             group.Id, group.Name, group.Description, group.InviteCode,
             group.MaxMembers, group.DefaultBalance, group.IsActive,
-            group.CreatedAt, group.SettlementMode, members));
+            group.CreatedAt, group.SettlementMode, members, FundAmount));
     }
 
     public async Task<Result<List<GroupDto>>> GetUserGroupsAsync(Guid userId)
