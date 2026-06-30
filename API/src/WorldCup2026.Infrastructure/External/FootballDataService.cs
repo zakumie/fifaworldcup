@@ -137,6 +137,14 @@ public class FootballDataService : IExternalMatchService
                             extraHomeScore = ehs.GetInt32();
                         if (et.TryGetProperty("away", out var eas) && eas.ValueKind == JsonValueKind.Number)
                             extraAwayScore = eas.GetInt32();
+                    }                    
+
+                    if (score.TryGetProperty("penalties", out var pn))
+                    {
+                        if (pn.TryGetProperty("home", out var ehs) && ehs.ValueKind == JsonValueKind.Number)
+                            extraHomeScore = ehs.GetInt32();
+                        if (pn.TryGetProperty("away", out var eas) && eas.ValueKind == JsonValueKind.Number)
+                            extraAwayScore = eas.GetInt32();
                     }
                 }
 

@@ -135,12 +135,13 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                     <span className="text-lg text-gray-400">-</span>
                     <span className="text-2xl font-black text-gray-800">{match.awayScore}</span>
                   </div>
-                  {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
-                    <div className="flex items-center gap-1 text-xs">
-                      <span className="text-amber-600 font-medium">{t('matches.card.extraTime')}:</span>
-                      <span className="text-gray-700 font-bold">{match.extraHomeScore} - {match.extraAwayScore}</span>
-                    </div>
-                  )}
+                    {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
+                      <div className="inline-flex items-center text-xs gap-2 px-4 py-2 bg-gray-30">
+                        <span className="text-amber-600 font-bold">{match.extraHomeScore} </span>
+                        <span className="text-amber-600">-</span>
+                        <span className="text-amber-600 font-bold">{match.extraAwayScore}</span>
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -392,8 +393,8 @@ export function MatchListPage() {
               filter === 'all'
                 ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
                 : filter === 'not-bet'
-                ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 shadow-sm'
-                : 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 shadow-sm';
+                  ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 shadow-sm'
+                  : 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 shadow-sm';
             const inactiveStyle =
               'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-white/60 dark:hover:bg-gray-700/60';
             return (

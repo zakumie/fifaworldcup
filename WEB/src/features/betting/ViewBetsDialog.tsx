@@ -112,7 +112,7 @@ function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }
       <div className="flex-1 min-w-0">
         <p className={`text-[11px] sm:text-xs font-bold truncate ${isWinner ? 'text-amber-800' : 'text-slate-800'}`}>
           {team.name}
-        </p>       
+        </p>
         {!hideAmount && <p className="text-[9px] sm:text-[10px] text-slate-500">{pool.toLocaleString()} {t('betting.view.wagered')}</p>}
       </div>
       <span> <p> {isWinner && '🏆'}</p></span>
@@ -175,178 +175,180 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
 
   return (
     <ThemeProvider theme={lightTheme}>
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-      fullScreen={isMobile}
-      PaperProps={{
-        sx: { borderRadius: isMobile ? 0 : 3, overflow: 'hidden' },
-      }}
-    >
-      {/* Match Header */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4">
-        <IconButton
-          onClick={onClose}
-          size="small"
-          sx={{ position: 'absolute', top: 8, right: 8, color: 'rgba(255,255,255,0.6)', '&:hover': { color: 'white' } }}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        maxWidth="md"
+        fullWidth
+        fullScreen={isMobile}
+        PaperProps={{
+          sx: { borderRadius: isMobile ? 0 : 3, overflow: 'hidden' },
+        }}
+      >
+        {/* Match Header */}
+        <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4">
+          <IconButton
+            onClick={onClose}
+            size="small"
+            sx={{ position: 'absolute', top: 8, right: 8, color: 'rgba(255,255,255,0.6)', '&:hover': { color: 'white' } }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
 
-        <div className="flex items-center justify-center gap-3 sm:gap-5">
-          <TeamFlag flagUrl={match.homeTeam.flagUrl} name={match.homeTeam.name} code={match.homeTeam.code} />
+          <div className="flex items-center justify-center gap-3 sm:gap-5">
+            <TeamFlag flagUrl={match.homeTeam.flagUrl} name={match.homeTeam.name} code={match.homeTeam.code} />
 
-          <div className="flex flex-col items-center gap-1">
-            {hasScore ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black text-white">{match.homeScore}</span>
-                <span className="text-base sm:text-lg text-white/40">:</span>
-                <span className="text-xl sm:text-2xl font-black text-white">{match.awayScore}</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 text-white/50">
-                <SportsSoccerIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
-                <span className="text-xs sm:text-sm font-medium">VS</span>
-              </div>
-            )}
-            <span className="text-[9px] sm:text-[10px] text-white/40 font-medium tracking-wider uppercase">
-              {formatStage(match.stage)}{match.group ? ` · ${formatStage(match.group)}` : ''}
-            </span>
-          </div>
-
-          <TeamFlag flagUrl={match.awayTeam.flagUrl} name={match.awayTeam.name} code={match.awayTeam.code} />
-        </div>
-
-        {/* Match Info Bar */}
-        <div className="mt-2 sm:mt-3 flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-            <span className="text-[10px] text-white/40 uppercase">{t('betting.view.kickoff')}</span>
-            <span className="text-xs font-semibold text-white/80">
-              {formatDateLocalized(match.startTime)}
-            </span>
-          </div>
-          {config && config.handicap !== 0 && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-              <span className="text-[10px] text-white/40 uppercase">{t('common.handicap')}</span>
-              <span className="text-xs font-semibold text-amber-300">
-                {config.favoredTeamName ?? 'Home'} {config.handicap > 0 ? '+' : ''}{config.handicap}
+            <div className="flex flex-col items-center gap-1">
+              {hasScore ? (
+                <div className="flex items-center gap-2">
+                  {(match.extraHomeScore !== null && (<span className="text-lg sm:text-xl text-amber-500 font-bold">({match.extraHomeScore}) </span>))}
+                  <span className="text-xl sm:text-2xl font-black text-white">{match.homeScore}</span>
+                  <span className="text-base sm:text-lg text-white/40">:</span>
+                  <span className="text-xl sm:text-2xl font-black text-white">{match.awayScore}</span>
+                  {(match.extraAwayScore !== null && (<span className="text-lg sm:text-xl text-amber-500 font-bold">({match.extraAwayScore})</span>))}
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 text-white/50">
+                  <SportsSoccerIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                  <span className="text-xs sm:text-sm font-medium">VS</span>
+                </div>
+              )}
+              <span className="text-[9px] sm:text-[10px] text-white/40 font-medium tracking-wider uppercase">
+                {formatStage(match.stage)}{match.group ? ` · ${formatStage(match.group)}` : ''}
               </span>
             </div>
-          )}
-          {config && config.handicap === 0 && (
+
+            <TeamFlag flagUrl={match.awayTeam.flagUrl} name={match.awayTeam.name} code={match.awayTeam.code} />
+          </div>
+
+          {/* Match Info Bar */}
+          <div className="mt-2 sm:mt-3 flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-              <span className="text-[10px] text-white/40 uppercase">{t('common.handicap')}</span>
-              <span className="text-xs font-semibold text-white/70">{t('common.even')}</span>
-            </div>
-          )}
-          {config && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
-              <span className="text-[10px] text-white/40 uppercase">{t('betting.view.bet')}</span>
-              <span className="text-xs font-semibold text-emerald-300">
-                {config.isFixedBet
-                  ? `${config.defaultBetAmount?.toLocaleString() ?? config.minBetAmount.toLocaleString()}`
-                  : `${config.minBetAmount.toLocaleString()} – ${config.maxBetAmount.toLocaleString()}`
-                }
+              <span className="text-[10px] text-white/40 uppercase">{t('betting.view.kickoff')}</span>
+              <span className="text-xs font-semibold text-white/80">
+                {formatDateLocalized(match.startTime)}
               </span>
             </div>
-          )}
+            {config && config.handicap !== 0 && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
+                <span className="text-[10px] text-white/40 uppercase">{t('common.handicap')}</span>
+                <span className="text-xs font-semibold text-amber-300">
+                  {config.favoredTeamName ?? 'Home'} {config.handicap > 0 ? '+' : ''}{config.handicap}
+                </span>
+              </div>
+            )}
+            {config && config.handicap === 0 && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
+                <span className="text-[10px] text-white/40 uppercase">{t('common.handicap')}</span>
+                <span className="text-xs font-semibold text-white/70">{t('common.even')}</span>
+              </div>
+            )}
+            {config && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10">
+                <span className="text-[10px] text-white/40 uppercase">{t('betting.view.bet')}</span>
+                <span className="text-xs font-semibold text-emerald-300">
+                  {config.isFixedBet
+                    ? `${config.defaultBetAmount?.toLocaleString() ?? config.minBetAmount.toLocaleString()}`
+                    : `${config.minBetAmount.toLocaleString()} – ${config.maxBetAmount.toLocaleString()}`
+                  }
+                </span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <DialogContent sx={{ p: 0, bgcolor: '#f8fafc', flex: isMobile ? 1 : undefined, overflow: 'auto' }}>
-        {isLoading && (
-          <div className="p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} variant="rectangular" height={56} sx={{ borderRadius: 3 }} />
-            ))}
-          </div>
-        )}
-
-        {!isLoading && (!bets || bets.length === 0) && (
-          <div className="p-4 space-y-4">
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <SportsSoccerIcon sx={{ fontSize: 40, color: '#cbd5e1', mb: 1 }} />
-              <p className="text-sm text-slate-400">{t('betting.view.empty.title')}</p>
-              <p className="text-xs text-slate-300 mt-0.5">{t('betting.view.empty.hint')}</p>
+        {/* Content */}
+        <DialogContent sx={{ p: 0, bgcolor: '#f8fafc', flex: isMobile ? 1 : undefined, overflow: 'auto' }}>
+          {isLoading && (
+            <div className="p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} variant="rectangular" height={56} sx={{ borderRadius: 3 }} />
+              ))}
             </div>
-            {noBetUsers.length > 0 && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-50/60 border border-orange-200/60">
-                  <WarningAmberIcon sx={{ fontSize: 16, color: '#f97316' }} />
-                  <span className="text-xs font-bold text-orange-600">{t('betting.view.noBet')}</span>
-                  <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} {noBetUsers.length > 1 ? t('betting.view.members') : t('betting.view.member')}</span>
-                </div>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {noBetUsers.map((u) => <NoBetUserCard key={u.id} user={u} />)}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+          )}
 
-        {bets && bets.length > 0 && stats && (
-          <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
-            {/* Two-column: Home vs Away */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {/* Home column */}
-              <div className="space-y-1.5 sm:space-y-2">
-                <ColumnHeader
-                  team={match.homeTeam}
-                  count={homeBets.length}
-                  pool={stats.homePool}
-                  color="bg-emerald-50"
-                  border="border-emerald-200"
-                  isWinner={homeWins}
-                />
-                {homeBets.length > 0 ? (
-                  <div className="space-y-1 sm:space-y-1.5">
-                    {homeBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
-                  </div>
-                ) : (
-                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">{t('betting.view.noOnePicked')}{match.homeTeam.name}</p>
-                )}
+          {!isLoading && (!bets || bets.length === 0) && (
+            <div className="p-4 space-y-4">
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <SportsSoccerIcon sx={{ fontSize: 40, color: '#cbd5e1', mb: 1 }} />
+                <p className="text-sm text-slate-400">{t('betting.view.empty.title')}</p>
+                <p className="text-xs text-slate-300 mt-0.5">{t('betting.view.empty.hint')}</p>
               </div>
-
-              {/* Away column */}
-              <div className="space-y-1.5 sm:space-y-2">
-                <ColumnHeader
-                  team={match.awayTeam}
-                  count={awayBets.length}
-                  pool={stats.awayPool}
-                  color="bg-green-50"
-                  border="border-green-200"
-                  isWinner={awayWins}
-                />
-                {awayBets.length > 0 ? (
-                  <div className="space-y-1 sm:space-y-1.5">
-                    {awayBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
+              {noBetUsers.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-50/60 border border-orange-200/60">
+                    <WarningAmberIcon sx={{ fontSize: 16, color: '#f97316' }} />
+                    <span className="text-xs font-bold text-orange-600">{t('betting.view.noBet')}</span>
+                    <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} {noBetUsers.length > 1 ? t('betting.view.members') : t('betting.view.member')}</span>
                   </div>
-                ) : (
-                  <p className="text-center text-xs text-slate-400 py-4 sm:py-6">{t('betting.view.noOnePicked')}{match.awayTeam.name}</p>
-                )}
-              </div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {noBetUsers.map((u) => <NoBetUserCard key={u.id} user={u} />)}
+                  </div>
+                </div>
+              )}
             </div>
+          )}
 
-            {/* No Bet — users who didn't pick or didn't bet at all */}
-            {noBetUsers.length > 0 && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-50/60 border border-orange-200/60">
-                  <WarningAmberIcon sx={{ fontSize: 16, color: '#f97316' }} />
-                  <span className="text-xs font-bold text-orange-600">{t('betting.view.noBet')}</span>
-                  <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} {noBetUsers.length > 1 ? t('betting.view.members') : t('betting.view.member')}</span>
+          {bets && bets.length > 0 && stats && (
+            <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
+              {/* Two-column: Home vs Away */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {/* Home column */}
+                <div className="space-y-1.5 sm:space-y-2">
+                  <ColumnHeader
+                    team={match.homeTeam}
+                    count={homeBets.length}
+                    pool={stats.homePool}
+                    color="bg-emerald-50"
+                    border="border-emerald-200"
+                    isWinner={homeWins}
+                  />
+                  {homeBets.length > 0 ? (
+                    <div className="space-y-1 sm:space-y-1.5">
+                      {homeBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
+                    </div>
+                  ) : (
+                    <p className="text-center text-xs text-slate-400 py-4 sm:py-6">{t('betting.view.noOnePicked')}{match.homeTeam.name}</p>
+                  )}
                 </div>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {noBetUsers.map((u) => <NoBetUserCard key={u.id} user={u} />)}
+
+                {/* Away column */}
+                <div className="space-y-1.5 sm:space-y-2">
+                  <ColumnHeader
+                    team={match.awayTeam}
+                    count={awayBets.length}
+                    pool={stats.awayPool}
+                    color="bg-green-50"
+                    border="border-green-200"
+                    isWinner={awayWins}
+                  />
+                  {awayBets.length > 0 ? (
+                    <div className="space-y-1 sm:space-y-1.5">
+                      {awayBets.map((bet) => <BetCard key={bet.id} bet={bet} hideAmount={winnerKeepsLoserPaysMode} avatarUrl={avatarMap.get(bet.userId)} />)}
+                    </div>
+                  ) : (
+                    <p className="text-center text-xs text-slate-400 py-4 sm:py-6">{t('betting.view.noOnePicked')}{match.awayTeam.name}</p>
+                  )}
                 </div>
               </div>
-            )}
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+
+              {/* No Bet — users who didn't pick or didn't bet at all */}
+              {noBetUsers.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-50/60 border border-orange-200/60">
+                    <WarningAmberIcon sx={{ fontSize: 16, color: '#f97316' }} />
+                    <span className="text-xs font-bold text-orange-600">{t('betting.view.noBet')}</span>
+                    <span className="ml-auto text-xs text-orange-400">{noBetUsers.length} {noBetUsers.length > 1 ? t('betting.view.members') : t('betting.view.member')}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {noBetUsers.map((u) => <NoBetUserCard key={u.id} user={u} />)}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   );
 }
