@@ -111,12 +111,24 @@ public class FootballDataService : IExternalMatchService
                 int? homeScore = null, awayScore = null;
                 int? extraHomeScore = null, extraAwayScore = null;
                 if (m.TryGetProperty("score", out var score))
-                {
-                    var ft = score.GetProperty("fullTime");
-                    if (ft.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
-                        homeScore = hs.GetInt32();
-                    if (ft.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
-                        awayScore = aws.GetInt32();
+                {//  "duration": "REGULAR",
+                    string duration = score.GetProperty("duration").GetString() ?? "REGULAR";
+                    if (duration.Equals("REGULAR", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        var ft = score.GetProperty("fullTime");
+                        if (ft.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
+                            homeScore = hs.GetInt32();
+                        if (ft.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
+                            awayScore = aws.GetInt32();
+                    }
+                    else
+                    {
+                        var rt = score.GetProperty("regularTime");
+                        if (rt.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
+                            homeScore = hs.GetInt32();
+                        if (rt.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
+                            awayScore = aws.GetInt32();
+                    }
                     
                     // Extract extra time scores if available
                     if (score.TryGetProperty("extraTime", out var et))
