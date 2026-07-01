@@ -5,6 +5,7 @@
     "cancel": "Cancel",
     "close": "Close",
     "done": "Done",
+    "save": "Save",
     "update": "Update",
     "create": "Create",
     "saving": "Saving...",
@@ -25,6 +26,8 @@
     "total": "Total:",
     "activeLabel": "Active:",
     "edit": "Edit",
+    "you": "YOU",
+    "actions": "Actions",
     "noDescription": "No description",
     "tryDifferentSearch": "Try a different search term",
     "tryAgainLater": "Please try again later",
@@ -208,7 +211,11 @@
       "penalty": "Penalty",
       "reward": "Reward",
       "netLoss": "Net",
-      "balance": "Balance"
+      "balance": "Balance",
+      "editAmounts": {
+        "title": "Edit Member Amounts",
+        "success": "Member amounts updated successfully"
+      }
     },
     "mode": {
       "winnerKeeps": "Winner Keeps",

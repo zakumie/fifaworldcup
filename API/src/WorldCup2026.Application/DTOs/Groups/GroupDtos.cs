@@ -7,6 +7,7 @@ public record UpdateGroupRequest(string Name, string? Description, int MaxMember
 public record JoinGroupRequest(string InviteCode);
 public record JoinGroupResponse(GroupDto Group, int MissedMatches, decimal PenaltyAmount, decimal FinalBalance);
 public record UpdateMemberRoleRequest(GroupRole Role);
+public record UpdateMemberAmountsRequest(decimal PenaltyAmount, decimal RewardAmount);
 
 public record GroupDto(
     Guid Id, string Name, string? Description, string InviteCode,

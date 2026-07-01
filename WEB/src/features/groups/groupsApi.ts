@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/api';
-import type { GroupDto, GroupDetailDto, CreateGroupRequest, UpdateGroupRequest, JoinGroupRequest } from '../../types';
+import type { GroupDto, GroupDetailDto, CreateGroupRequest, UpdateGroupRequest, JoinGroupRequest, UpdateMemberAmountsRequest } from '../../types';
 
 export const groupsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,6 +27,10 @@ export const groupsApi = apiSlice.injectEndpoints({
       query: (body) => ({ url: '/groups/join', method: 'POST', body }),
       invalidatesTags: ['Groups'],
     }),
+    updateMemberAmounts: builder.mutation<void, { groupId: string; memberId: string; body: UpdateMemberAmountsRequest }>({
+      query: ({ groupId, memberId, body }) => ({ url: `/groups/${groupId}/members/${memberId}/amounts`, method: 'PUT', body }),
+      invalidatesTags: (_result, _err, { groupId }) => [{ type: 'Groups', id: groupId }],
+    }),
     leaveGroup: builder.mutation<void, string>({
       query: (id) => ({ url: `/groups/${id}/leave`, method: 'POST' }),
       invalidatesTags: ['Groups'],
@@ -36,5 +40,5 @@ export const groupsApi = apiSlice.injectEndpoints({
 
 export const {
   useGetGroupsQuery, useGetAllGroupsQuery, useGetGroupQuery,
-  useCreateGroupMutation, useUpdateGroupMutation, useJoinGroupMutation, useLeaveGroupMutation,
+  useCreateGroupMutation, useUpdateGroupMutation, useJoinGroupMutation, useUpdateMemberAmountsMutation, useLeaveGroupMutation,
 } = groupsApi;

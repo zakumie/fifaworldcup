@@ -15,5 +15,6 @@ public interface IGroupService
     Task<Result<JoinGroupResponse>> JoinByCodeAsync(JoinGroupRequest request, Guid userId);
     Task<Result<string>> RegenerateInviteCodeAsync(Guid groupId, Guid userId);
     Task<Result> UpdateMemberRoleAsync(Guid groupId, Guid memberId, GroupRole role, Guid currentUserId);
+    Task<Result> UpdateMemberAmountsAsync(Guid groupId, Guid memberId, decimal penaltyAmount, decimal rewardAmount, Guid currentUserId);
     Task<Result> RemoveMemberAsync(Guid groupId, Guid memberId, Guid currentUserId);
 }

@@ -57,6 +57,11 @@ public class GroupsController : BaseApiController
     public async Task<ActionResult> UpdateMemberRole(Guid groupId, Guid memberId, UpdateMemberRoleRequest request)
         => HandleResult(await _groups.UpdateMemberRoleAsync(groupId, memberId, request.Role, _currentUser.UserId));
 
+    [HttpPut("{groupId:guid}/members/{memberId:guid}/amounts")]
+    [Authorize(Policy = "AdminOnly")]
+    public async Task<ActionResult> UpdateMemberAmounts(Guid groupId, Guid memberId, UpdateMemberAmountsRequest request)
+        => HandleResult(await _groups.UpdateMemberAmountsAsync(groupId, memberId, request.PenaltyAmount, request.RewardAmount, _currentUser.UserId));
+
     [HttpDelete("{groupId:guid}/members/{memberId:guid}")]
     public async Task<ActionResult> RemoveMember(Guid groupId, Guid memberId)
         => HandleResult(await _groups.RemoveMemberAsync(groupId, memberId, _currentUser.UserId));

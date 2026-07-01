@@ -94,6 +94,11 @@ export interface JoinGroupRequest {
   inviteCode: string;
 }
 
+export interface UpdateMemberAmountsRequest {
+  penaltyAmount: number;
+  rewardAmount: number;
+}
+
 export interface TeamDto {
   id: string;
   name: string;

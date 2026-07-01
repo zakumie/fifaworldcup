@@ -102,7 +102,7 @@ public class GroupService : IGroupService
 
         var members = group.Members.Select(m => new GroupMemberDto(
             m.Id, m.UserId, m.User.DisplayName, m.User.Email,
-            m.User.AvatarUrl, m.Role, m.Balance, m.JoinedAt, m.IsActive, m.PenaltyAmount, m.RewardAmount)).ToList();
+            m.User.AvatarUrl, m.Role, m.Balance, m.JoinedAt, m.IsActive, m.PenaltyAmount, m.RewardAmount)).OrderByDescending(m=>m.Balance).ToList();
 
         decimal TotalAmount = members.Sum(m => m.Balance);
         decimal FundAmount = (group.DefaultBalance * members.Count) - TotalAmount;
@@ -259,6 +259,28 @@ public class GroupService : IGroupService
         if (member == null) return Result.Failure("Member not found.");
 
         member.Role = role;
+        await _db.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    public async Task<Result> UpdateMemberAmountsAsync(Guid groupId, Guid memberId, decimal penaltyAmount, decimal rewardAmount, Guid currentUserId)
+    {
+        if (!await IsSystemAdmin(currentUserId))
+            return Result.Failure("Only admins can update member amounts.");
+
+        if (penaltyAmount < 0)
+            return Result.Failure("Penalty amount cannot be negative.");
+
+        if (rewardAmount < 0)
+            return Result.Failure("Reward amount cannot be negative.");
+
+        var member = await _db.GroupMembers.FirstOrDefaultAsync(
+            m => m.GroupId == groupId && m.UserId == memberId && m.IsActive);
+        if (member == null) return Result.Failure("Member not found.");
+
+        member.PenaltyAmount = penaltyAmount;
+        member.RewardAmount = rewardAmount;
         await _db.SaveChangesAsync();
 
         return Result.Success();

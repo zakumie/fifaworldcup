@@ -5,6 +5,7 @@
     "cancel": "Hủy",
     "close": "Đóng",
     "done": "Xong",
+    "save": "Lưu",
     "update": "Cập nhật",
     "create": "Tạo",
     "saving": "Đang lưu...",
@@ -25,6 +26,8 @@
     "total": "Tổng:",
     "activeLabel": "Hoạt động:",
     "edit": "Sửa",
+    "you": "BẠN",
+    "actions": "Hành động",
     "noDescription": "Không có mô tả",
     "tryDifferentSearch": "Thử từ khóa tìm kiếm khác",
     "tryAgainLater": "Vui lòng thử lại sau",
@@ -208,7 +211,11 @@
       "penalty": "Phạt",
       "reward": "Thưởng",
       "netLoss": "Lỗ ròng",
-      "balance": "Số dư"
+      "balance": "Số dư",
+      "editAmounts": {
+        "title": "Chỉnh sửa số tiền thành viên",
+        "success": "Đã cập nhật số tiền thành viên thành công"
+      }
     },
     "mode": {
       "winnerKeeps": "Người thắng giữ",
