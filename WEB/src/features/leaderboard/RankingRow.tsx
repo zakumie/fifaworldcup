@@ -22,7 +22,6 @@ export function RankingRow({ entry, onClick }: { entry: LeaderboardEntryDto; onC
   const isTop3 = entry.rank <= 3;
   const profitColor = entry.profit > 0 ? 'text-emerald-600' : entry.profit < 0 ? 'text-red-600' : 'text-gray-500';
   const podiumStyle = isTop3 ? PODIUM_STYLES[entry.rank - 1] : null;
-
   return (
     <div
       className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 hover:bg-gray-50 transition-colors cursor-pointer ${isTop3 ? 'bg-amber-50/30' : ''}`}

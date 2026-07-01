@@ -160,7 +160,7 @@ public class LeaderboardService : ILeaderboardService
                 e.TotalBets, e.Wins, e.Losses, e.Draws,
                 e.TotalWagered, e.TotalPayout, e.Profit,
                 e.Balance, e.WinRate, e.PenaltyAmount,
-                rankChange, streak);
+                rankChange, streak, e.RewardAmount);
         }).ToList();
 
         await _cache.SetAsync(cacheKey, ranked, TimeSpan.FromMinutes(5));

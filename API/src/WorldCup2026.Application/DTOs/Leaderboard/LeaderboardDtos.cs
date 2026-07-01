@@ -5,7 +5,7 @@ public record LeaderboardEntryDto(
     int TotalBets, int Wins, int Losses, int Draws,
     decimal TotalWagered, decimal TotalPayout, decimal Profit,
     decimal Balance, decimal WinRate, decimal PenaltyAmount,
-    int RankChange, int Streak);
+    int RankChange, int Streak, decimal RewardAmount);
 
 public record DashboardDto(
     List<LeaderboardEntryDto> TopWinners,

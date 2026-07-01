@@ -222,9 +222,9 @@ export interface LeaderboardEntryDto {
   balance: number;
   winRate: number;
   penaltyAmount: number;
-  rewardAmount: number;
   rankChange: number;
-  streak: number;
+  streak: number;  
+  rewardAmount: number;
 }
 
 export interface PagedResult<T> {
