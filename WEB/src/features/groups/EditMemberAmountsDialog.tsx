@@ -178,7 +178,7 @@ export function EditMemberAmountsDialog({ open, groupId, member, onClose }: Prop
                   '& .MuiInputLabel-root': { fontSize: '0.8rem', fontWeight: 500 },
                   '& .MuiInputLabel-root.Mui-focused': { color: '#ef4444' },
                 }}
-                inputProps={{ step: '10', min: '0' }}
+                inputProps={{ step: '5', min: '0' }}
               />
 
               <TextField
@@ -207,7 +207,7 @@ export function EditMemberAmountsDialog({ open, groupId, member, onClose }: Prop
                   '& .MuiInputLabel-root': { fontSize: '0.8rem', fontWeight: 500 },
                   '& .MuiInputLabel-root.Mui-focused': { color: '#10b981' },
                 }}
-                inputProps={{ step: '10', min: '0' }}
+                inputProps={{ step: '5', min: '0' }}
               />
 
               {/* Net change preview */}
