@@ -75,8 +75,8 @@ export function GroupDetailPage() {
 
   const memberPercent = Math.round((group.members.length / group.maxMembers) * 100);
   const sortedMembers = [...group.members].sort((a, b) => {
-    const balanceA = a.balance - a.rewardAmount + a.penaltyAmount;
-    const balanceB = b.balance - b.rewardAmount + b.penaltyAmount;
+    const balanceA = a.balance + a.rewardAmount;
+    const balanceB = b.balance + b.rewardAmount;
     return balanceB - balanceA;
   });
 
@@ -257,7 +257,7 @@ export function GroupDetailPage() {
         {/* Members list */}
         <div className="divide-y divide-white/[0.04]">
           {sortedMembers.map((member, idx) => {
-            const balanceAmount = member.balance - member.rewardAmount + member.penaltyAmount;
+            const balanceAmount = member.balance + member.rewardAmount;
             const netLoss = group.defaultBalance - balanceAmount - member.penaltyAmount + member.rewardAmount;
             const isTop3 = idx < 3;
             const isCurrentUser = member.userId === currentUser?.id;
