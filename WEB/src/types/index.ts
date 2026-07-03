@@ -147,6 +147,7 @@ export interface BettingConfigDto {
   bettingCloseTime: string;
   isSettled: boolean;
   createdAt: string;
+  isLuckyStar: boolean;
 }
 
 export interface CreateBettingConfigRequest {
@@ -161,6 +162,7 @@ export interface CreateBettingConfigRequest {
   isFixedBet: boolean;
   bettingOpenTime: string;
   bettingCloseTime: string;
+  isLuckyStar: boolean;
 }
 
 export interface UpdateBettingConfigRequest {
@@ -173,17 +175,20 @@ export interface UpdateBettingConfigRequest {
   isFixedBet: boolean;
   bettingOpenTime: string;
   bettingCloseTime: string;
+  isLuckyStar: boolean;
 }
 
 export interface PlaceBetRequest {
   matchBettingConfigId: string;
   selectedTeamId: string;
   betAmount: number;
+  isLuckyStar: boolean;
 }
 
 export interface UpdateBetRequest {
   selectedTeamId: string;
   betAmount: number;
+  isLuckyStar: boolean;
 }
 
 export interface BetDto {
@@ -203,6 +208,7 @@ export interface BetDto {
   matchStartTime: string;
   handicap: number;
   favoredTeamName: string | null;
+  isLuckyStar: boolean;
 }
 
 export type BetStatus = 'Pending' | 'Won' | 'Lost' | 'HalfWon' | 'HalfLost' | 'Push' | 'Cancelled';

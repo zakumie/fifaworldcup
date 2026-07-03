@@ -24,9 +24,9 @@ public class LeaderboardService : ILeaderboardService
 
     public async Task<Result<List<LeaderboardEntryDto>>> GetLeaderboardAsync(Guid groupId, CancellationToken ct = default)
     {
-        //string cacheKey = $"leaderboard:{groupId}";
-        //var cached = await _cache.GetAsync<List<LeaderboardEntryDto>>(cacheKey);
-        //if (cached != null) return Result<List<LeaderboardEntryDto>>.Success(cached);
+        string cacheKey = $"leaderboard:{groupId}";
+        var cached = await _cache.GetAsync<List<LeaderboardEntryDto>>(cacheKey);
+        if (cached != null) return Result<List<LeaderboardEntryDto>>.Success(cached);
 
         var members = await _db.GroupMembers
             .AsNoTracking()
@@ -163,7 +163,7 @@ public class LeaderboardService : ILeaderboardService
                 rankChange, streak, e.RewardAmount);
         }).ToList();
 
-      //  await _cache.SetAsync(cacheKey, ranked, TimeSpan.FromMinutes(5));
+        await _cache.SetAsync(cacheKey, ranked, TimeSpan.FromMinutes(1));
         return Result<List<LeaderboardEntryDto>>.Success(ranked);
     }
 

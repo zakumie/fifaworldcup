@@ -42,6 +42,7 @@ public class BettingService : IBettingService
             IsFixedBet = request.IsFixedBet,
             BettingOpenTime = request.BettingOpenTime,
             BettingCloseTime = request.BettingCloseTime,
+            IsLuckyStar = request.IsLuckyStar,
             CreatedById = userId
         };
 
@@ -71,6 +72,7 @@ public class BettingService : IBettingService
         config.IsFixedBet = request.IsFixedBet;
         config.BettingOpenTime = request.BettingOpenTime;
         config.BettingCloseTime = request.BettingCloseTime;
+        config.IsLuckyStar = request.IsLuckyStar;
 
         await _db.SaveChangesAsync();
         return Result<BettingConfigDto>.Success(await GetConfigDtoAsync(config.Id));
@@ -153,7 +155,8 @@ public class BettingService : IBettingService
                     GroupId = config.GroupId,
                     MatchId = config.MatchId,
                     SelectedTeamId = request.SelectedTeamId,
-                    BetAmount = betAmount
+                    BetAmount = betAmount,
+                    IsLuckyStar = request.IsLuckyStar && config.IsLuckyStar
                 };
                 _db.Bets.Add(bet);
 
@@ -271,6 +274,7 @@ public class BettingService : IBettingService
 
                 freshBet.SelectedTeamId = request.SelectedTeamId;
                 freshBet.BetAmount = newBetAmount;
+                freshBet.IsLuckyStar = request.IsLuckyStar && config.IsLuckyStar;
 
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
@@ -386,6 +390,16 @@ public class BettingService : IBettingService
                             BetStatus.HalfLost => -(bet.BetAmount * 0.5m),
                             _ => -bet.BetAmount
                         };
+
+                        // Hope Star: win → extra bonus, lose → double loss
+                        if (bet.IsLuckyStar && config.IsLuckyStar)
+                        {
+                            if (result.Status is BetStatus.Won or BetStatus.HalfWon)
+                                bet.Profit = bet.BetAmount; // bonus: earn bet amount
+                            else if (result.Status is BetStatus.Lost or BetStatus.HalfLost)
+                                bet.Profit *= 2m; // double the loss
+                        }
+
                         balanceChange = bet.Profit;
                         // Simplify status: no half states in this mode
                         if (result.Status == BetStatus.HalfWon) bet.Status = BetStatus.Won;
@@ -514,7 +528,7 @@ public class BettingService : IBettingService
         new(c.Id, c.MatchId, c.GroupId, c.Handicap, c.FavoredTeamId,
             c.FavoredTeam?.Name, c.Odds, c.MinBetAmount, c.MaxBetAmount,
             c.DefaultBetAmount, c.IsFixedBet, c.BettingOpenTime,
-            c.BettingCloseTime, c.IsSettled, c.CreatedAt);
+            c.BettingCloseTime, c.IsSettled, c.CreatedAt, c.IsLuckyStar);
 
     private async Task<BetDto> GetBetDtoAsync(Guid betId)
     {
@@ -537,5 +551,6 @@ public class BettingService : IBettingService
             b.BetAmount, b.Status, b.Profit,
             b.CreatedAt, b.SettledAt,
             b.Match.StartTime,
-            b.BettingConfig.Handicap, b.BettingConfig.FavoredTeam?.Name);
+            b.BettingConfig.Handicap, b.BettingConfig.FavoredTeam?.Name,
+            b.IsLuckyStar);
 }

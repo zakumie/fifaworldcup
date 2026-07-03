@@ -13,6 +13,7 @@ public class Bet : BaseEntity
     public decimal BetAmount { get; set; }
     public BetStatus Status { get; set; } = BetStatus.Pending;
     public decimal Profit { get; set; }
+    public bool IsLuckyStar { get; set; }
     public DateTime? SettledAt { get; set; }
 
     public User User { get; set; } = null!;

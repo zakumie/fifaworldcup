@@ -1,4 +1,4 @@
-﻿{
+{
   "common": {
     "vs": "vs",
     "home": "Đội nhà",
@@ -347,7 +347,9 @@
       "max": "Tối đa:",
       "potentialWinLabel": "Tiền thắng tiềm năng",
       "updateButton": "Cập nhật cược",
-      "confirmButton": "Xác nhận cược"
+      "confirmButton": "Xác nhận cược",
+      "luckyStar": "Ngôi sao may mắn ?",
+      "luckyStarHint": "Thắng: cộng điểm - Thua: trừ x2 điểm"
     },
     "view": {
       "wagered": "đã cược",
@@ -375,7 +377,8 @@
       "fixedBetToggle": "Số tiền cược cố định",
       "fixedAmountLabel": "Số tiền cố định",
       "opensLabel": "Mở cược",
-      "closesLabel": "Đóng cược"
+      "closesLabel": "Đóng cược",
+      "luckyStarToggle": "Ngôi sao mai mắn ? Thắng: cộng điểm - Thua: trừ x2 điểm"
     }
   },
   "bets": {

@@ -6,6 +6,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import StarIcon from '@mui/icons-material/Star';
 import { useTranslation } from 'react-i18next';
 import type { BetDto, BettingConfigDto, MatchDto, SettlementMode } from '../../types';
 import { usePlaceBetMutation, useUpdateBetMutation } from './bettingApi';
@@ -34,6 +35,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
 
   const [selectedTeamId, setSelectedTeamId] = useState<string>(defaultTeamId);
   const [betAmount, setBetAmount] = useState<number | ''>(defaultAmount);
+  const [isLuckyStar, setisLuckyStar] = useState(existingBet?.isLuckyStar ?? false);
   const [placeBet, { isLoading: isPlacing, error: placeError, isSuccess: placeSuccess, reset: resetPlace }] = usePlaceBetMutation();
   const [updateBet, { isLoading: isUpdating, error: updateError, isSuccess: updateSuccess, reset: resetUpdate }] = useUpdateBetMutation();
 
@@ -46,6 +48,7 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
     resetUpdate();
     setSelectedTeamId(defaultTeamId);
     setBetAmount(defaultAmount);
+    setisLuckyStar(existingBet?.isLuckyStar ?? false);
     onClose();
   };
 
@@ -54,13 +57,14 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
     if (isEditMode) {
       await updateBet({
         betId: existingBet.id,
-        body: { selectedTeamId, betAmount: Number(betAmount) },
+        body: { selectedTeamId, betAmount: Number(betAmount), isLuckyStar },
       });
     } else {
       await placeBet({
         matchBettingConfigId: config.id,
         selectedTeamId,
         betAmount: Number(betAmount),
+        isLuckyStar,
       });
     }
   };
@@ -256,6 +260,40 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                   </>
                 )}
               </div>
+
+              {/* Lucky Star toggle (only for WinnerKeepsLoserPays + config enabled) */}
+              {config.isLuckyStar && settlementMode === 'WinnerKeepsLoserPays' && (
+                <div className="mb-5">
+                  <button
+                    type="button"
+                    onClick={() => setisLuckyStar(!isLuckyStar)}
+                    className={`
+                      w-full flex items-center justify-between px-4 py-3 rounded-xl border-2 transition-all duration-200
+                      ${isLuckyStar
+                        ? 'border-amber-400 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-sm shadow-amber-100'
+                        : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <StarIcon sx={{ fontSize: 22, color: isLuckyStar ? '#f59e0b' : '#cbd5e1' }} />
+                      <div className="text-left">
+                        <p className={`text-sm font-bold ${isLuckyStar ? 'text-amber-700' : 'text-gray-600'}`}>
+                          {t('betting.place.luckyStar')}
+                        </p>
+                        <p className="text-[10px] text-gray-400">{t('betting.place.luckyStarHint')}</p>
+                      </div>
+                    </div>
+                    {isLuckyStar && (
+                      <span className="w-5 h-5 rounded-full bg-amber-400 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Potential win / loss */}
               {selectedTeamId && betAmount !== '' && (

@@ -1,4 +1,4 @@
-﻿{
+{
   "common": {
     "vs": "vs",
     "home": "Home",
@@ -347,7 +347,9 @@
       "max": "Max:",
       "potentialWinLabel": "Potential Win",
       "updateButton": "Update Bet",
-      "confirmButton": "Confirm Bet"
+      "confirmButton": "Confirm Bet",
+      "luckyStar": "Lucky Star?",
+      "luckyStarHint": "Win bonus points - Lose double loss"
     },
     "view": {
       "wagered": "wagered",
@@ -375,7 +377,8 @@
       "fixedBetToggle": "Fixed Bet Amount",
       "fixedAmountLabel": "Fixed Amount",
       "opensLabel": "Betting Opens",
-      "closesLabel": "Betting Closes"
+      "closesLabel": "Betting Closes",
+      "luckyStarToggle": "Lucky Star? (Win: bonus - Lose: x2 loss)"
     }
   },
   "bets": {

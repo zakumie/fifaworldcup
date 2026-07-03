@@ -32,6 +32,7 @@ interface FormValues {
   isFixedBet: boolean;
   bettingOpenTime: string;
   bettingCloseTime: string;
+  isLuckyStar: boolean;
 }
 
 export function BettingConfigDialog({ open, match, groupId, existingConfig, onClose }: Props) {
@@ -56,6 +57,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
       isFixedBet: existingConfig?.isFixedBet ?? false,
       bettingOpenTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingOpenTime) : defaultOpen,
       bettingCloseTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingCloseTime) : defaultClose,
+      isLuckyStar: existingConfig?.isLuckyStar ?? false,
     },
   });
 
@@ -71,6 +73,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
         isFixedBet: existingConfig?.isFixedBet ?? false,
         bettingOpenTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingOpenTime) : defaultOpen,
         bettingCloseTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingCloseTime) : defaultClose,
+        isLuckyStar: existingConfig?.isLuckyStar ?? false,
       });
     }
   }, [open, existingConfig]);
@@ -88,6 +91,7 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
       isFixedBet: values.isFixedBet,
       bettingOpenTime: new Date(values.bettingOpenTime).toISOString(),
       bettingCloseTime: new Date(values.bettingCloseTime).toISOString(),
+      isLuckyStar: values.isLuckyStar,
     };
 
     if (isEdit && existingConfig) {
@@ -195,6 +199,14 @@ export function BettingConfigDialog({ open, match, groupId, existingConfig, onCl
               render={({ field }) => (
                 <TextField {...field} label={t('betting.config.closesLabel')} type="datetime-local" fullWidth size="small"
                   InputLabelProps={{ shrink: true }} />
+              )} />
+          </Grid>
+          <Grid item xs={12}>
+            <Controller name="isLuckyStar" control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={<Switch checked={field.value} onChange={field.onChange} />}
+                  label={t('betting.config.luckyStarToggle')} />
               )} />
           </Grid>
         </Grid>

@@ -84,13 +84,15 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
 
   return (
     <>
-      <div className={`
+      <div
+        className={`
         group relative bg-white rounded-2xl border border-gray-100
         shadow-sm hover:shadow-lg transition-all duration-300
         overflow-hidden
-        ${isLive ? 'ring-2 ring-red-400/50' : ''}
-        ${!myBet && hasConfig && !isLive && !isFinished && !isSettled ? 'ring-1 ring-emerald-400 bg-emerald-50/30' : ''}
-      `}>
+        ${isLive ? "ring-2 ring-red-400/50" : ""}
+        ${!myBet && hasConfig && !isLive && !isFinished && !isSettled ? "ring-1 ring-emerald-400 bg-emerald-50/30" : ""}
+      `}
+      >
         {isLive && (
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-orange-400 animate-pulse" />
         )}
@@ -101,25 +103,42 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               {formatStage(match.stage, match.group)}
             </span>
             <div className="flex items-center gap-1.5">
-              <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full ${statusStyle}`}>
+              <span
+                className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full ${statusStyle}`}
+              >
                 {statusLabel}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-3 my-5 cursor-pointer" onClick={() => settlementMode === "WinnerKeepsLoserPays" && setViewBetsOpen(true)}>
+          <div
+            className="flex items-center justify-center gap-3 my-5 cursor-pointer"
+            onClick={() =>
+              settlementMode === "WinnerKeepsLoserPays" && setViewBetsOpen(true)
+            }
+          >
             <div className="flex-1 text-center">
               {match.homeTeam.flagUrl && (
-                <img src={match.homeTeam.flagUrl} alt="" className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm" />
+                <img
+                  src={match.homeTeam.flagUrl}
+                  alt=""
+                  className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm"
+                />
               )}
-              <p className="text-sm font-bold text-gray-800 leading-tight">{match.homeTeam.name}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{match.homeTeam.code}</p>
+              <p className="text-sm font-bold text-gray-800 leading-tight">
+                {match.homeTeam.name}
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {match.homeTeam.code}
+              </p>
             </div>
 
             <div className="text-center min-w-[80px]">
-              {(!isLive && !isFinished && !isSettled) ? (
+              {!isLive && !isFinished && !isSettled ? (
                 <div className="flex flex-col items-center">
-                  <span className="text-lg font-semibold text-slate-400">{t('common.vs')}</span>
+                  <span className="text-lg font-semibold text-slate-400">
+                    {t("common.vs")}
+                  </span>
                   <span className="text-xs text-slate-400 flex items-center gap-1">
                     <AccessTimeIcon sx={{ fontSize: 14 }} />
                     {formatDateLocalized(match.startTime)}
@@ -127,19 +146,30 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1">
-                  <div className={`
+                  <div
+                    className={`
                     inline-flex items-center gap-2 px-4 py-2 rounded-xl
-                    ${isLive ? 'bg-red-50' : 'bg-gray-50'}
-                  `}>
-                    <span className="text-2xl font-black text-gray-800">{match.homeScore}</span>
+                    ${isLive ? "bg-red-50" : "bg-gray-50"}
+                  `}
+                  >
+                    <span className="text-2xl font-black text-gray-800">
+                      {match.homeScore}
+                    </span>
                     <span className="text-lg text-gray-400">-</span>
-                    <span className="text-2xl font-black text-gray-800">{match.awayScore}</span>
+                    <span className="text-2xl font-black text-gray-800">
+                      {match.awayScore}
+                    </span>
                   </div>
-                    {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
+                  {match.extraHomeScore !== null &&
+                    match.extraAwayScore !== null && (
                       <div className="inline-flex items-center text-xs gap-2 px-4 py-2 bg-gray-30">
-                        <span className="text-amber-600 font-bold">{match.extraHomeScore} </span>
+                        <span className="text-amber-600 font-bold">
+                          {match.extraHomeScore}{" "}
+                        </span>
                         <span className="text-amber-600">-</span>
-                        <span className="text-amber-600 font-bold">{match.extraAwayScore}</span>
+                        <span className="text-amber-600 font-bold">
+                          {match.extraAwayScore}
+                        </span>
                       </div>
                     )}
                 </div>
@@ -148,38 +178,66 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
 
             <div className="flex-1 text-center">
               {match.awayTeam.flagUrl && (
-                <img src={match.awayTeam.flagUrl} alt="" className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm" />
+                <img
+                  src={match.awayTeam.flagUrl}
+                  alt=""
+                  className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm"
+                />
               )}
-              <p className="text-sm font-bold text-gray-800 leading-tight">{match.awayTeam.name}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{match.awayTeam.code}</p>
+              <p className="text-sm font-bold text-gray-800 leading-tight">
+                {match.awayTeam.name}
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {match.awayTeam.code}
+              </p>
             </div>
           </div>
 
           {config && (
             <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-100 mb-3">
               <div className="flex items-center gap-1.5 text-xs text-slate-600">
-                <span className="font-medium text-slate-400">{t('common.handicap')}:</span>
+                <span className="font-medium text-slate-400">
+                  {t("common.handicap")}:
+                </span>
                 {config.handicap !== 0 ? (
                   <span className="font-bold text-gray-800">
-                    {config.favoredTeamName ?? t('common.home')} {config.handicap > 0 ? '+' : ''}{config.handicap}
+                    {config.favoredTeamName ?? t("common.home")}{" "}
+                    {config.handicap > 0 ? "+" : ""}
+                    {config.handicap}
                   </span>
-                ) : <span className='font-bold text-gray-800'>{t('common.even')}</span>}
+                ) : (
+                  <span className="font-bold text-gray-800">
+                    {t("common.even")}
+                  </span>
+                )}
               </div>
-              <span className="bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold">
-                {config.isFixedBet
-                  ? `${(config.defaultBetAmount ?? config.minBetAmount).toLocaleString()}`
-                  : `${config.minBetAmount.toLocaleString()} - ${config.maxBetAmount.toLocaleString()}`
-                }
-              </span>
+              <div className="flex items-center gap-1.5">
+                {myBet?.isLuckyStar && (
+                  <span className="text-amber-400" title="Lucky Star">
+                    ⭐
+                  </span>
+                )}
+                <span className="bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold">
+                  {config.isFixedBet
+                    ? `${(config.defaultBetAmount ?? config.minBetAmount).toLocaleString()}`
+                    : `${config.minBetAmount.toLocaleString()} - ${config.maxBetAmount.toLocaleString()}`}
+                </span>
+              </div>
             </div>
           )}
           <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-green-50 border border-slate-100 mb-3">
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
-              <span className="font-medium text-slate-400">{t('matches.card.yourBet')}</span>
-              <span className="font-bold text-gray-800">{myBet ? myBet.selectedTeamName : '_'}</span>
+              <span className="font-medium text-slate-400">
+                {t("matches.card.yourBet")}
+              </span>
+              <span className="font-bold text-gray-800">
+                {myBet ? myBet.selectedTeamName : "_"}
+              </span>
             </div>
-            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${BET_STATUS_STYLE[myBet ? myBet.status : 'Open'] ?? 'text-gray-600 bg-gray-100'}`}>
-              {myBet ? t(`bets.status.${myBet.status.toLowerCase()}`) : '__'}
+            <span
+              className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${BET_STATUS_STYLE[myBet ? myBet.status : "Open"] ?? "text-gray-600 bg-gray-100"}`}
+            >
+              {myBet ? t(`bets.status.${myBet.status.toLowerCase()}`) : "__"}
             </span>
           </div>
 
@@ -188,9 +246,9 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               {showView && (
                 <button
                   onClick={() => setViewBetsOpen(true)}
-                  className={`${canBet ? 'flex-1' : 'w-full'} justify-center inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 border border-emerald-500 hover:bg-emerald-50 py-3 rounded-xl transition-all duration-200 active:scale-95`}
+                  className={`${canBet ? "flex-1" : "w-full"} justify-center inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 border border-emerald-500 hover:bg-emerald-50 py-3 rounded-xl transition-all duration-200 active:scale-95`}
                 >
-                  {t('matches.card.viewButton')}
+                  {t("matches.card.viewButton")}
                 </button>
               )}
               {canBet && (
@@ -198,7 +256,9 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                   onClick={() => setBetDialogOpen(true)}
                   className="flex-1 justify-center inline-flex items-center gap-1 text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
                 >
-                  {myBet ? t('matches.card.updateBet') : t('matches.card.betNow')}
+                  {myBet
+                    ? t("matches.card.updateBet")
+                    : t("matches.card.betNow")}
                 </button>
               )}
             </div>
@@ -211,7 +271,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
           open={betDialogOpen}
           config={config}
           match={match}
-          existingBet={myBet?.status === 'Pending' ? myBet : undefined}
+          existingBet={myBet?.status === "Pending" ? myBet : undefined}
           settlementMode={settlementMode}
           onClose={() => setBetDialogOpen(false)}
         />

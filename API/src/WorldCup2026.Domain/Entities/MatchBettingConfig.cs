@@ -16,6 +16,7 @@ public class MatchBettingConfig : BaseEntity
     public DateTime BettingOpenTime { get; set; }
     public DateTime BettingCloseTime { get; set; }
     public bool IsSettled { get; set; }
+    public bool IsLuckyStar { get; set; }
     public Guid CreatedById { get; set; }
 
     public Match Match { get; set; } = null!;

@@ -8,6 +8,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import BalanceIcon from '@mui/icons-material/Balance';
 import PaidIcon from '@mui/icons-material/Paid';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import StarIcon from '@mui/icons-material/Star';
 import type { BettingConfigDto, CreateBettingConfigRequest, MatchDto } from '../../types';
 import { useCreateBettingConfigMutation, useUpdateBettingConfigMutation } from '../betting/bettingApi';
 import { toLocalDatetimeInput } from '../../utils/timezone';
@@ -31,6 +32,7 @@ interface BettingFormValues {
   isFixedBet: boolean;
   bettingOpenTime: string;
   bettingCloseTime: string;
+  isLuckyStar: boolean;
 }
 
 export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, onCancel }: Props) {
@@ -56,6 +58,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       isFixedBet: existingConfig?.isFixedBet ?? true,
       bettingOpenTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingOpenTime) : defaultOpen,
       bettingCloseTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingCloseTime) : defaultClose,
+      isLuckyStar: existingConfig?.isLuckyStar ?? false,
     },
   });
 
@@ -72,6 +75,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       isFixedBet: existingConfig?.isFixedBet ?? true,
       bettingOpenTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingOpenTime) : defaultOpen,
       bettingCloseTime: existingConfig ? toLocalDatetimeInput(existingConfig.bettingCloseTime) : defaultClose,
+      isLuckyStar: existingConfig?.isLuckyStar ?? false,
     });
   }, [existingConfig]);
 
@@ -91,6 +95,7 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
       isFixedBet: values.isFixedBet,
       bettingOpenTime: new Date(values.bettingOpenTime).toISOString(),
       bettingCloseTime: new Date(values.bettingCloseTime).toISOString(),
+      isLuckyStar: values.isLuckyStar,
     };
 
     if (isEdit && existingConfig) {
@@ -247,6 +252,31 @@ export function BettingConfigForm({ match, groupId, existingConfig, onSuccess, o
                   sx={inputSx} />
               )} />
           </div>
+        </div>
+      </div>
+
+      {/* ─── Section: Lucky Star ─── */}
+      <div className="rounded-xl border border-gray-100 p-3 sm:p-4 bg-gradient-to-br from-amber-50/50 to-yellow-50/30">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <StarIcon sx={{ fontSize: 16, color: '#f59e0b' }} />
+            <div>
+              <p className="text-xs font-bold text-gray-600 uppercase tracking-wide">Lucky Star</p>
+              <p className="text-[10px] text-gray-400 mt-0.5">Win → bonus points · Lose → double loss</p>
+            </div>
+          </div>
+          <Controller name="isLuckyStar" control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={
+                  <Switch checked={field.value} onChange={field.onChange} size="small"
+                    sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#f59e0b' }, '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#f59e0b' } }}
+                  />
+                }
+                label=""
+                sx={{ mr: 0 }}
+              />
+            )} />
         </div>
       </div>
 
