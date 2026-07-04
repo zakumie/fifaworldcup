@@ -106,11 +106,11 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
             ) : (
               <div className="flex flex-col items-end gap-0.5">
                 <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
-                  {match.homeScore} - {match.awayScore}
+                  {match.fullHomeScore} - {match.fullAwayScore}
                 </span>
                 {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
                   <span className="text-[10px] text-amber-600 font-medium">
-                    ET: {match.extraHomeScore} - {match.extraAwayScore}
+                    90': {match.homeScore} - {match.awayScore}
                   </span>
                 )}
               </div>
@@ -156,11 +156,11 @@ const MatchRow = memo(function MatchRow({ match, config, groupId }: MatchRowProp
             ) : (
               <div className="flex flex-col items-center gap-0.5">
                 <span className={`text-sm font-black ${isLive ? 'text-red-600' : 'text-gray-800'}`}>
-                 {match.homeScore}  - {match.awayScore}
+                 {match.fullHomeScore}  - {match.fullAwayScore}
                 </span>
                 {(match.extraHomeScore !== null && match.extraAwayScore !== null) && (
                   <span className="text-[10px] text-amber-600 font-medium">
-                   {match.extraHomeScore} - {match.extraAwayScore}
+                   {match.homeScore} - {match.awayScore}
                   </span>
                 )}
               </div>

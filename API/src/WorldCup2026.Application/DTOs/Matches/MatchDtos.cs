@@ -17,6 +17,7 @@ public record MatchDto(
     TeamDto HomeTeam, TeamDto AwayTeam,
     int? HomeScore, int? AwayScore,
     int? ExtraHomeScore, int? ExtraAwayScore,
+    int? FullHomeScore, int? FullAwayScore,
     int MatchDay, string Stage, string? Group,
     DateTime StartTime, MatchStatus Status);
 

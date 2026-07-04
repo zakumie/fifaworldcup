@@ -35,14 +35,21 @@ interface MatchCardProps {
 }
 
 const BET_STATUS_STYLE: Record<string, string> = {
-  Open: 'text-gray-700 bg-gray-50',
-  Pending: 'text-amber-700 bg-amber-50',
-  Won: 'text-emerald-700 bg-emerald-50',
-  HalfWon: 'text-emerald-700 bg-emerald-50',
-  Lost: 'text-red-700 bg-red-50',
-  HalfLost: 'text-red-700 bg-red-50',
-  Push: 'text-slate-700 bg-slate-100',
-  Cancelled: 'text-gray-500 bg-gray-100',
+  Open: "text-gray-700 bg-gray-50",
+  Pending: "text-gray-700 bg-gray-100",
+  Won: "text-emerald-700 bg-emerald-50",
+  HalfWon: "text-emerald-700 bg-emerald-50",
+  Lost: "text-red-700 bg-red-50",
+  HalfLost: "text-red-700 bg-red-50",
+  Push: "text-slate-700 bg-slate-100",
+  Cancelled: "text-gray-500 bg-gray-100",
+};
+
+const LUCKY_STAR_STLYE: Record<string, string> = {
+  Normal:
+    "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700",
+  LuckyStar:
+    "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700",
 };
 
 const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settlementMode }: MatchCardProps) {
@@ -99,7 +106,7 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
 
         <div className="p-5">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-medium text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full">
+            <span className="text-xs font-medium text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
               {formatStage(match.stage, match.group)}
             </span>
             <div className="flex items-center gap-1.5">
@@ -128,9 +135,6 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               <p className="text-sm font-bold text-gray-800 leading-tight">
                 {match.homeTeam.name}
               </p>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {match.homeTeam.code}
-              </p>
             </div>
 
             <div className="text-center min-w-[80px]">
@@ -153,23 +157,41 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                   `}
                   >
                     <span className="text-2xl font-black text-gray-800">
-                      {match.homeScore}
+                      {match.fullHomeScore}
                     </span>
                     <span className="text-lg text-gray-400">-</span>
                     <span className="text-2xl font-black text-gray-800">
-                      {match.awayScore}
+                      {match.fullAwayScore}
                     </span>
                   </div>
                   {match.extraHomeScore !== null &&
                     match.extraAwayScore !== null && (
                       <div className="inline-flex items-center text-xs gap-2 px-4 py-2 bg-gray-30">
-                        <span className="text-amber-600 font-bold">
-                          {match.extraHomeScore}{" "}
-                        </span>
+                        <span className="tex-amber-600 font-bold">90' : </span>
+                        {match.homeScore ? (
+                          <span className="text-amber-600 font-bold">
+                            {match.homeScore}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 font-bold">
+                            <SportsSoccerIcon
+                              sx={{ fontSize: 17 }}
+                            ></SportsSoccerIcon>
+                          </span>
+                        )}
+
                         <span className="text-amber-600">-</span>
-                        <span className="text-amber-600 font-bold">
-                          {match.extraAwayScore}
-                        </span>
+                        {match.awayScore ? (
+                          <span className="text-amber-600 font-bold">
+                            {match.awayScore}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 font-bold">
+                            <SportsSoccerIcon
+                              sx={{ fontSize: 17 }}
+                            ></SportsSoccerIcon>
+                          </span>
+                        )}
                       </div>
                     )}
                 </div>
@@ -186,9 +208,6 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               )}
               <p className="text-sm font-bold text-gray-800 leading-tight">
                 {match.awayTeam.name}
-              </p>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {match.awayTeam.code}
               </p>
             </div>
           </div>
@@ -212,11 +231,6 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
                 )}
               </div>
               <div className="flex items-center gap-1.5">
-                {myBet?.isLuckyStar && (
-                  <span className="text-amber-400" title="Lucky Star">
-                    ⭐
-                  </span>
-                )}
                 <span className="bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold">
                   {config.isFixedBet
                     ? `${(config.defaultBetAmount ?? config.minBetAmount).toLocaleString()}`
@@ -225,7 +239,9 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               </div>
             </div>
           )}
-          <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-green-50 border border-slate-100 mb-3">
+          <div
+            className={`flex items-center justify-between px-3 py-2 rounded-xl ${myBet?.isLuckyStar ? "bg-yellow-50" : "bg-green-50"} border border-slate-100 mb-3`}
+          >
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
               <span className="font-medium text-slate-400">
                 {t("matches.card.yourBet")}
@@ -233,6 +249,14 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               <span className="font-bold text-gray-800">
                 {myBet ? myBet.selectedTeamName : "_"}
               </span>
+              {myBet?.isLuckyStar && (
+                <span
+                  className="text-amber-400 text-[14px] font-bold"
+                  title="Lucky Star"
+                >
+                  ⭐️
+                </span>
+              )}
             </div>
             <span
               className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${BET_STATUS_STYLE[myBet ? myBet.status : "Open"] ?? "text-gray-600 bg-gray-100"}`}
@@ -246,7 +270,10 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               {showView && (
                 <button
                   onClick={() => setViewBetsOpen(true)}
-                  className={`${canBet ? "flex-1" : "w-full"} justify-center inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 border border-emerald-500 hover:bg-emerald-50 py-3 rounded-xl transition-all duration-200 active:scale-95`}
+                  className={`${canBet ? "flex-1" : "w-full"} justify-center inline-flex
+                  items-center gap-1 text-xs font-semibold 
+                  text-emerald-600 border border-emerald-500
+                  hover:bg-emerald-50 py-3 rounded-xl transition-all duration-200 active:scale-95`}
                 >
                   {t("matches.card.viewButton")}
                 </button>
@@ -254,7 +281,9 @@ const MatchCard = memo(function MatchCard({ match, config, groupId, myBet, settl
               {canBet && (
                 <button
                   onClick={() => setBetDialogOpen(true)}
-                  className="flex-1 justify-center inline-flex items-center gap-1 text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-95"
+                  className={`flex-1 justify-center inline-flex items-center 
+                  gap-1 text-xs font-semibold text-white ${myBet?.isLuckyStar ? LUCKY_STAR_STLYE.LuckyStar : LUCKY_STAR_STLYE.Normal}
+                  py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md active:scale-95`}
                 >
                   {myBet
                     ? t("matches.card.updateBet")

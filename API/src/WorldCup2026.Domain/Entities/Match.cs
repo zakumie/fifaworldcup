@@ -12,6 +12,8 @@ public class Match : BaseEntity
     public int? AwayScore { get; set; }
     public int? ExtraHomeScore { get; set; }
     public int? ExtraAwayScore { get; set; }
+    public int? FullHomeScore { get; set; }
+    public int? FullAwayScore { get; set; }
     public int MatchDay { get; set; }
     public string Stage { get; set; } = null!;
     public string? Group { get; set; }

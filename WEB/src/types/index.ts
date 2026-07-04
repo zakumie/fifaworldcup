@@ -121,6 +121,8 @@ export interface MatchDto {
   awayScore: number | null;
   extraHomeScore: number | null;
   extraAwayScore: number | null;
+  fullHomeScore: number | null;
+  fullAwayScore: number | null;
 }
 
 export type MatchStatus = 'Upcoming' | 'Open' | 'Live' | 'Finished' | 'Postponed' | 'Cancelled';

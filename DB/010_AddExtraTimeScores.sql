@@ -1,3 +1,3 @@
 ALTER TABLE Matches
-ADD ExtraHomeScore INT NULL,
-    ExtraAwayScore INT NULL;
+ADD FullHomeScore INT NULL,
+    FullAwayScore INT NULL;

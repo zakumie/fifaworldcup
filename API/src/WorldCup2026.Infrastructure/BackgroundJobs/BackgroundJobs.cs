@@ -113,10 +113,15 @@ public class LeaderboardSnapshotJob : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            // Wait until midnight UTC
+            // Wait until 18H UTC
             var now = DateTime.UtcNow;
-            var nextMidnight = now.Date.AddDays(1);
-            var delay = nextMidnight - now;
+
+            var next6Pm = now.Date.AddHours(18);
+
+            if (next6Pm <= now)
+                next6Pm = next6Pm.AddDays(1);
+
+            var delay = next6Pm - now;
             await Task.Delay(delay, stoppingToken);
 
             try

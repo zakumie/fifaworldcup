@@ -110,41 +110,51 @@ public class FootballDataService : IExternalMatchService
 
                 int? homeScore = null, awayScore = null;
                 int? extraHomeScore = null, extraAwayScore = null;
+                int? fullHomeScore = null, fullAwayScore = null;
                 if (m.TryGetProperty("score", out var score))
-                {//  "duration": "REGULAR",
+                {
                     string duration = score.GetProperty("duration").GetString() ?? "REGULAR";
                     if (duration.Equals("REGULAR", StringComparison.InvariantCultureIgnoreCase))
                     {
                         var ft = score.GetProperty("fullTime");
                         if (ft.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
+                        {
+                            fullHomeScore = hs.GetInt32();
                             homeScore = hs.GetInt32();
+                        }
+                           
                         if (ft.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
+                        {
+                            fullAwayScore = aws.GetInt32();
                             awayScore = aws.GetInt32();
+                        }
                     }
                     else
                     {
-                        var rt = score.GetProperty("regularTime");
-                        if (rt.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
-                            homeScore = hs.GetInt32();
-                        if (rt.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
-                            awayScore = aws.GetInt32();
-                    }
-                    
-                    // Extract extra time scores if available
-                    if (score.TryGetProperty("extraTime", out var et))
-                    {
-                        if (et.TryGetProperty("home", out var ehs) && ehs.ValueKind == JsonValueKind.Number)
-                            extraHomeScore = ehs.GetInt32();
-                        if (et.TryGetProperty("away", out var eas) && eas.ValueKind == JsonValueKind.Number)
-                            extraAwayScore = eas.GetInt32();
-                    }                    
+                        if (score.TryGetProperty("fullTime", out var ft))
+                        {
+                            if (ft.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
+                                fullHomeScore = hs.GetInt32();
 
-                    if (score.TryGetProperty("penalties", out var pn))
-                    {
-                        if (pn.TryGetProperty("home", out var ehs) && ehs.ValueKind == JsonValueKind.Number)
-                            extraHomeScore = ehs.GetInt32();
-                        if (pn.TryGetProperty("away", out var eas) && eas.ValueKind == JsonValueKind.Number)
-                            extraAwayScore = eas.GetInt32();
+                            if (ft.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
+                                fullAwayScore = aws.GetInt32();
+                        }                       
+
+                        if (score.TryGetProperty("regularTime", out var rt))
+                        {
+                            if (rt.TryGetProperty("home", out var hs) && hs.ValueKind == JsonValueKind.Number)
+                                homeScore = hs.GetInt32();
+                            if (rt.TryGetProperty("away", out var aws) && aws.ValueKind == JsonValueKind.Number)
+                                awayScore = aws.GetInt32();
+                        }
+
+                        if (score.TryGetProperty("extraTime", out var et))
+                        {
+                            if (et.TryGetProperty("home", out var ehs) && ehs.ValueKind == JsonValueKind.Number)
+                                extraHomeScore = ehs.GetInt32();
+                            if (et.TryGetProperty("away", out var eas) && eas.ValueKind == JsonValueKind.Number)
+                                extraAwayScore = eas.GetInt32();
+                        }
                     }
                 }
 
@@ -157,6 +167,8 @@ public class FootballDataService : IExternalMatchService
                     existing.AwayScore = awayScore;
                     existing.ExtraHomeScore = extraHomeScore;
                     existing.ExtraAwayScore = extraAwayScore;
+                    existing.FullHomeScore = fullHomeScore;
+                    existing.FullAwayScore = fullAwayScore;
                     existing.Group = group;
                 }
                 else
@@ -174,7 +186,9 @@ public class FootballDataService : IExternalMatchService
                         HomeScore = homeScore,
                         AwayScore = awayScore,
                         ExtraHomeScore = extraHomeScore,
-                        ExtraAwayScore = extraAwayScore
+                        ExtraAwayScore = extraAwayScore,
+                        FullHomeScore = fullHomeScore,
+                        FullAwayScore = fullAwayScore
                     });
                     count++;
                 }
