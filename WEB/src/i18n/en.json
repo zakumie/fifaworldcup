@@ -21,6 +21,7 @@
     "members": "Members",
     "handicap": "Handicap",
     "pick": "Pick",
+    "luckyStar" :"Lucky Star",
     "wager": "Wager",
     "profitLoss": "P/L",
     "total": "Total:",
@@ -303,6 +304,15 @@
       "postponed": "Postponed",
       "cancelled": "Cancelled"
     },
+    "stage": {
+      "groupStage": "Group Stage",
+      "last32": "Round of 32",
+      "last16": "Round of 16",
+      "quarterFinals": "Quarter Finals",
+      "semiFinals": "Semi Finals",
+      "thirdPlace": "3rd Place",
+      "final": "Final"
+    },
     "list": {
       "title": "MATCH CENTER",
       "titleMatch": "MATCH",
@@ -352,7 +362,7 @@
       "luckyStarHint": "Win bonus points - Lose double loss"
     },
     "view": {
-      "wagered": "wagered",
+      "pointed": "Pointed",
       "kickoff": "Kick-off",
       "bet": "Bet",
       "empty": {

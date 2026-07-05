@@ -21,6 +21,7 @@
     "members": "Thành viên",
     "handicap": "Kèo chấp",
     "pick": "Chọn",
+    "luckyStar": "Ngôi sao may mắn",
     "wager": "Cược",
     "profitLoss": "L/L",
     "total": "Tổng:",
@@ -303,6 +304,15 @@
       "postponed": "Hoãn",
       "cancelled": "Hủy"
     },
+    "stage": {
+      "groupStage": "Vòng bảng",
+      "last32": "Vòng 32",
+      "last16": "Vòng 16",
+      "quarterFinals": "Tứ kết",
+      "semiFinals": "Bán kết",
+      "thirdPlace": "Hạng ba",
+      "final": "Chung kết"
+    },
     "list": {
       "title": "TRUNG TÂM TRẬN ĐẤU",
       "titleMatch": "TRẬN",
@@ -352,7 +362,7 @@
       "luckyStarHint": "Thắng: cộng điểm - Thua: trừ x2 điểm"
     },
     "view": {
-      "wagered": "đã cược",
+      "pointed": "Điểm",
       "kickoff": "Giờ khai cuộc",
       "bet": "Cược",
       "empty": {

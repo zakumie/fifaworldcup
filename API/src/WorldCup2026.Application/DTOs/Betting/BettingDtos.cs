@@ -40,4 +40,17 @@ public record BetDto(
     decimal Handicap = 0, string? FavoredTeamName = null,
     bool IsLuckyStar = false);
 
+public record MyBetDto(
+    Guid Id, Guid UserId, string UserDisplayName,
+    Guid MatchId, string HomeTeamName, string AwayTeamName,
+    int? HomeScore, int? AwayScore,
+    int? ExtraHomeScore, int? ExtraAwayScore,
+    int? FullHomeScore, int? FullAwayScore,
+    Guid? SelectedTeamId, string? SelectedTeamName,
+    decimal BetAmount, BetStatus Status, decimal Profit,
+    DateTime CreatedAt, DateTime? SettledAt,
+    DateTime MatchStartTime, string Stage, MatchStatus MatchStatus,
+    decimal Handicap = 0, string? FavoredTeamName = null,
+    bool IsLuckyStar = false);
+
 public record BetResultDto(BetStatus Status, decimal Profit);

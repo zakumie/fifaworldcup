@@ -5,8 +5,6 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useTranslation } from 'react-i18next';
 import { useGetMatchBetsQuery, useGetBettingConfigQuery } from './bettingApi';
@@ -16,6 +14,7 @@ import type { MatchDto, BetDto, TeamDto } from '../../types';
 import { getTheme } from '../../app/theme';
 
 import { useUserTimeZone } from '../../utils/useUserTimeZone';
+import { BetCard } from './BetCard';
 
 interface Props {
   open: boolean;
@@ -38,60 +37,6 @@ function TeamFlag({ flagUrl, name, code }: { flagUrl: string | null; name: strin
         </div>
       )}
       <span className="text-[11px] sm:text-xs font-semibold text-white/90 max-w-[64px] sm:max-w-[72px] truncate text-center">{name}</span>
-    </div>
-  );
-}
-
-function ProfitDisplay({ profit }: { profit: number }) {
-  if (profit === 0) return <span className="text-xs text-green-600 font-bold"><TrendingUpIcon sx={{ fontSize: 14 }} /> 0</span>;
-  const isPositive = profit > 0;
-  return (
-    <span className={`inline-flex items-center gap-0.5 text-xs font-bold ${isPositive ? 'text-emerald-600' : 'text-red-500'}`}>
-      {isPositive ? <TrendingUpIcon sx={{ fontSize: 14 }} /> : <TrendingDownIcon sx={{ fontSize: 14 }} />}
-      {isPositive ? '+' : ''}{profit.toLocaleString()}
-    </span>
-  );
-}
-
-function BetCard({ bet, hideAmount, avatarUrl }: { bet: BetDto; hideAmount?: boolean; avatarUrl?: string | null }) {
-  const isSettled = bet.status !== 'Pending' && bet.status !== 'Cancelled';
-
-  return (
-    <div
-      className={`flex items-center gap-2 p-1.5 sm:p-2 rounded-lg 
-          ${bet.isLuckyStar ? "bg-yellow-50" : "bg-white"} border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all`}>
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt={bet.userDisplayName}
-          className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-slate-200"
-        />
-      ) : (
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm shrink-0">
-          {bet.userDisplayName?.charAt(0).toUpperCase()}
-        </div>
-      )}
-      <div className="flex-1 min-w-0">
-        <p className="text-xs sm:text-[13px] text-gray-800 truncate">
-          {bet.userDisplayName}
-        </p>
-        <div className="flex items-center gap-1.5 mt-0.5">
-          {!hideAmount && (
-            <span className="text-[11px] sm:text-xs font-bold text-gray-600">
-              {bet.betAmount.toLocaleString()}
-            </span>
-          )}
-          {isSettled && <ProfitDisplay profit={bet.profit} />}
-        </div>
-      </div>
-      {bet.isLuckyStar && (
-        <span
-          className="text-amber-400 text-[14px] font-bold"
-          title="Lucky Star"
-        >
-          ⭐️
-        </span>
-      )}
     </div>
   );
 }
@@ -133,7 +78,7 @@ function ColumnHeader({ team, count, pool, color, border, hideAmount, isWinner }
         <p className={`text-[11px] sm:text-xs font-bold truncate ${isWinner ? 'text-amber-800' : 'text-slate-800'}`}>
           {team.name}
         </p>
-        {!hideAmount && <p className="text-[9px] sm:text-[10px] text-slate-500">{pool.toLocaleString()} {t('betting.view.wagered')}</p>}
+        {!hideAmount && <p className="text-[9px] sm:text-[10px] text-slate-500">{pool.toLocaleString()} {t('betting.view.pointed')}</p>}
       </div>
       <span> <p> {isWinner && '🏆'}</p></span>
       <span className={`text-base sm:text-lg font-black ${isWinner ? 'text-amber-700' : 'text-slate-700'}`}>{count}</span>
@@ -159,8 +104,8 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
     const away = bets.filter((b) => b.selectedTeamName === match.awayTeam.name);
     const noPicks = bets.filter((b) => !b.selectedTeamName);
     const totalPool = bets.reduce((s, b) => s + b.betAmount, 0);
-    const homePool = home.reduce((s, b) => s + b.betAmount, 0);
-    const awayPool = away.reduce((s, b) => s + b.betAmount, 0);
+    const homePool = home.reduce((s, b) => s + (b.isLuckyStar ? b.betAmount * 2 : b.betAmount), 0);
+    const awayPool = away.reduce((s, b) => s + (b.isLuckyStar ? b.betAmount * 2 : b.betAmount), 0);
 
     const betUserIds = new Set(bets.map((b) => b.userId));
     const missingMembers = activeMembers.filter((m) => !betUserIds.has(m.userId));

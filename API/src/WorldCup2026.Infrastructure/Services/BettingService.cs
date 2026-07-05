@@ -293,7 +293,7 @@ public class BettingService : IBettingService
         }
     }
 
-    public async Task<Result<List<BetDto>>> GetUserBetsAsync(Guid groupId, Guid userId)
+    public async Task<Result<List<MyBetDto>>> GetUserBetsAsync(Guid groupId, Guid userId)
     {
         var bets = await _db.Bets
             .Include(b => b.Match).ThenInclude(m => m.HomeTeam)
@@ -304,10 +304,10 @@ public class BettingService : IBettingService
             .AsNoTracking()
             .Where(b => b.GroupId == groupId && b.UserId == userId)
             .OrderByDescending(b => b.CreatedAt)
-            .Select(b => MapBetToDto(b))
+            .Select(b => MapMyBetToDto(b))
             .ToListAsync();
 
-        return Result<List<BetDto>>.Success(bets);
+        return Result<List<MyBetDto>>.Success(bets);
     }
 
     public async Task<Result<List<BetDto>>> GetMatchBetsAsync(Guid groupId, Guid matchId)
@@ -551,6 +551,19 @@ public class BettingService : IBettingService
             b.BetAmount, b.Status, b.Profit,
             b.CreatedAt, b.SettledAt,
             b.Match.StartTime,
+            b.BettingConfig.Handicap, b.BettingConfig.FavoredTeam?.Name,
+            b.IsLuckyStar);
+
+    private static MyBetDto MapMyBetToDto(Bet b) =>
+         new(b.Id, b.UserId, b.User.DisplayName, b.MatchId,
+            b.Match.HomeTeam.Name, b.Match.AwayTeam.Name,
+            b.Match.HomeScore, b.Match.AwayScore,
+            b.Match.ExtraHomeScore, b.Match.ExtraAwayScore,
+            b.Match.FullHomeScore, b.Match.FullAwayScore,
+            b.SelectedTeamId, b.SelectedTeam?.Name,
+            b.BetAmount, b.Status, b.Profit,
+            b.CreatedAt, b.SettledAt,
+            b.Match.StartTime, b.Match.Stage,b.Match.Status,
             b.BettingConfig.Handicap, b.BettingConfig.FavoredTeam?.Name,
             b.IsLuckyStar);
 }

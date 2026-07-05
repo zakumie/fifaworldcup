@@ -200,6 +200,12 @@ export interface BetDto {
   matchId: string;
   homeTeamName: string;
   awayTeamName: string;
+  homeScore: number | null;
+  awayScore: number | null;
+  extraHomeScore: number | null;
+  extraAwayScore: number | null;
+  fullHomeScore: number | null;
+  fullAwayScore: number | null;
   selectedTeamId: string | null;
   selectedTeamName: string | null;
   betAmount: number;
@@ -208,6 +214,8 @@ export interface BetDto {
   createdAt: string;
   settledAt: string | null;
   matchStartTime: string;
+  stage: string;
+  matchStatus: string;
   handicap: number;
   favoredTeamName: string | null;
   isLuckyStar: boolean;
