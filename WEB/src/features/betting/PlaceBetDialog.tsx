@@ -261,8 +261,8 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                 )}
               </div>
 
-              {/* Lucky Star toggle (only for WinnerKeepsLoserPays + config enabled) */}
-              {config.isLuckyStar && settlementMode === 'WinnerKeepsLoserPays' && (
+              {/* Lucky Star toggle (when config enabled) */}
+              {config.isLuckyStar && (
                 <div className="mb-5">
                   <button
                     type="button"
