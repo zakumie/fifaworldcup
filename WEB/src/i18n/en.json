@@ -431,6 +431,11 @@
       "bets": "bets"
     }
   },
+  "matchCard": {
+    "title": "Match Details",
+    "fullTime": "Full Time",
+    "settledAt": "Settled:"
+  },
   "leaderboard": {
     "title": "LEADERBOARD",
     "subtitle": "Top players · Win rates · Rankings",

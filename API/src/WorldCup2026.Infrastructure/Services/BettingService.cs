@@ -557,6 +557,7 @@ public class BettingService : IBettingService
     private static MyBetDto MapMyBetToDto(Bet b) =>
          new(b.Id, b.UserId, b.User.DisplayName, b.MatchId,
             b.Match.HomeTeam.Name, b.Match.AwayTeam.Name,
+            b.Match.HomeTeam.FlagUrl, b.Match.AwayTeam.FlagUrl,
             b.Match.HomeScore, b.Match.AwayScore,
             b.Match.ExtraHomeScore, b.Match.ExtraAwayScore,
             b.Match.FullHomeScore, b.Match.FullAwayScore,

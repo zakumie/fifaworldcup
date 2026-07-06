@@ -18,7 +18,7 @@ interface MatchCardProps {
 
 const BET_STATUS_STYLE: Record<string, string> = {
   Open: "text-gray-700 bg-gray-50",
-  Pending: "text-gray-700 bg-gray-100",
+  Pending: "dark:text-gray-700 bg-gray-100",
   Won: "text-emerald-700 bg-emerald-50",
   HalfWon: "text-emerald-700 bg-emerald-50",
   Lost: "text-red-700 bg-red-50",
@@ -232,7 +232,7 @@ export function MatchCard({
             </div>
           )}
           <div
-            className={`flex items-center justify-between px-3 py-2 rounded-xl ${myBet?.isLuckyStar ? "bg-yellow-50" : "bg-green-50"} border border-slate-100 mb-3`}
+            className={`flex items-center justify-between px-3 py-2 rounded-xl ${myBet?.isLuckyStar ? "bg-blue-50" : "bg-green-50"} border border-slate-100 mb-3`}
           >
             <div className="flex items-center gap-1.5 text-xs text-slate-600">
               <span className="font-medium text-slate-400">

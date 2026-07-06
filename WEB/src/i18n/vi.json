@@ -431,6 +431,11 @@
       "bets": "cược"
     }
   },
+  "matchCard": {
+    "title": "Chi tiết trận đấu",
+    "fullTime": "Kết thúc",
+    "settledAt": "Quyết toán:"
+  },
   "leaderboard": {
     "title": "BẢNG XẾP HẠNG",
     "subtitle": "Người chơi hàng đầu · Tỷ lệ thắng · Xếp hạng",

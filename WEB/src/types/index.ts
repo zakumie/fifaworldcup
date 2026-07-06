@@ -198,6 +198,8 @@ export interface BetDto {
   userId: string;
   userDisplayName: string;
   matchId: string;
+  flagHomeTeam: string | null;
+  flagAwayTeam: string | null;
   homeTeamName: string;
   awayTeamName: string;
   homeScore: number | null;

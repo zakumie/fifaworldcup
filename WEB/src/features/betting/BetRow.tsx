@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { BetDto } from "@/types";
 import { useUserTimeZone } from "@/utils/useUserTimeZone";
 import { useTranslation } from "react-i18next";
+import { MatchCardDialog } from "./MatchCardDialog";
 
 const STATUS_COLORS: Record<string, string> = {
   Won: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -19,9 +21,19 @@ export function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string
   const statusStyle = STATUS_COLORS[bet.status] || STATUS_COLORS.Cancelled;
   const { formatDateLocalized } = useUserTimeZone();
   const displayProfitLabel = profitLabel || t('bets.row.profit');
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <div className="group flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200">
+    <>
+      <MatchCardDialog
+        open={dialogOpen}
+        bet={bet}
+        profitLabel={displayProfitLabel}
+        onClose={() => setDialogOpen(false)}
+      />
+    <div
+      onClick={() => setDialogOpen(true)}
+      className="group flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm transition-all duration-200 cursor-pointer">
       {/* Match Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center">
@@ -159,5 +171,6 @@ export function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -43,6 +43,7 @@ public record BetDto(
 public record MyBetDto(
     Guid Id, Guid UserId, string UserDisplayName,
     Guid MatchId, string HomeTeamName, string AwayTeamName,
+    string? FlagHomeTeam, string? FlagAwayTeam,
     int? HomeScore, int? AwayScore,
     int? ExtraHomeScore, int? ExtraAwayScore,
     int? FullHomeScore, int? FullAwayScore,
