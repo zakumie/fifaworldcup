@@ -6,6 +6,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { useTranslation } from 'react-i18next';
 import { useGetMatchBetsQuery, useGetBettingConfigQuery } from './bettingApi';
 import { useGetGroupQuery } from '../groups/groupsApi';
@@ -47,17 +48,28 @@ interface NoBetUser {
   avatarUrl?: string | null;
 }
 
-function NoBetUserCard({ user }: { user: NoBetUser }) {
+function NoBetUserCard({ user, profit }: { user: NoBetUser, profit: number | null }) {
   return (
     <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-orange-100">
       {user.avatarUrl ? (
-        <img src={user.avatarUrl} alt={user.displayName} className="w-7 h-7 rounded-full object-cover shrink-0" />
+        <img
+          src={user.avatarUrl}
+          alt={user.displayName}
+          className="w-7 h-7 rounded-full object-cover shrink-0"
+        />
       ) : (
         <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-[11px] font-bold text-orange-500 shrink-0">
           {user.displayName?.charAt(0).toUpperCase()}
         </div>
       )}
-      <span className="text-[13px] font-medium text-slate-500 truncate">{user.displayName}</span>
+
+      <span className="text-[13px] font-medium text-slate-500 truncate">
+        {user.displayName}
+      </span>
+      <span className="inline-flex items-center gap-0.5 text-xs font-bold text-red-500">
+        <TrendingDownIcon sx={{ fontSize: 14 }} /> 
+         - {profit?.toLocaleString()}
+      </span>
     </div>
   );
 }
@@ -338,7 +350,11 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {noBetUsers.map((u) => (
-                      <NoBetUserCard key={u.id} user={u} />
+                      <NoBetUserCard
+                        key={u.id}
+                        user={u}
+                        profit={config?.defaultBetAmount ?? 0}
+                      />
                     ))}
                   </div>
                 </div>
@@ -426,7 +442,7 @@ export function ViewBetsDialog({ open, matchId, groupId, match, onClose }: Props
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {noBetUsers.map((u) => (
-                      <NoBetUserCard key={u.id} user={u} />
+                      <NoBetUserCard key={u.id} user={u} profit={config?.defaultBetAmount ?? 0} />
                     ))}
                   </div>
                 </div>
