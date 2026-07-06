@@ -106,7 +106,6 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                 <img src={match.homeTeam.flagUrl} alt="" className="w-12 h-12 mx-auto mb-1.5 rounded-full object-cover ring-2 ring-white/20 shadow-lg" />
               )}
               <p className="text-sm font-bold text-white">{match.homeTeam.name}</p>
-              <p className="text-[10px] text-slate-400 font-medium">{match.homeTeam.code}</p>
             </div>
             <div className="flex flex-col items-center">
               <span className="text-lg font-black text-white/30">VS</span>
@@ -116,7 +115,6 @@ export function PlaceBetDialog({ open, config, match, existingBet, settlementMod
                 <img src={match.awayTeam.flagUrl} alt="" className="w-12 h-12 mx-auto mb-1.5 rounded-full object-cover ring-2 ring-white/20 shadow-lg" />
               )}
               <p className="text-sm font-bold text-white">{match.awayTeam.name}</p>
-              <p className="text-[10px] text-slate-400 font-medium">{match.awayTeam.code}</p>
             </div>
           </div>
 

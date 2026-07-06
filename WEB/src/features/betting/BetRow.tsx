@@ -43,9 +43,9 @@ export function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string
           {bet.matchStatus === "Finished" ? (
             <div className="flex item inline-flex items-center mx-2 px-1 sm:px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200 text-[10px] sm:text-xs font-semibold truncate max-w-[60px] sm:max-w-none">
               {bet.extraHomeScore && (
-                <span className="mx-0.5 px-0.5 text-[10px] sm:text-xs font-semibold text-green-500">
+                <p className="mx-0.5 px-0.5 text-[10px] sm:text-xs font-semibold text-green-500">
                   ({bet.fullHomeScore})
-                </span>
+                </p>
               )}
               <p className="text-[10px] sm:text-xs font-semibold text-sky-500">
                 {bet.homeScore}
@@ -58,9 +58,9 @@ export function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string
                 {bet.awayScore}
               </p>
               {bet.extraAwayScore && (
-                <span className="mx-0.5 px-0.5 text-[10px] sm:text-xs font-semibold text-green-500">
+                <p className="mx-0.5 px-0.5 text-[10px] sm:text-xs font-semibold text-green-500">
                   ({bet.fullAwayScore})
-                </span>
+                </p>
               )}
             </div>
           ) : (
@@ -105,9 +105,9 @@ export function BetRow({ bet, profitLabel }: { bet: BetDto; profitLabel?: string
           {t("common.pick")}
         </span>
         <div className="inline-flex items-center py-2">
-          <span className="px-1 sm:px-1.5 py-0.5 mx:1 bg-sky-50 rounded-md text-sky-700 border border-sky-200 text-[10px] sm:text-xs font-semibold truncate max-w-[60px] sm:max-w-none">
+          <p className="px-1 sm:px-1.5 py-0.5 mx:1 bg-sky-50 rounded-md text-sky-700 border border-sky-200 text-[10px] sm:text-xs font-semibold truncate max-w-[60px] sm:max-w-none">
             {bet.selectedTeamName ?? "—"}
-          </span>
+          </p>
         </div>
       </div>
 

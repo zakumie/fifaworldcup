@@ -17,13 +17,13 @@ interface Props {
 }
 
 const STATUS_STYLES: Record<string, { bar: string; badge: string; label: string }> = {
-  Won:       { bar: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'bets.status.won' },
-  HalfWon:   { bar: 'bg-emerald-400', badge: 'bg-emerald-50 text-emerald-600 border-emerald-200', label: 'bets.status.halfwon' },
-  Lost:      { bar: 'bg-red-500',     badge: 'bg-red-50 text-red-700 border-red-200',             label: 'bets.status.lost' },
-  HalfLost:  { bar: 'bg-red-400',     badge: 'bg-red-50 text-red-600 border-red-200',             label: 'bets.status.halflost' },
-  Push:      { bar: 'bg-slate-400',   badge: 'bg-slate-50 text-slate-700 border-slate-200',       label: 'bets.status.push' },
-  Pending:   { bar: 'bg-amber-400',   badge: 'bg-amber-50 text-amber-700 border-amber-200',       label: 'bets.status.pending' },
-  Cancelled: { bar: 'bg-gray-300',    badge: 'bg-gray-50 text-gray-500 border-gray-200',          label: 'bets.status.cancelled' },
+  Won: { bar: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200', label: 'bets.status.won' },
+  HalfWon: { bar: 'bg-emerald-400', badge: 'bg-emerald-50 text-emerald-600 border-emerald-200', label: 'bets.status.halfwon' },
+  Lost: { bar: 'bg-red-500', badge: 'bg-red-50 text-red-700 border-red-200', label: 'bets.status.lost' },
+  HalfLost: { bar: 'bg-red-400', badge: 'bg-red-50 text-red-600 border-red-200', label: 'bets.status.halflost' },
+  Push: { bar: 'bg-slate-400', badge: 'bg-slate-50 text-slate-700 border-slate-200', label: 'bets.status.push' },
+  Pending: { bar: 'bg-amber-400', badge: 'bg-amber-50 text-amber-700 border-amber-200', label: 'bets.status.pending' },
+  Cancelled: { bar: 'bg-gray-300', badge: 'bg-gray-50 text-gray-500 border-gray-200', label: 'bets.status.cancelled' },
 };
 
 const DIALOG_PAPER_SX = {
@@ -33,21 +33,37 @@ const DIALOG_PAPER_SX = {
   boxShadow: 'none',
 } as const;
 
+function TeamFlag({ flagUrl, name }: { flagUrl: string | null; name: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1 sm:gap-1.5">
+      {flagUrl ? (
+        <img src={flagUrl} alt={name} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover ring-2 ring-white shadow-md" />
+      ) : (
+        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 flex items-center justify-center text-[10px] sm:text-xs font-bold text-slate-500 ring-2 ring-white shadow-md">
+          {name.charAt(0)}
+        </div>
+      )}
+      <span className="text-[11px] sm:text-xs font-semibold text-white/90 max-w-[64px] sm:max-w-[72px] truncate text-center">{name}</span>
+    </div>
+  );
+}
+
 export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
   const { t } = useTranslation();
   const { formatDateLocalized } = useUserTimeZone();
 
   const statusStyle = STATUS_STYLES[bet.status] ?? STATUS_STYLES.Cancelled;
-  const profitColor =
-    bet.profit > 0 ? 'text-emerald-400' : bet.profit < 0 ? 'text-red-400' : 'text-slate-400';
-  const displayProfitLabel = profitLabel ?? t('bets.row.profit');
-
+  const profitColor = bet.profit > 0 ? 'text-emerald-600' : bet.profit < 0 ? 'text-red-600' : 'text-slate-600';
+  const profitBackground = bet.profit > 0 ? 'bg-emerald-50' : bet.profit < 0 ? 'bg-red-50' : 'bg-slate-50';
+  const profitBorder = bet.profit > 0 ? 'border-emerald-200' : bet.profit < 0 ? 'border-red-200' : 'border-slate-200';
   const handicapLabel =
     bet.handicap !== 0
       ? `${bet.favoredTeamName ?? ''} ${bet.handicap > 0 ? '+' : ''}${bet.handicap}`
       : null;
 
   const isFinished = bet.matchStatus === 'Finished';
+  const hasScore = bet.homeScore !== null && bet.awayScore !== null;
+  profitLabel = bet.profit > 0 ? t('common.profit') : bet.profit < 0 ? t('common.loss') : t('common.profitLoss');
 
   return (
     <Dialog
@@ -75,63 +91,67 @@ export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
           </div>
 
           {/* Teams */}
-          <div className="flex items-center justify-center gap-4">
-            {/* Home */}
-            <div className="flex-1 text-center">
-              {bet.flagHomeTeam && (
-                <img
-                  src={bet.flagHomeTeam}
-                  alt=""
-                  className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm"
-                />
-              )}
-              <p className="text-sm font-bold text-white leading-tight">
-                {bet.homeTeamName}
-              </p>
-              {isFinished && (
-                <p className="text-2xl font-black text-emerald-300 mt-1">
-                  {bet.fullHomeScore ?? bet.homeScore ?? "–"}
-                  {bet.extraHomeScore != null && (
-                    <span className="text-sm font-semibold text-green-400 ml-1">
-                      ({bet.fullHomeScore})
-                    </span>
-                  )}
-                </p>
-              )}
-            </div>
+          <div className="flex items-center justify-center gap-3 sm:gap-5">
+            <TeamFlag
+              flagUrl={bet.flagHomeTeam}
+              name={bet.homeTeamName}
+            />
 
-            {/* Centre divider */}
             <div className="flex flex-col items-center gap-1">
-              {isFinished ? (
-                <span className="text-lg font-black text-white/40">:</span>
+              {hasScore ? (
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl sm:text-2xl font-black text-white">
+                      {bet.fullHomeScore}
+                    </span>
+                    <span className="text-base sm:text-lg text-white/40">
+                      :
+                    </span>
+                    <span className="text-xl sm:text-2xl font-black text-white">
+                      {bet.fullAwayScore}
+                    </span>
+                  </div>
+                  {bet.extraHomeScore !== null &&
+                    bet.extraAwayScore !== null && (
+                      <div className="inline-flex items-center text-xs gap-2 px-3 py-2 bg-gray-30">
+                        {bet.homeScore ? (
+                          <span className="text-amber-600 font-bold">
+                            {bet.homeScore}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 font-bold">
+                            <SportsSoccerIcon
+                              sx={{ fontSize: 17 }}
+                            ></SportsSoccerIcon>
+                          </span>
+                        )}
+
+                        <span className="text-amber-600">:</span>
+                        {bet.awayScore ? (
+                          <span className="text-amber-600 font-bold">
+                            {bet.awayScore}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 font-bold">
+                            <SportsSoccerIcon
+                              sx={{ fontSize: 17 }}
+                            ></SportsSoccerIcon>
+                          </span>
+                        )}
+                      </div>
+                    )}
+                </div>
               ) : (
-                <span className="text-lg font-black text-white/30">VS</span>
+                <div className="flex items-center gap-1.5 text-white/50">
+                  <span className="text-xs sm:text-sm font-medium">VS</span>
+                </div>
               )}
             </div>
 
-            {/* Away */}
-            <div className="flex-1 text-center">
-              {bet.flagAwayTeam && (
-                <img
-                  src={bet.flagAwayTeam}
-                  alt=""
-                  className="w-10 h-10 mx-auto mb-1.5 rounded-full object-cover shadow-sm"
-                />
-              )}
-              <p className="text-sm font-bold text-white leading-tight">
-                {bet.awayTeamName}
-              </p>
-              {isFinished && (
-                <p className="text-2xl font-black text-emerald-300 mt-1">
-                  {bet.fullAwayScore ?? bet.awayScore ?? "–"}
-                  {bet.extraAwayScore != null && (
-                    <span className="text-sm font-semibold text-green-400 ml-1">
-                      ({bet.fullAwayScore})
-                    </span>
-                  )}
-                </p>
-              )}
-            </div>
+            <TeamFlag
+              flagUrl={bet.flagAwayTeam}
+              name={bet.awayTeamName}
+            />
           </div>
 
           {/* Match time */}
@@ -141,7 +161,7 @@ export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
               {formatDateLocalized(bet.matchStartTime)}
             </span>
             {isFinished && (
-              <span className="text-[11px] font-semibold text-slate-300 bg-white/10 px-2.5 py-1 rounded-full">
+              <span className="text-[11px] font-semibold text-green-300 bg-white/10 px-2.5 py-1 rounded-full">
                 {t("matchCard.fullTime")}
               </span>
             )}
@@ -149,7 +169,7 @@ export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
 
           {/* Stage / group badge */}
           <div className="flex items-center justify-center gap-2 mt-4">
-            <span className="lex items-center gap-1 text-[11px] font-semibold text-white bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-sm">
+            <span className="flex items-center gap-1 text-[11px] font-semibold text-amber-500 bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-sm">
               {formatStage(bet.stage)}
             </span>
           </div>
@@ -191,11 +211,11 @@ export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
             </div>
 
             {/* Wager */}
-            <div className="flex flex-col gap-1 p-3 rounded-xl bg-gray-50 border border-gray-100">
-              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                {t("common.wager")}
+            <div className="flex flex-col gap-1 p-3 rounded-xl bg-green-50 border border-green-100">
+              <span className="text-[10px] font-semibold text-green-500 uppercase tracking-wider">
+                {t("common.pointWager")}
               </span>
-              <span className="text-sm font-bold text-gray-800">
+              <span className="text-sm font-bold text-green-800">
                 {bet.betAmount.toLocaleString()}
               </span>
             </div>
@@ -203,9 +223,9 @@ export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
 
           {/* Profit / Loss + Lucky Star row */}
           <div className="flex items-center gap-3">
-            <div className="flex-1 flex flex-col gap-1 p-3 rounded-xl bg-gray-900 border border-gray-800">
-              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                {displayProfitLabel}
+            <div className={`flex-1 flex flex-col gap-1 p-3 rounded-xl ${profitBackground} border ${profitBorder}`}>
+              <span className={`text-[10px] font-semibold ${profitColor} uppercase tracking-wider`}>
+                {profitLabel}
               </span>
               <span className={`text-xl font-black ${profitColor}`}>
                 {bet.profit > 0 ? "+" : ""}
@@ -237,7 +257,7 @@ export function MatchCardDialog({ open, bet, profitLabel, onClose }: Props) {
           {/* Close button */}
           <button
             onClick={onClose}
-            className="w-full py-2.5 text-sm font-semibold text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors border border-gray-100"
+            className="w-full py-2.5 text-sm font-semibold text-white bg-green-700 hover:bg-green-600 rounded-xl transition-colors border border-gray-100"
           >
             {t("common.close")}
           </button>

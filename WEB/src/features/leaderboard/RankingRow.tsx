@@ -4,7 +4,7 @@ import { PODIUM_STYLES } from './PodiumCard';
 import type { LeaderboardEntryDto } from '../../types';
 
 function getStreakEmoji(streak: number): string {
-  if (streak >= 10) return '🏅';
+  if (streak >= 10) return '👑';
   if (streak >= 5) return '🔥';
   if (streak === 4) return '😍';
   if (streak === 3) return '🥰';
@@ -12,7 +12,8 @@ function getStreakEmoji(streak: number): string {
   if (streak <= 1 && streak >= -1) return '';
   if (streak === -2) return '😭';
   if (streak === -3) return '🤬';
-  if (streak === -4) return '🤡';
+  if (streak === -4) return '🤕';
+  if (streak === -5) return '🤡';
   if (streak > -10) return '💩';
   return '☠️';
 }
