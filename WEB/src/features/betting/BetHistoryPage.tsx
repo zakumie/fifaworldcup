@@ -19,7 +19,7 @@ import { useGroupId } from '../groups/useGroupId';
 import { useGetGroupQuery } from '../groups/groupsApi';
 import { BetRow } from './BetRow';
 
-const STATUS_FILTERS = ['All', 'Pending', 'Won', 'Lost'] as const;
+const STATUS_FILTERS = ['All', 'Pending', 'Won', 'Push', 'Lost'] as const;
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
@@ -57,11 +57,12 @@ export function BetHistoryPage() {
     return { total: data.length, wins, winRate, netProfit, totalWagered };
   }, [data]);
 
-  const { pendingCount, wonCount, lostCount } = useMemo(() => {
-    if (!data) return { pendingCount: 0, wonCount: 0, lostCount: 0 };
+  const { pendingCount, wonCount, pushCount, lostCount } = useMemo(() => {
+    if (!data) return { pendingCount: 0, wonCount: 0, pushCount: 0, lostCount: 0 };
     return {
       pendingCount: data.filter((b) => b.status === 'Pending').length,
       wonCount: data.filter((b) => b.status === 'Won' || b.status === 'HalfWon').length,
+      pushCount: data.filter((b) => b.status === 'Push').length,
       lostCount: data.filter((b) => b.status === 'Lost' || b.status === 'HalfLost').length,
     };
   }, [data]);
@@ -76,6 +77,8 @@ export function BetHistoryPage() {
       items = items.filter((b) => b.status === 'Lost' || b.status === 'HalfLost');
     } else if (statusFilter === 'Pending') {
       items = items.filter((b) => b.status === 'Pending');
+    } else if (statusFilter === 'Push') {
+      items = items.filter((b) => b.status === 'Push');
     }
 
     if (search.trim()) {
@@ -104,12 +107,14 @@ export function BetHistoryPage() {
   const getTabCount = (tab: string) => {
     if (tab === 'Pending') return pendingCount;
     if (tab === 'Won') return wonCount;
+    if (tab === 'Push') return pushCount;
     if (tab === 'Lost') return lostCount;
     return data?.length ?? 0;
   };
 
   const getTabCountStyle = (tab: string, isActive: boolean) => {
     if (tab === 'Won') return isActive ? 'bg-emerald-900/20 text-emerald-900' : 'bg-emerald-500/20 text-emerald-400';
+    if (tab === 'Push') return isActive ? 'bg-sky-900/20 text-sky-900' : 'bg-sky-500/20 text-sky-400';
     if (tab === 'Lost') return isActive ? 'bg-red-900/20 text-red-900' : 'bg-red-500/20 text-red-400';
     if (tab === 'Pending') return isActive ? 'bg-amber-900/20 text-amber-900' : 'bg-amber-500/20 text-amber-400';
     return isActive ? 'bg-slate-900/20 text-slate-900' : 'bg-slate-500/20 text-slate-400';

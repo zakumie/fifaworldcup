@@ -75,7 +75,7 @@ export function MatchCard({
     statusStyle = "text-green-700 bg-green-100";
   } else if (hasConfig) {
     statusLabel = t("matches.status.upcoming");
-    statusStyle = "text-blue-600 bg-blue-50";
+    statusStyle = "text-amber-600 bg-amber-50";
   } else {
     statusLabel = t("matches.status.open");
     statusStyle = "text-slate-500 bg-slate-100";

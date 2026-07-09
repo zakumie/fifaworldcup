@@ -54,6 +54,7 @@
       "pending": "Pending",
       "won": "Won",
       "lost": "Lost",
+      "push": "Draw",
       "open": "Open",
       "active": "Active",
       "inactive": "Inactive",

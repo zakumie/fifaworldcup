@@ -206,10 +206,10 @@ export function MatchListPage() {
               >
                 {tab === 'Live' && <span className="inline-block w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />}
                 {t(TAB_I18N_KEY[tab])}
-                {tab === 'Upcoming' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-blue-900/20 text-blue-900' : 'bg-blue-500/20 text-blue-400'}`}>{upcomingCount}</span>}
+                {tab === 'Upcoming' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-amber-900/20 text-amber-900' : 'bg-amber-500/20 text-amber-400'}`}>{upcomingCount}</span>}
                 {tab === 'Live' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-red-900/20 text-red-900' : 'bg-red-500/20 text-red-400'}`}>{liveCount}</span>}
                 {tab === 'Finished' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-green-900/20 text-green-900' : 'bg-green-500/20 text-green-400'}`}>{finishedCount}</span>}
-                {tab === 'My Bets' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-amber-900/20 text-amber-900' : 'bg-amber-500/20 text-amber-400'}`}>{myBetsCount}</span>}
+                {tab === 'My Bets' && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === tab ? 'bg-sky-900/20 text-sky-900' : 'bg-sky-500/20 text-sky-400'}`}>{myBetsCount}</span>}
               </button>
             ))}
           </div>
