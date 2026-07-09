@@ -84,11 +84,10 @@ export function DashboardPage() {
   const upcomingMatches = useMemo(() => {
     if (!matches) return [];
     const configMatchIds = new Set(groupConfigs?.filter(c => !c.isSettled).map(c => c.matchId) ?? []);
-    const bettedMatchIds = new Set(bets?.map(b => b.matchId) ?? []);
+    //const bettedMatchIds = new Set(bets?.map(b => b.matchId) ?? []);
     return matches.items.filter(
       (m) => m.status !== 'Finished' && m.status !== 'Cancelled'
-        && configMatchIds.has(m.id)
-        && !bettedMatchIds.has(m.id),
+        && configMatchIds.has(m.id),
     );
   }, [matches, groupConfigs, bets]);
 
@@ -101,8 +100,8 @@ export function DashboardPage() {
     return { total: bets.length, wins, winRate, netProfit };
   }, [bets]);
 
-  const recentBets = useMemo(() => bets?.slice(0, 5) ?? [], [bets]);
-  const upcomingSlice = useMemo(() => upcomingMatches.slice(0, 5), [upcomingMatches]);
+  const recentBets = useMemo(() => bets?.slice(0, 8) ?? [], [bets]);
+  const upcomingSlice = useMemo(() => upcomingMatches.slice(0, 8), [upcomingMatches]);
   const todayStr = useMemo(() => formatDate(new Date()),  [formatDate]);
 
   const goTo = useCallback((path: string) => () => navigate(path), [navigate]);
@@ -226,7 +225,7 @@ export function DashboardPage() {
                               match.status === "Live"
                                 ? "bg-red-50 text-red-600 border-red-100"
                                 : match.status === "Upcoming"
-                                  ? "bg-blue-50 text-blue-600 border-blue-100"
+                                  ? "bg-amber-50 text-amber-600 border-amber-400"
                                   : "bg-slate-50 text-slate-600 border-slate-100"
                             }`}
                           >
