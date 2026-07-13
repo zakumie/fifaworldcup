@@ -33,7 +33,7 @@ public record MatchListRequest
     public int PageSize
     {
         get => _pageSize;
-        init => _pageSize = value > 100 ? 100 : value < 1 ? 1 : value;
+        init => _pageSize = value > 200 ? 200 : value < 1 ? 1 : value;
     }
     private readonly int _pageSize = 20;
 }
