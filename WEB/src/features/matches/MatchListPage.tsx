@@ -49,7 +49,7 @@ export function MatchListPage() {
   const [betFilter, setBetFilter] = useState<'all' | 'not-bet' | 'betted'>('all');
   const [stageFilter, setStageFilter] = useState<StageFilter>('ALL');
 
-  const { data, isLoading } = useGetMatchesQuery({ pageSize: 100 });
+  const { data, isLoading } = useGetMatchesQuery({ pageSize: 150 });
   const { groupId, groups } = useGroupId();
   const { data: configs } = useGetGroupConfigsQuery({ groupId }, { skip: !groupId });
   const { data: myBets } = useGetMyBetsQuery({ groupId }, { skip: !groupId });

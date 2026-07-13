@@ -212,7 +212,7 @@ export function ManageMatchesPage() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const { data, isLoading } = useGetMatchesQuery({ pageSize: 100 });
+  const { data, isLoading } = useGetMatchesQuery({ pageSize: 150 });
   const { groupId, groups } = useGroupId();
   const { data: configs } = useGetGroupConfigsQuery({ groupId }, { skip: !groupId });
 
